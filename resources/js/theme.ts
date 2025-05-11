@@ -50,7 +50,7 @@ const theme = createTheme({
             defaultProps: {
                 size: 'sm',
                 classNames: {
-                    root: 'rounded-full',
+                    root: 'rounded-full !pt-1',
                 },
             },
         }),

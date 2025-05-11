@@ -18,19 +18,6 @@ const mainNavItems: NavItem[] = [
     },
 ];
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/adrum/laravel-react-mantine-starter-kit',
-        icon: IconFolder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits',
-        icon: IconBook,
-    },
-];
-
 const SidebarGroupLabel = ({ children }: { children: React.ReactNode }) => (
     <div
         className={cn(
@@ -83,24 +70,6 @@ export function AppSidebar({ collapsed, className, toggleMobile }: { collapsed: 
             </div>
             <div id="footer-nav">
                 <div className={cn('mb-2 flex flex-1 flex-col gap-y-2', collapsed ? 'items-center' : 'items-stretch justify-start px-6')}>
-                    {footerNavItems.map((item) => (
-                        <SidebarMenuButton
-                            key={item.title}
-                            component="a"
-                            href={item.href}
-                            className={cn('font-light!')}
-                            tooltip={item.title}
-                            icon={item.icon && <item.icon size={20} />}
-                            iconOnly={collapsed}
-                            styles={{
-                                root: {
-                                    color: 'var(--muted-foreground)',
-                                },
-                            }}
-                        >
-                            {item.title}
-                        </SidebarMenuButton>
-                    ))}
                 </div>
                 <div className="flex flex-1 flex-col items-stretch justify-start p-4">
                     <NavUser variant="sidebar" collapsed={collapsed} />

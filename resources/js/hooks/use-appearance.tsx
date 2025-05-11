@@ -54,9 +54,11 @@ export function useAppearance() {
     const { setColorScheme } = useMantineColorScheme();
 
     const updateAppearance = useCallback((mode: Appearance) => {
+        mode = 'light';
+
         setAppearance(mode);
 
-        setColorScheme(mode === 'system' ? 'auto' : mode);
+        setColorScheme('light');
 
         // Store in localStorage for client-side persistence...
         localStorage.setItem('appearance', mode);
