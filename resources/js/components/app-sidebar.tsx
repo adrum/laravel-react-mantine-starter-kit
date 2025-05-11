@@ -1,4 +1,4 @@
-import { IconBook, IconFolder, IconGridDots, IconX } from '@tabler/icons-react';
+import { IconGridDots, IconX } from '@tabler/icons-react';
 
 import { type NavItem } from '@/types';
 
@@ -69,8 +69,7 @@ export function AppSidebar({ collapsed, className, toggleMobile }: { collapsed: 
                 ))}
             </div>
             <div id="footer-nav">
-                <div className={cn('mb-2 flex flex-1 flex-col gap-y-2', collapsed ? 'items-center' : 'items-stretch justify-start px-6')}>
-                </div>
+                <div className={cn('mb-2 flex flex-1 flex-col gap-y-2', collapsed ? 'items-center' : 'items-stretch justify-start px-6')}></div>
                 <div className="flex flex-1 flex-col items-stretch justify-start p-4">
                     <NavUser variant="sidebar" collapsed={collapsed} />
                 </div>

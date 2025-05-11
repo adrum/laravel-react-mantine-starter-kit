@@ -2,9 +2,9 @@
 import { Head, router, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
 
+import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import AuthLayout from '@/layouts/auth-layout';
 import { Button } from '@mantine/core';
-import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 
 export default function VerifyEmail({ status }: { status?: string }) {
     const { post, processing } = useForm({});
@@ -33,12 +33,12 @@ export default function VerifyEmail({ status }: { status?: string }) {
                 </div>
             )}
 
-            <form onSubmit={submit} className="space-y-6 text-center flex flex-col items-center">
-                <Button type='submit' disabled={processing} variant="outline" loading={processing}>
+            <form onSubmit={submit} className="flex flex-col items-center space-y-6 text-center">
+                <Button type="submit" disabled={processing} variant="outline" loading={processing}>
                     Resend verification email
                 </Button>
 
-                <Button type='button' onClick={handleLogout} variant='subtle' className="cursor-pointer mx-auto block text-sm">
+                <Button type="button" onClick={handleLogout} variant="subtle" className="mx-auto block cursor-pointer text-sm">
                     Log out
                 </Button>
             </form>

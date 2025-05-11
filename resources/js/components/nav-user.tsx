@@ -3,11 +3,11 @@ import { Menu } from '@mantine/core';
 import { IconLogout, IconSelector, IconSettings } from '@tabler/icons-react';
 
 import { UserInfo } from '@/components/user-info';
+import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { cn } from '@/lib/utils';
 import { type SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
 import SidebarMenuButton from './sidebar-menu-button';
-import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 
 export function NavUser({ variant, collapsed = false }: { variant: 'header' | 'sidebar'; collapsed?: boolean }) {
     const { auth } = usePage<SharedData>().props;
