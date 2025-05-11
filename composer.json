@@ -1,6 +1,6 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "adrum/laravel-react-mantine-starter-kit",
+    "name": "andrewperoramas/sassykit",
     "type": "project",
     "description": "A starter kit for the Laravel framework using Inertia.js, React, and Mantine.",
     "keywords": [
