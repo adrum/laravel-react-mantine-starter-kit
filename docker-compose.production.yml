@@ -10,7 +10,7 @@ x-base: &base
     context: .
     dockerfile: Swoole.Dockerfile
     args:
-      APP_ENV: 'production'
+      APP_ENV: 'local'
       APP_HOST: '${APP_HOST}'
       WWWUSER: ${HOST_UID:-1000}
       WWWGROUP: ${HOST_GID:-1000}
@@ -24,6 +24,8 @@ x-base: &base
     - no-new-privileges:true
   volumes:
     - 'database:/var/www/html/database'
+  ports:
+    - '8000:8000'
   networks:
     - stack
   logging: *default-logging
