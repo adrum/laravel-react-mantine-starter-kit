@@ -29,7 +29,8 @@
             "tsconfig",
             "https",
             "inertiajs",
-            "fillable"
+            "fillable",
+            "textarea"
         ],
         "paths": []
     }
