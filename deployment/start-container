@@ -13,8 +13,8 @@ initialStuff() {
         php artisan migrate --isolated --seed --force || php artisan migrate --seed --force
     fi
 
-    php artisan optimize:clear; \
-    php artisan optimize;
+   # php artisan optimize:clear; \
+   # php artisan optimize;
 }
 
 if [ "$1" != "" ]; then
