@@ -34,14 +34,14 @@ const data = [
 export function Footer() {
     const groups = data.map((group) => {
         const links = group.links.map((link, index) => (
-            <Text<'a'> key={index}  component="a" href={link.link} onClick={(event) => event.preventDefault()}>
+            <Text<'a'> key={index} component="a" href={link.link} onClick={(event) => event.preventDefault()}>
                 {link.label}
             </Text>
         ));
 
         return (
             <div key={group.title}>
-                <Text >{group.title}</Text>
+                <Text>{group.title}</Text>
                 {links}
             </div>
         );
@@ -49,21 +49,21 @@ export function Footer() {
 
     return (
         <footer className="bg-blue-100 py-8">
-            <Container size={'xl'}  className="flex space-x-2 w-full pb-4 justify-between">
+            <Container size={'xl'} className="flex w-full justify-between space-x-2 pb-4">
                 <div>
                     ApplicationLogo
-                    <Text size="xs" c="dimmed" >
+                    <Text size="xs" c="dimmed">
                         Build fully functional accessible web applications faster than ever
                     </Text>
                 </div>
                 <div className="flex">{groups}</div>
             </Container>
-            <Container  size={'xl'} className="border-t py-4">
+            <Container size={'xl'} className="border-t py-4">
                 <Text c="dimmed" size="sm">
                     © 2020 mantine.dev. All rights reserved.
                 </Text>
 
-                <Group gap={0}  justify="flex-end" wrap="nowrap">
+                <Group gap={0} justify="flex-end" wrap="nowrap">
                     <ActionIcon size="lg" color="gray" variant="subtle">
                         <IconBrandTwitter size={18} stroke={1.5} />
                     </ActionIcon>

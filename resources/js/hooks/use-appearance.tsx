@@ -53,21 +53,24 @@ export function useAppearance() {
 
     const { setColorScheme } = useMantineColorScheme();
 
-    const updateAppearance = useCallback((mode: Appearance) => {
-        mode = 'light';
+    const updateAppearance = useCallback(
+        (mode: Appearance) => {
+            mode = 'light';
 
-        setAppearance(mode);
+            setAppearance(mode);
 
-        setColorScheme('light');
+            setColorScheme('light');
 
-        // Store in localStorage for client-side persistence...
-        localStorage.setItem('appearance', mode);
+            // Store in localStorage for client-side persistence...
+            localStorage.setItem('appearance', mode);
 
-        // Store in cookie for SSR...
-        setCookie('appearance', mode);
+            // Store in cookie for SSR...
+            setCookie('appearance', mode);
 
-        applyTheme(mode);
-    }, []);
+            applyTheme(mode);
+        },
+        [setColorScheme],
+    );
 
     useEffect(() => {
         const savedAppearance = localStorage.getItem('appearance') as Appearance | null;

@@ -77,8 +77,8 @@ export function SiteHeader() {
     ));
 
     return (
-        <Box  className="mx-auto !h-[600px] max-w-7xl z-3">
-            <header className="relative mx-auto h-18 px-4 text-white z-20">
+        <Box className="z-3 mx-auto !h-[600px] max-w-7xl">
+            <header className="relative z-20 mx-auto h-18 px-4 text-white">
                 <Group justify="space-between" h="100%">
                     <Group h="100%" gap={0} visibleFrom="sm">
                         <h2 className="mr-4 font-bold tracking-wide">
@@ -146,7 +146,7 @@ export function SiteHeader() {
             </header>
 
             <div className="absolute inset-0 z-10 !h-[600px]">
-                <div className="relative  w-full !h-[600px]">
+                <div className="relative !h-[600px] w-full">
                     <img src="/banner.jpg" className="h-full w-full object-cover brightness-50" alt="Banner" />
                     <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-black/80" />
 

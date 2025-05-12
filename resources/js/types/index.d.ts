@@ -1,5 +1,6 @@
 import { Icon } from '@tabler/icons-react';
 import type { Config } from 'ziggy-js';
+import { SocialAccount } from './socialite-ui';
 
 export interface Auth {
     user: User;
@@ -39,5 +40,6 @@ export interface User {
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
+    social_accounts: SocialAccount[];
     [key: string]: unknown; // This allows for additional properties...
 }

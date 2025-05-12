@@ -1,11 +1,11 @@
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
 
+import Socialite from '@/components/socialite';
 import TextLink from '@/components/text-link';
 import AuthLayout from '@/layouts/auth-layout';
+import { type SocialiteUi as SocialiteUiType } from '@/types/socialite-ui';
 import { Button, Checkbox, PasswordInput, TextInput } from '@mantine/core';
-import { type SocialiteUi as SocialiteUiType }  from '@/types/socialite-ui';
-import Socialite from '@/components/socialite';
 
 type LoginForm = {
     email: string;

@@ -10,11 +10,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use SocialiteUi\Concerns\HasSocialAccounts;
 
-
 final class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasSocialAccounts;
+    use HasFactory, HasSocialAccounts, Notifiable;
 
     /**
      * The attributes that are mass assignable.

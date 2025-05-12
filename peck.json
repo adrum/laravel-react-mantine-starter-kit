@@ -1,16 +1,35 @@
 {
-    "preset": "laravel",
     "ignore": {
         "words": [
-            "php",
+            "makefile",
+            "readme",
+            "swoole",
+            "socialstream",
+            "auth",
+            "confirmable",
+            "middleware",
+            "ui",
+            "config",
             "filesystems",
-            "favicon",
+            "healthcheck",
+            "franken",
+            "caddyfile",
+            "supervisord",
+            "frankenphp",
             "eslint",
-            "nav",
+            "phpstan",
+            "phpunit",
+            "favicon",
             "js",
+            "nav",
             "utils",
+            "ssr",
+            "vite",
+            "env",
             "tsconfig",
-            "ssr"
+            "https",
+            "inertiajs",
+            "fillable"
         ],
         "paths": []
     }

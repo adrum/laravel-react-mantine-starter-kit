@@ -1,13 +1,13 @@
 import { Head } from '@inertiajs/react';
 
 import HeadingSmall from '@/components/heading-small';
-import { type BreadcrumbItem } from '@/types';
+import { User, type BreadcrumbItem } from '@/types';
 
+import { SocialiteIcons } from '@/components/socialite-icons';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
+import { Provider, SocialAccount, SocialiteUi } from '@/types/socialite-ui';
 import { Button } from '@mantine/core';
-import { SocialiteIcons } from '@/components/socialite-icons';
-import { SocialiteUi } from '@/types/socialite-ui';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -18,13 +18,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface LinkedAccountsProps {
     status?: string;
-    auth: { user: any };
+    auth: { user: User };
     socialiteUi: SocialiteUi;
 }
 
-export default function LinkedAccounts({ status, auth, socialiteUi }: LinkedAccountsProps) {
+export default function LinkedAccounts({ auth, socialiteUi }: LinkedAccountsProps) {
     const availableAccounts = socialiteUi.providers.filter(
-        (provider: any) => !auth.user.social_accounts.some((socialAccount: any) => socialAccount.provider.id === provider.id),
+        (provider: Provider) => !auth.user.social_accounts.some((socialAccount: SocialAccount) => socialAccount.provider.id === provider.id),
     );
 
     return (
@@ -36,7 +36,7 @@ export default function LinkedAccounts({ status, auth, socialiteUi }: LinkedAcco
                     <HeadingSmall title="Linked Accounts" description="View and remove your currently linked accounts" />
 
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                        {availableAccounts.map((provider: any) => (
+                        {availableAccounts.map((provider: Provider) => (
                             <div key={provider.id} className="flex flex-col space-y-6 rounded-xl border p-4 md:space-y-4">
                                 <div className="flex w-full justify-center py-2">
                                     <SocialiteIcons provider={provider.id} className="mx-auto h-8 w-8 md:mx-0" />

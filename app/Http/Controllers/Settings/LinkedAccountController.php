@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
@@ -11,7 +13,7 @@ use Inertia\Response;
 use SocialiteUi\Events\SocialAccountDeleted;
 use SocialiteUi\Providers;
 
-class LinkedAccountController extends Controller
+final class LinkedAccountController extends Controller
 {
     public function show(): Response
     {
@@ -35,4 +37,3 @@ class LinkedAccountController extends Controller
         );
     }
 }
-

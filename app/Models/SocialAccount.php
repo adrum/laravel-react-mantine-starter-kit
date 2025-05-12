@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
@@ -12,7 +14,7 @@ use SocialiteUi\Events\SocialAccountUpdated;
 use SocialiteUi\SocialAccount as Base;
 use SocialiteUi\SocialiteUi;
 
-class SocialAccount extends Base
+final class SocialAccount extends Base
 {
     /** @use HasFactory<\Database\Factories\SocialAccountFactory> */
     use HasFactory;
@@ -22,7 +24,7 @@ class SocialAccount extends Base
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'provider',
@@ -40,7 +42,7 @@ class SocialAccount extends Base
     /**
      * The attributes that should be hidden for arrays.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $hidden = [
         'token',
@@ -84,4 +86,3 @@ class SocialAccount extends Base
         ];
     }
 }
-

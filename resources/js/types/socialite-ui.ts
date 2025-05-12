@@ -1,4 +1,17 @@
-export declare type ProviderId = 'bitbucket' | 'facebook' | 'github' | 'gitlab' | 'google' | 'linkedin' | 'linkedin-openid' | 'slack' | 'slack-openid' | 'twitch' | 'twitter' | 'twitter-oauth-2' | 'x';
+export declare type ProviderId =
+    | 'bitbucket'
+    | 'facebook'
+    | 'github'
+    | 'gitlab'
+    | 'google'
+    | 'linkedin'
+    | 'linkedin-openid'
+    | 'slack'
+    | 'slack-openid'
+    | 'twitch'
+    | 'twitter'
+    | 'twitter-oauth-2'
+    | 'x';
 
 export interface Provider {
     id: ProviderId;
@@ -11,7 +24,7 @@ export interface SocialiteUi {
     divideText: string;
     hasPassword: boolean;
     providers: Provider[];
-    error?: string
+    error?: string;
 }
 
 export interface SocialAccount {
@@ -19,9 +32,8 @@ export interface SocialAccount {
     name: string;
     email: string;
     avatar?: string;
-    nickname: string
+    nickname: string;
     provider: Provider;
     provider_id: number;
     [key: string]: unknown; // This allows for additional properties...
 }
-
