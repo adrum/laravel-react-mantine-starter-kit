@@ -23,7 +23,7 @@ x-base: &base
   security_opt:
     - no-new-privileges:true
   volumes:
-    - 'database:/var/www/html/database/database.sqlite'
+    - 'database:/var/www/html/database'
   networks:
     - stack
   logging: *default-logging
