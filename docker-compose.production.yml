@@ -22,6 +22,8 @@ x-base: &base
       hard: 40000
   security_opt:
     - no-new-privileges:true
+  volumes:
+    - 'database:/var/www/html/database/database.sqlite'
   networks:
     - stack
   logging: *default-logging
@@ -39,3 +41,7 @@ services:
 networks:
   stack:
     driver: bridge
+
+volumes:
+  database:
+    driver: local
