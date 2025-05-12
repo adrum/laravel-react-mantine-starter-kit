@@ -152,7 +152,7 @@ export function SiteHeader() {
 
                     {/* Content Overlay */}
                     <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center text-white">
-                        <Title>Sassykit baby!!</Title>
+                        <Title>Sassykit Demo</Title>
                         <Text className="!mb-2">Discover amazing content and connect with creators around the world.</Text>
                         <Button variant="gradient">Get Started</Button>
                     </div>
