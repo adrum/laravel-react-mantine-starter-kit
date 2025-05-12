@@ -3,13 +3,11 @@
     "name": "andrewperoramas/sassykit",
     "type": "project",
     "description": "A starter kit for the Laravel framework using Inertia.js, React, and Mantine.",
-    "keywords": [
-        "laravel",
-        "framework"
-    ],
+    "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "filament/filament": "^3.3",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel-uis/socialite-ui": "^1.0",
         "laravel/framework": "^12.0",
@@ -24,7 +22,7 @@
         "laravel/pint": "^1.18",
         "pestphp/pest": "^4.0.0",
         "laravel/sail": "^1.41",
-                "larastan/larastan": "^3.4.0",
+        "larastan/larastan": "^3.4.0",
         "pestphp/pest-plugin-laravel": "^4.0.0",
         "pestphp/pest-plugin-type-coverage": "^4.0.0",
         "mockery/mockery": "^1.6",
@@ -47,7 +45,8 @@
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
+            "@php artisan package:discover --ansi",
+            "@php artisan filament:upgrade"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
