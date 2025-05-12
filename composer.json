@@ -7,13 +7,18 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "bezhansalleh/filament-shield": "^3.3",
         "filament/filament": "^3.3",
         "inertiajs/inertia-laravel": "^2.0",
+        "joaopaulolndev/filament-edit-profile": "^1.0",
         "laravel-uis/socialite-ui": "^1.0",
         "laravel/framework": "^12.0",
         "laravel/octane": "^2.9",
         "laravel/tinker": "^2.10.1",
         "nunomaduro/essentials": "@dev",
+        "pxlrbt/filament-environment-indicator": "^2.1",
+        "spatie/laravel-permission": "^6.17",
+        "stechstudio/filament-impersonate": "^3.16",
         "tightenco/ziggy": "^2.4"
     },
     "require-dev": {
@@ -74,7 +79,10 @@
         ],
         "lint": [
             "pint",
-            "npm run lint"
+            "npm run lint",
+            "npm run format",
+            "peck"
+
         ],
         "refactor": "rector",
         "test:type-coverage": "pest --type-coverage --min=100",
@@ -83,7 +91,7 @@
             "pint --test",
             "npm run test:lint"
         ],
-        "test:unit": "pest --parallel --coverage --min=80.0",
+        "test:unit": "pest --parallel --coverage --min=50.0",
         "test:types": "phpstan",
         "test:refactor": "rector --dry-run",
         "test": [

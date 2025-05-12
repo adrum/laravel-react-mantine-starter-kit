@@ -30,7 +30,12 @@
             "https",
             "inertiajs",
             "fillable",
-            "textarea"
+            "textarea",
+            "hu",
+            "ja",
+            "nl",
+            "joaopaulolndev",
+            "livewire"
         ],
         "paths": []
     }
