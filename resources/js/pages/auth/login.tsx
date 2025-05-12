@@ -4,6 +4,8 @@ import { FormEventHandler } from 'react';
 import TextLink from '@/components/text-link';
 import AuthLayout from '@/layouts/auth-layout';
 import { Button, Checkbox, PasswordInput, TextInput } from '@mantine/core';
+import { type SocialiteUi as SocialiteUiType }  from '@/types/socialite-ui';
+import Socialite from '@/components/socialite';
 
 type LoginForm = {
     email: string;
@@ -14,9 +16,10 @@ type LoginForm = {
 interface LoginProps {
     status?: string;
     canResetPassword: boolean;
+    socialiteUi: SocialiteUiType;
 }
 
-export default function Login({ status, canResetPassword }: LoginProps) {
+export default function Login({ status, canResetPassword, socialiteUi }: LoginProps) {
     const { data, setData, post, processing, errors, reset } = useForm<Required<LoginForm>>({
         email: '',
         password: '',
@@ -91,6 +94,8 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                         Log in
                     </Button>
                 </div>
+
+                <Socialite socialiteUi={socialiteUi} />
 
                 <div className="text-muted-foreground text-center text-sm">
                     Don't have an account?{' '}

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Settings\LinkedAccountController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -20,4 +21,8 @@ Route::middleware('auth')->group(function () {
     Route::get('settings/appearance', function () {
         return Inertia::render('settings/appearance');
     })->name('appearance');
+
+    Route::get('settings/linked-accounts', [LinkedAccountController::class, 'show'])->name('linked-accounts');
+    Route::delete('settings/linked-accounts/{account}', [LinkedAccountController::class, 'destroy'])->name('linked-accounts.destroy');
+
 });

@@ -7,6 +7,7 @@ namespace App\Http\Middleware;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use SocialiteUi\SocialiteUi;
 use Tighten\Ziggy\Ziggy;
 
 final class HandleInertiaRequests extends Middleware
@@ -46,8 +47,14 @@ final class HandleInertiaRequests extends Middleware
             'name' => config('app.name'),
             'quote' => ['message' => mb_trim((string) $message), 'author' => mb_trim((string) $author)],
             'auth' => [
-                'user' => $request->user(),
+                'user' => $request->user()?->load('socialAccounts'),
             ],
+            'socialiteUi' => [
+                'error' => $request->session()->get('socialite-ui.error'),
+                'providers' => SocialiteUi::providers()->toArray(),
+                'hasPassword' => ! is_null($request->user()?->getAuthPassword()),
+            ],
+
             'ziggy' => fn (): array => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
