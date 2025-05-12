@@ -1,0 +1,44 @@
+x-logging: &default-logging
+  driver: 'json-file'
+  options:
+    max-size: "50m"
+    max-file: 6
+
+x-base: &base
+  profiles: [app]
+  build:
+    context: .
+    dockerfile: Swoole.Dockerfile
+    args:
+      APP_ENV: 'production'
+      APP_HOST: '${APP_HOST}'
+      WWWUSER: ${HOST_UID:-1000}
+      WWWGROUP: ${HOST_GID:-1000}
+  image: laravelx/app
+  user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+  ulimits:
+    nofile:
+      soft: 20000
+      hard: 40000
+  security_opt:
+    - no-new-privileges:true
+  networks:
+    - stack
+  volumes:
+    - './storage/app/public:/var/www/html/storage/app/public'
+    - './storage/logs:/var/www/html/storage/logs'
+  logging: *default-logging
+  restart: always
+
+services:
+  app:
+    <<: *base
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "localhost:8000/up" ]
+      interval: 3s
+      retries: 12
+      timeout: 5s
+
+networks:
+  stack:
+    driver: bridge
