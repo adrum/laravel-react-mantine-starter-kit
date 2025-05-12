@@ -6,6 +6,8 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Cashier\Cashier;
+use Laravel\Cashier\Subscription;
 
 final class AppServiceProvider extends ServiceProvider
 {
@@ -25,5 +27,7 @@ final class AppServiceProvider extends ServiceProvider
         if (! app()->isProduction()) {
             URL::forceScheme('http');
         }
+
+        Cashier::useSubscriptionModel(Subscription::class);
     }
 }

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Cashier\Billable;
 use SocialiteUi\Concerns\HasSocialAccounts;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -19,7 +20,7 @@ final class User extends Authenticatable implements HasAvatar
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, HasSocialAccounts, Notifiable;
 
-    use HasRoles;
+    use HasRoles, Billable;
 
     /**
      * The attributes that are mass assignable.
