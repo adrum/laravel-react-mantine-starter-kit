@@ -17,10 +17,10 @@ use Spatie\Permission\Traits\HasRoles;
 
 final class User extends Authenticatable implements HasAvatar
 {
+    use Billable, HasRoles;
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, HasSocialAccounts, Notifiable;
-
-    use HasRoles, Billable;
 
     /**
      * The attributes that are mass assignable.

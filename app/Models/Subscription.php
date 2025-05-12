@@ -10,6 +10,4 @@ use Laravel\Cashier\Subscription as CashierSubscription;
 final class Subscription extends CashierSubscription
 {
     use HasTimestamps;
-
-
 }

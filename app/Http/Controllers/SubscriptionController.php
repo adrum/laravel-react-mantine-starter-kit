@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-class SubscriptionController extends Controller
+final class SubscriptionController extends Controller
 {
     //
 }

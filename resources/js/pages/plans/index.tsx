@@ -1,6 +1,5 @@
 import { Footer } from '@/components/site/footer';
 import { SiteHeader } from '@/components/site/header';
-import { Link } from '@inertiajs/react';
 
 interface Plan {
     price_id: number;
