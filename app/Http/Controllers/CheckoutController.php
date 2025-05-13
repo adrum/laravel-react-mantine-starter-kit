@@ -17,10 +17,14 @@ final class CheckoutController extends Controller
         $plan = collect($plans)->get($request->plan);
         abort_unless($plan !== null, 404);
 
-        return $request->user()->newSubscription('default', $plan['price_id'])
+        return $request->user()
+            ->newSubscription('default', $plan['price_id'])
+            ->allowPromotionCodes()
             ->checkout([
                 'success_url' => route('home'),
                 'cancel_url' => route('home'),
+            ], [
+                'email' => $request->user()->email,
             ]);
 
     }

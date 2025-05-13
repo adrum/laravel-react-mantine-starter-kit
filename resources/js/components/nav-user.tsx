@@ -1,6 +1,6 @@
 import { Link, router } from '@inertiajs/react';
 import { Menu } from '@mantine/core';
-import { IconLogout, IconSelector, IconSettings } from '@tabler/icons-react';
+import { IconLogout, IconMoneybag, IconSelector, IconSettings } from '@tabler/icons-react';
 
 import { UserInfo } from '@/components/user-info';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
@@ -42,10 +42,14 @@ export function NavUser({ variant, collapsed = false }: { variant: 'header' | 's
                     </Menu.Label>
 
                     <Menu.Divider />
+                    <Menu.Item component={Link} href={route('billings.overview')} leftSection={<IconMoneybag color="gray" size={20} />}>
+                        Billing
+                    </Menu.Item>
 
                     <Menu.Item component={Link} href={route('profile.edit')} leftSection={<IconSettings color="gray" size={20} />}>
                         Settings
                     </Menu.Item>
+
                     <Menu.Divider />
                     <form
                         onSubmit={(e) => {

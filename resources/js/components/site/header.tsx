@@ -1,3 +1,6 @@
+import { useTranslation } from '@/hooks/use-translations';
+import { SharedData } from '@/types';
+import { Link, usePage } from '@inertiajs/react';
 import {
     Anchor,
     Box,
@@ -54,12 +57,44 @@ const mockdata = [
     },
 ];
 
+function userAccount(auth: SharedData['auth'], __: ReturnType<typeof useTranslation>) {
+    if (auth.user) {
+        return (
+            <>
+                <Link href={route('dashboard')}>{__('general.greeting', { name: auth.user.name })}</Link> |
+                <Link className="cursor-pointer" method="post" href={route('logout')}>
+                    logout
+                </Link>
+            </>
+        );
+    }
+
+    return (
+        <>
+            <Link href={route('login')}>
+                <Button component="a" variant="default">
+                    Login
+                </Button>
+            </Link>
+
+            <Link href={route('register')}>
+                <Button component="a" variant="filled">
+                    Register
+                </Button>
+            </Link>
+        </>
+    );
+}
+
 export function SiteHeader() {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
     const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
     const theme = useMantineTheme();
 
     const [scrolled, setScrolled] = useState(false);
+
+    const { auth } = usePage<SharedData>().props;
+    const __ = useTranslation();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -148,9 +183,9 @@ export function SiteHeader() {
                                 Academy
                             </a>
                         </Group>
-                        <Group visibleFrom="sm">
-                            <Button variant="default">Log in</Button>
-                            <Button>Sign up</Button>
+                        <Group visibleFrom="sm" className="!flex">
+                            {userAccount(auth, __)}
+
                             <LanguageSelector />
                         </Group>
 
@@ -186,7 +221,11 @@ export function SiteHeader() {
 
                         <Group justify="center" grow pb="xl" px="md">
                             <Button variant="default">Log in</Button>
-                            <Button>Sign up</Button>
+                            <Link href="/register">
+                                <Button component="a" variant="default">
+                                    Register
+                                </Button>
+                            </Link>
                         </Group>
                     </ScrollArea>
                 </Drawer>

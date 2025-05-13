@@ -25,4 +25,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::post('language', LanguageStoreController::class)->name('language.store');
 
 require __DIR__.'/settings.php';
+require __DIR__.'/billings.php';
 require __DIR__.'/auth.php';

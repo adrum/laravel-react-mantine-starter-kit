@@ -27,9 +27,9 @@ final class AppServiceProvider extends ServiceProvider
     {
         JsonResource::withoutWrapping();
 
-        /* if (! app()->isProduction()) { */
-        /*     URL::forceScheme('http'); */
-        /* } */
+        if (! app()->isProduction()) {
+            URL::forceScheme('http');
+        }
 
         Cashier::useSubscriptionModel(Subscription::class);
     }
