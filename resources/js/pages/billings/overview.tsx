@@ -18,9 +18,7 @@ export default function Overview() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Profile settings" />
 
-            <BillingsLayout>
-                burat {auth.user.name}
-            </BillingsLayout>
+            <BillingsLayout>burat {auth.user.name}</BillingsLayout>
         </AppLayout>
     );
 }
