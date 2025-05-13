@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\LanguageStoreController;
 use App\Http\Controllers\PlanController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -20,6 +21,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 });
+
+Route::post('language', LanguageStoreController::class)->name('language.store');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

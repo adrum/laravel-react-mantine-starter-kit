@@ -35,7 +35,8 @@
             "ja",
             "nl",
             "joaopaulolndev",
-            "livewire"
+            "livewire",
+            "enums"
         ],
         "paths": []
     }

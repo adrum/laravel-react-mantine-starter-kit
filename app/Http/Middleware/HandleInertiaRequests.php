@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Enums\Language;
+use App\Http\Resources\LanguageResource;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\File;
 use Inertia\Middleware;
 use SocialiteUi\SocialiteUi;
+use SplFileInfo;
 use Tighten\Ziggy\Ziggy;
 
 final class HandleInertiaRequests extends Middleware
@@ -54,7 +59,14 @@ final class HandleInertiaRequests extends Middleware
                 'providers' => SocialiteUi::providers()->toArray(),
                 'hasPassword' => ! is_null($request->user()?->getAuthPassword()),
             ],
+            'language' => app()->getLocale(),
+            'translations' => fn () => cache()->rememberForever('translations.'.app()->getLocale(), fn () => collect(File::allFiles(base_path('lang/'.app()->getLocale())))
+                ->flatMap(fn (SplFileInfo $file) => Arr::dot(
+                    File::getRequire($file->getRealPath()),
+                    $file->getBasename('.'.$file->getExtension()).'.'
+                ))),
 
+            'languages' => LanguageResource::collection(Language::cases()),
             'ziggy' => fn (): array => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),

@@ -30,8 +30,20 @@ const InputStyles = {
     },
 };
 
+import { MantineColorsTuple } from '@mantine/core';
+
+const myColor: MantineColorsTuple = ['#fff4e1', '#ffe8cc', '#fed09b', '#fdb766', '#fca13a', '#fc931d', '#fc8a08', '#e17800', '#c86a00', '#af5a00'];
+
 const theme = createTheme({
-    primaryColor: 'dark',
+    primaryColor: 'myColor',
+    defaultGradient: {
+        from: '#af5a00',
+        to: '#fca13a',
+        deg: 45,
+    },
+    colors: {
+        myColor,
+    },
 
     defaultRadius: 'md',
 
@@ -50,7 +62,7 @@ const theme = createTheme({
             defaultProps: {
                 size: 'sm',
                 classNames: {
-                    root: 'rounded-full !pt-1',
+                    root: '!rounded-full !pt-1',
                 },
             },
         }),

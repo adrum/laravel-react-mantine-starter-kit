@@ -29,6 +29,9 @@ export interface SharedData {
     auth: Auth;
     ziggy: Config & { location: string };
     sidebarOpen: boolean;
+    languages: { label: string; value: string }[];
+    translations: [];
+    language: string;
     [key: string]: unknown;
 }
 
