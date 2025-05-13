@@ -26,9 +26,10 @@ final class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         JsonResource::withoutWrapping();
-        if (! app()->isProduction()) {
-            URL::forceScheme('http');
-        }
+
+        /* if (! app()->isProduction()) { */
+        /*     URL::forceScheme('http'); */
+        /* } */
 
         Cashier::useSubscriptionModel(Subscription::class);
     }
