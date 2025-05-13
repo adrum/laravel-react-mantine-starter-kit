@@ -11,7 +11,7 @@ This React starter kit utilizes React 19, TypeScript, Tailwind, and the [Mantine
 ## Getting Started
 
 ```bash
-laravel new --using=adrum/laravel-react-mantine-starter-kit
+laravel new --using=andrewperoramas/sassykit
 ```
 
 ## Documentation
