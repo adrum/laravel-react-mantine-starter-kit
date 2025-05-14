@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Cashier\Cashier;
 use Laravel\Cashier\Subscription;
-use Opcodes\LogViewer\Facades\LogViewer;
 
 final class AppServiceProvider extends ServiceProvider
 {
@@ -37,7 +35,9 @@ final class AppServiceProvider extends ServiceProvider
 
         Gate::before(fn (User $user): ?true => $user->hasRole('super_admin') ? true : null);
 
-        LogViewer::auth(fn(Request $request) => $request->user()->hasRole('super_admin'));
+        Gate::define('viewLogViewer', function (User $user) {
+            return $user->hasRole('super_admin');
+        });
 
         Cashier::useSubscriptionModel(Subscription::class);
     }
