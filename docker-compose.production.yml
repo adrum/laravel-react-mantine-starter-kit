@@ -23,7 +23,7 @@ x-base: &base
   security_opt:
     - no-new-privileges:true
   volumes:
-    - './database:/var/www/html/database'
+    - 'db:/var/www/html/db'
   ports:
     - '8000:8000'
   networks:
