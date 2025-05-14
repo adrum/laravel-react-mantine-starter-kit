@@ -18,7 +18,7 @@ final class SetLanguage
      */
     public function handle(Request $request, Closure $next): Response
     {
-        app()->setLocale(Language::tryFrom(session()->get('language', config('app.locale')))->value);
+        app()->setLocale(Language::tryFrom(session()->get('language', config('app.locale')))->value ?? 'en');
 
         return $next($request);
     }

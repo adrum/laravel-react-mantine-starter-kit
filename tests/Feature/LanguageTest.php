@@ -19,10 +19,10 @@ it('contains a list of available languages', function () {
 
 it('contains the current selected language', function () {
 
-    app()->setLocale('ph');
+    app()->setLocale('en_PH');
 
     get('/')->assertInertia(function (AssertableInertia $page) {
-        $page->where('language', 'ph');
+        $page->where('language', 'en_PH');
 
     });
 
@@ -31,7 +31,7 @@ it('contains the current selected language', function () {
 it('sets the language', function () {
 
     $response = $this->post('/language',
-        ['locale' => $language = 'ph',
+        ['locale' => $language = 'en_PH',
         ]
     );
 

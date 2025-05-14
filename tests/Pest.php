@@ -2,6 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Models\User;
+use Spatie\Permission\Models\Role;
+
+use function Pest\Laravel\actingAs;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -14,7 +19,7 @@ declare(strict_types=1);
 */
 
 pest()->extend(Tests\TestCase::class)
- // ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Feature');
 
 /*
@@ -43,7 +48,16 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function adminAuth(): User
 {
-    // ..
+    $user = User::factory()->create();
+    $permission = Role::create([
+        'name' => 'super_admin',
+        'guard_name' => 'web',
+    ]);
+
+    $user->assignRole('super_admin');
+    actingAs($user);
+
+    return $user;
 }

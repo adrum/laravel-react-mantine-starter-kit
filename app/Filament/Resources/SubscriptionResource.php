@@ -11,6 +11,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 final class SubscriptionResource extends Resource
 {
@@ -37,6 +38,16 @@ final class SubscriptionResource extends Resource
                 Forms\Components\DateTimePicker::make('trial_ends_at'),
                 Forms\Components\DateTimePicker::make('ends_at'),
             ]);
+    }
+
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return false;
     }
 
     public static function table(Table $table): Table

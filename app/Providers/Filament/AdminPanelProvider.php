@@ -10,6 +10,7 @@ use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\MenuItem;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -23,7 +24,9 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
+use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
 use pxlrbt\FilamentEnvironmentIndicator\EnvironmentIndicatorPlugin;
+use pxlrbt\FilamentSpotlight\SpotlightPlugin;
 
 final class AdminPanelProvider extends PanelProvider
 {
@@ -36,9 +39,10 @@ final class AdminPanelProvider extends PanelProvider
             ->login()
             ->userMenuItems([
                 'profile' => MenuItem::make()
-                    ->label(fn () => auth()->user()->name)
+                    ->label(fn () => auth()->user()?->name)
                     ->url(fn (): string => EditProfilePage::getUrl())
                     ->icon('heroicon-m-user-circle'),
+
             ])
             ->colors([
                 'primary' => Color::Amber,
@@ -65,9 +69,21 @@ final class AdminPanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
 
             ])
+            ->navigationItems([
+                NavigationItem::make('Log')
+                    ->url('/log-viewer', shouldOpenInNewTab: true)
+                    ->icon('heroicon-o-cog')
+                    ->visible(fn (): bool => auth()->user()->can('view_log') || auth()->user()->hasRole('super_admin'))
+                    ->group('Settings'),
+
+            ])
+
             ->plugins([
                 FilamentShieldPlugin::make(),
                 EnvironmentIndicatorPlugin::make(),
+                SpotlightPlugin::make(),
+                FilamentApexChartsPlugin::make(),
+
                 FilamentEditProfilePlugin::make()
                     ->setTitle('My Profile')
                     ->setIcon('heroicon-o-user')

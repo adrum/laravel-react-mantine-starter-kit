@@ -36,7 +36,10 @@
             "nl",
             "joaopaulolndev",
             "livewire",
-            "enums"
+            "enums",
+            "img",
+            "pxlrbt",
+            "apexcharts"
         ],
         "paths": []
     }

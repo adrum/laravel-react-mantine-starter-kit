@@ -7,7 +7,7 @@ namespace App\Enums;
 enum Language: string
 {
     case EN = 'en';
-    case PH = 'ph';
+    case PH = 'en_PH';
 
     public function label(): string
     {

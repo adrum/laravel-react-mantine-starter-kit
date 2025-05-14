@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Cashier\Cashier;
@@ -30,6 +32,8 @@ final class AppServiceProvider extends ServiceProvider
         if (! app()->isProduction()) {
             URL::forceScheme('http');
         }
+
+        Gate::before(fn (User $user): ?true => $user->hasRole('super_admin') ? true : null);
 
         Cashier::useSubscriptionModel(Subscription::class);
     }

@@ -7,6 +7,8 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 final class DatabaseSeeder extends Seeder
 {
@@ -17,9 +19,25 @@ final class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+
+        $role = Role::create([
+            'name' => 'super_admin',
         ]);
+
+        Permission::create([
+            'name' => 'view_log',
+            'guard_name' => 'web',
+        ]);
+
+        $role->givePermissionTo(Permission::all());
+
+        $user = User::factory()->create([
+            'name' => 'Admin',
+            'email' => 'mobistyle35@gmail.com',
+            'password' => bcrypt('Asakaboi35'),
+        ]);
+
+        $user->assignRole('super_admin');
     }
 }
