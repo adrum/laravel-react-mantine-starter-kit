@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -14,7 +15,7 @@ use Laravel\Cashier\Billable;
 use SocialiteUi\Concerns\HasSocialAccounts;
 use Spatie\Permission\Traits\HasRoles;
 
-final class User extends Authenticatable implements HasAvatar
+final class User extends Authenticatable implements HasAvatar, FilamentUser
 {
     use Billable, HasRoles;
 
