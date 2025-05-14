@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
+use Filament\Panel;
 use Laravel\Cashier\Billable;
 use SocialiteUi\Concerns\HasSocialAccounts;
 use Spatie\Permission\Traits\HasRoles;
@@ -42,6 +41,11 @@ final class User extends Authenticatable implements HasAvatar
         $avatarColumn = config('filament-edit-profile.avatar_column', 'avatar_url');
 
         return $this->$avatarColumn ? Storage::url($this->$avatarColumn) : null;
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->hasVerifiedEmail();
     }
 
     /**
