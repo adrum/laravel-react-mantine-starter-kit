@@ -6,16 +6,16 @@ namespace App\Models;
 
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
-use Filament\Panel;
 use Laravel\Cashier\Billable;
 use SocialiteUi\Concerns\HasSocialAccounts;
 use Spatie\Permission\Traits\HasRoles;
 
-final class User extends Authenticatable implements HasAvatar, FilamentUser
+final class User extends Authenticatable implements FilamentUser, HasAvatar
 {
     use Billable, HasRoles;
 
