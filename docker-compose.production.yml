@@ -45,5 +45,5 @@ networks:
     driver: bridge
 
 volumes:
-  database:
+  db:
     driver: local
