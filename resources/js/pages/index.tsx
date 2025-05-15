@@ -26,10 +26,18 @@ export default function Welcome() {
                     />
                     <img
                         src="/desktop.webp"
+                        srcSet="
+    /desktop-768.webp 768w,
+    /desktop-1350.webp 1350w,
+    /desktop.webp 1920w
+  "
+                        sizes="(max-width: 768px) 100vw, (max-width: 1366px) 1350px, 1920px"
                         alt="Banner"
                         fetchPriority="high"
                         loading="eager"
                         decoding="async"
+                        width="1350"
+                        height="759"
                         className="hidden h-full w-full object-cover brightness-70 sm:block"
                     />
 
@@ -41,7 +49,6 @@ export default function Welcome() {
                     </div>
                 </div>
             </div>
-
 
             <WhenVisible data="feat" fallback={<div></div>}>
                 <FeaturesCards />

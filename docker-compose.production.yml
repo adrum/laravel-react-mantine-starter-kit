@@ -53,6 +53,13 @@ x-base: &base
     - "traefik.http.routers.static-assets.service=app"
     - "traefik.http.routers.static-assets.middlewares=compress,static-assets-cache"
 
+    - "traefik.http.middlewares.image-cache.headers.customResponseHeaders.Cache-Control=public, max-age=31536000, immutable"
+
+    - "traefik.http.routers.images.rule=Host(`bastardo.761073128.xyz`) && PathPrefix(`/images/`, `/img/`, `/desktop.webp`, `/mobile.webp`)"
+    - "traefik.http.routers.images.service=app"
+    - "traefik.http.routers.images.middlewares=compress,image-cache"
+
+
   logging: *default-logging
   restart: always
 
