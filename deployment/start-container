@@ -8,6 +8,8 @@ running_migrations_and_seeders=${RUNNING_MIGRATIONS_AND_SEEDERS:-"false"}
 initialStuff() {
     echo "Container mode: $container_mode"
 
+     php artisan migrate --isolated --force
+
     if [ "${running_migrations_and_seeders}" = "true" ]; then
         echo "Running migrations and seeding database ..."
         php artisan migrate --isolated --seed --force || php artisan migrate --seed --force
