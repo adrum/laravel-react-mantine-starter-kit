@@ -19,7 +19,22 @@ export default function Welcome() {
             <div className="h-[700px]"></div>
             <div className="absolute inset-0 h-[700px]">
                 <div className="relative !h-[700px] w-full">
-                    <img src="/banner.jpg" className="h-full w-full object-cover brightness-70" alt="Banner" />
+                    <img
+                        src="/mobile.webp"
+                        alt="Banner"
+                        fetchPriority="high"
+                        loading="eager"
+                        decoding="async"
+                        className="h-full w-full object-cover brightness-70 sm:hidden block"
+                    />
+                    <img
+                        src="/desktop.webp"
+                        alt="Banner"
+                        fetchPriority="high"
+                        loading="eager"
+                        decoding="async"
+                        className="h-full w-full object-cover brightness-70 hidden sm:block"
+                    />
                     <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-black/80" />
                     <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center text-white">
                         <Title>{__('general.welcome_message')}</Title>
