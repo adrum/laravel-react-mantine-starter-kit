@@ -17,19 +17,6 @@ export default defineConfig({
     esbuild: {
         jsx: 'automatic',
     },
-    build: {
-        rollupOptions: {
-            output: {
-                manualChunks(id) {
-                    if (id.includes('node_modules')) {
-                        if (id.includes('@mantine')) return 'mantine';
-                        if (id.includes('react')) return 'react-vendor';
-                        return 'vendor';
-                    }
-                },
-            },
-        },
-    },
     resolve: {
         alias: {
             'ziggy-js': resolve(__dirname, 'vendor/tightenco/ziggy'),
