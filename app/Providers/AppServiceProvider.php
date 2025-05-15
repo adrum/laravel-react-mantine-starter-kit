@@ -35,9 +35,7 @@ final class AppServiceProvider extends ServiceProvider
 
         Gate::before(fn (User $user): ?true => $user->hasRole('super_admin') ? true : null);
 
-        Gate::define('viewLogViewer', function (User $user) {
-            return $user->hasRole('super_admin');
-        });
+        Gate::define('viewLogViewer', fn (User $user): bool => $user->hasRole('super_admin'));
 
         Cashier::useSubscriptionModel(Subscription::class);
     }

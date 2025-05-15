@@ -20,7 +20,7 @@ import {
     useMantineTheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconBook, IconChartPie3, IconChevronDown, IconCode, IconCoin, IconFingerprint, IconNotification } from '@tabler/icons-react';
+import { IconChevronDown, IconCode } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { LanguageSelector } from '../language-selector';
 
@@ -29,31 +29,6 @@ const mockdata = [
         icon: IconCode,
         title: 'Open source',
         description: 'This Pokémon’s cry is very loud and distracting',
-    },
-    {
-        icon: IconCoin,
-        title: 'Free for everyone',
-        description: 'The fluid of Smeargle’s tail secretions changes',
-    },
-    {
-        icon: IconBook,
-        title: 'Documentation',
-        description: 'Yanma is capable of seeing 360 degrees without',
-    },
-    {
-        icon: IconFingerprint,
-        title: 'Security',
-        description: 'The shell’s rounded shape and the grooves on its.',
-    },
-    {
-        icon: IconChartPie3,
-        title: 'Analytics',
-        description: 'This Pokémon uses its flying ability to quickly chase',
-    },
-    {
-        icon: IconNotification,
-        title: 'Notifications',
-        description: 'Combusken battles with the intensely hot flames it spews',
     },
 ];
 
@@ -71,17 +46,12 @@ function userAccount(auth: SharedData['auth'], __: ReturnType<typeof useTranslat
 
     return (
         <>
-            <Link href={route('login')}>
-                <Button component="a" variant="default">
-                    Login
-                </Button>
-            </Link>
-
-            <Link href={route('register')}>
-                <Button component="a" variant="filled">
-                    Register
-                </Button>
-            </Link>
+            <Button component={Link} href={route('login')} variant="default">
+                Login
+            </Button>
+            <Button component={Link} href={route('register')} variant="default">
+                Register
+            </Button>
         </>
     );
 }
@@ -221,11 +191,9 @@ export function SiteHeader() {
 
                         <Group justify="center" grow pb="xl" px="md">
                             <Button variant="default">Log in</Button>
-                            <Link href="/register">
-                                <Button component="a" variant="default">
-                                    Register
-                                </Button>
-                            </Link>
+                            <Button component={Link} href="/register" variant="default">
+                                Register
+                            </Button>
                         </Group>
                     </ScrollArea>
                 </Drawer>
