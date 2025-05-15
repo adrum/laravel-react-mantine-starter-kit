@@ -1,24 +1,18 @@
-import { lazy, Suspense } from 'react';
-
-// Import header and footer directly as they should appear immediately
+import { FAQ } from '@/components/site/faq';
+import { FeaturesCards } from '@/components/site/features-card';
 import { Footer } from '@/components/site/footer';
 import { SiteHeader } from '@/components/site/header';
 import { useTranslation } from '@/hooks/use-translations';
+import { WhenVisible } from '@inertiajs/react';
 import { Button, Text, Title } from '@mantine/core';
-
-// Lazy load components that are not needed on initial render
-const FAQ = lazy(() => import('@/components/site/faq').then((module) => ({ default: module.FAQ })));
-const FeaturesCards = lazy(() => import('@/components/site/features-card').then((module) => ({ default: module.FeaturesCards })));
-
-// Simple loading fallback
-const LoadingFallback = () => <div className="py-4"></div>;
 
 export default function Welcome() {
     const __ = useTranslation();
 
     return (
         <>
-            <SiteHeader />
+            <SiteHeader></SiteHeader>
+
             <div className="h-[700px]"></div>
             <div className="absolute inset-0 h-[700px]">
                 <div className="relative !h-[700px] w-full">
@@ -38,6 +32,7 @@ export default function Welcome() {
                         decoding="async"
                         className="hidden h-full w-full object-cover brightness-70 sm:block"
                     />
+
                     <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-black/80" />
                     <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center text-white">
                         <Title>{__('general.welcome_message')}</Title>
@@ -47,23 +42,30 @@ export default function Welcome() {
                 </div>
             </div>
 
-            <Suspense fallback={<LoadingFallback />}>
+
+            <WhenVisible data="feat" fallback={<div></div>}>
                 <FeaturesCards />
-            </Suspense>
+            </WhenVisible>
 
-            <Suspense fallback={<LoadingFallback />}>
+            <WhenVisible data="faq1" fallback={<div></div>}>
                 <FAQ />
-            </Suspense>
+            </WhenVisible>
 
-            <Suspense fallback={<LoadingFallback />}>
+            <WhenVisible data="faq2" fallback={<div></div>}>
                 <FAQ />
-            </Suspense>
+            </WhenVisible>
 
-            <Suspense fallback={<LoadingFallback />}>
+            <WhenVisible data="faq3" fallback={<div></div>}>
                 <FAQ />
-            </Suspense>
+            </WhenVisible>
 
-            <Footer />
+            <WhenVisible data="faq4" fallback={<div></div>}>
+                <FAQ />
+            </WhenVisible>
+
+            <WhenVisible data="footer" fallback={<div></div>}>
+                <Footer></Footer>
+            </WhenVisible>
         </>
     );
 }
