@@ -24,7 +24,6 @@ x-base: &base
     - no-new-privileges:true
   volumes:
     - 'db:/var/www/html/db'
-  command: bash -c 'touch database/database.sqlite && php artisan migrate --force '
   ports:
     - '8000:8000'
   networks:
