@@ -10,11 +10,13 @@ x-base: &base
     context: .
     dockerfile: Swoole.Dockerfile
     args:
-      APP_ENV: 'production'
+      APP_ENV: 'local'
       APP_HOST: '${APP_HOST}'
       WWWUSER: ${HOST_UID:-1000}
       WWWGROUP: ${HOST_GID:-1000}
   image: laravelx/app
+  environment:
+    WITH_SSR: true
   user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
   ulimits:
     nofile:
@@ -26,29 +28,30 @@ x-base: &base
     - 'db:/var/www/html/db'
   ports:
     - '8000:8000'
-  networks:
-    - dokploy-network
 
   labels:
-    # Base configuration
+    # Enable Traefik for this container
     - "traefik.enable=true"
+
+    # Main app router (for HTML and app routes)
     - "traefik.http.routers.app.rule=Host(`bastardo.761073128.xyz`)"
+    - "traefik.http.routers.app.service=app"
+    - "traefik.http.routers.app.middlewares=compress,html-cache"
     - "traefik.http.services.app.loadbalancer.server.port=8000"
 
     # Compression middleware
     - "traefik.http.middlewares.compress.compress=true"
 
-    # Static assets caching middleware (for JS, CSS, images, fonts)
-    - "traefik.http.middlewares.static-assets-cache.headers.customResponseHeaders.Cache-Control=public, max-age=31536000, immutable"
+    # HTML cache middleware
     - "traefik.http.middlewares.html-cache.headers.customResponseHeaders.Cache-Control=public, max-age=3600"
 
-    # Router for static assets (JS, CSS, images, fonts)
-    - "traefik.http.routers.static-assets.rule=Host(`bastardo.761073128.xyz`) && PathPathPrefix(`/js/`, `/css/`, `/images/`, `/fonts/`, `/assets/`)"
+    # Static assets cache middleware
+    - "traefik.http.middlewares.static-assets-cache.headers.customResponseHeaders.Cache-Control=public, max-age=31536000, immutable"
+
+    # Static assets router (Vite build assets)
+    - "traefik.http.routers.static-assets.rule=Host(`bastardo.761073128.xyz`) && PathPrefix(`/build/assets/`)"
     - "traefik.http.routers.static-assets.service=app"
     - "traefik.http.routers.static-assets.middlewares=compress,static-assets-cache"
-
-    # Router for HTML and other content
-    - "traefik.http.routers.app.middlewares=compress,html-cache"
 
   logging: *default-logging
   restart: always
@@ -62,11 +65,7 @@ services:
       retries: 12
       timeout: 5s
 
-networks:
-  dokploy-network:
-    external: true
-
-
 volumes:
   db:
     driver: local
+

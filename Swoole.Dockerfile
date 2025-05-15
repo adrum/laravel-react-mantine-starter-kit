@@ -37,6 +37,9 @@ RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime \
 
 ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
+RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
+    && apt-get install -y nodejs
+
 RUN apt-get update; \
     apt-get upgrade -yqq; \
     apt-get install -yqq --no-install-recommends --show-progress \
@@ -154,7 +157,7 @@ RUN bun install --frozen-lockfile
 COPY --link . .
 COPY --link --from=common ${ROOT}/vendor vendor
 
-RUN bun run build
+RUN bun run build:ssr
 
 ###########################################
 
@@ -168,6 +171,7 @@ ENV WITH_HORIZON=false \
 
 COPY --link --chown=${WWWUSER}:${WWWUSER} . .
 COPY --link --chown=${WWWUSER}:${WWWUSER} --from=build ${ROOT}/public public
+COPY --link --chown=${WWWUSER}:${WWWUSER} --from=build ${ROOT}/bootstrap/ssr bootstrap/ssr
 
 RUN mkdir -p \
     storage/framework/{sessions,views,cache,testing} \
@@ -182,6 +186,7 @@ RUN composer install \
     && composer clear-cache
 
 EXPOSE 8000
+EXPOSE 13714
 EXPOSE 8080
 
 ENTRYPOINT ["start-container"]
