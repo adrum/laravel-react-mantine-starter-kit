@@ -39,7 +39,9 @@
             "enums",
             "img",
             "pxlrbt",
-            "apexcharts"
+            "apexcharts",
+            "visualbuilder",
+            "tinyeditor"
         ],
         "paths": []
     }

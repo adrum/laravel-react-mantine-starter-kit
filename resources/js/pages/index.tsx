@@ -25,7 +25,7 @@ export default function Welcome() {
                         fetchPriority="high"
                         loading="eager"
                         decoding="async"
-                        className="h-full w-full object-cover brightness-70 sm:hidden block"
+                        className="block h-full w-full object-cover brightness-70 sm:hidden"
                     />
                     <img
                         src="/desktop.webp"
@@ -33,7 +33,7 @@ export default function Welcome() {
                         fetchPriority="high"
                         loading="eager"
                         decoding="async"
-                        className="h-full w-full object-cover brightness-70 hidden sm:block"
+                        className="hidden h-full w-full object-cover brightness-70 sm:block"
                     />
                     <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-black/80" />
                     <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center text-white">

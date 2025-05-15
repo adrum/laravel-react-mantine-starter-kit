@@ -27,7 +27,12 @@ x-base: &base
   ports:
     - '8000:8000'
   networks:
-    - stack
+    - dokploy-network
+  labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.urpuppy.rule=Host(`bastardo.761073128.xyz`)"
+    - "traefik.http.services.urpuppy.loadbalancer.server.port=8000"
+    - "traefik.http.middlewares.compress.compress=true"
   logging: *default-logging
   restart: always
 
@@ -41,8 +46,9 @@ services:
       timeout: 5s
 
 networks:
-  stack:
-    driver: bridge
+  dokploy-network:
+    external: true
+
 
 volumes:
   db:
