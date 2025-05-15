@@ -33,6 +33,8 @@ x-base: &base
     - "traefik.http.routers.urpuppy.rule=Host(`bastardo.761073128.xyz`)"
     - "traefik.http.services.urpuppy.loadbalancer.server.port=8000"
     - "traefik.http.middlewares.compress.compress=true"
+    - "traefik.http.middlewares.static-cache.headers.customresponseheaders.Cache-Control=public, max-age=31536000, immutable"
+    - "traefik.http.routers.urpuppy.middlewares=static-cache@docker"
   logging: *default-logging
   restart: always
 
