@@ -46,12 +46,12 @@ function userAccount(auth: SharedData['auth'], __: ReturnType<typeof useTranslat
 
     return (
         <>
-            <Button component={Link} href={route('login')} variant="default">
-                Login
-            </Button>
-            <Button component={Link} href={route('register')} variant="default">
-                Register
-            </Button>
+            <Anchor href={route('login')}>
+                <Button variant="default">Login</Button>
+            </Anchor>
+            <Anchor href={route('register')}>
+                <Button variant="filled">Register</Button>
+            </Anchor>
         </>
     );
 }
