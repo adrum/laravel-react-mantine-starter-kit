@@ -28,13 +28,28 @@ x-base: &base
     - '8000:8000'
   networks:
     - dokploy-network
+
   labels:
+    # Base configuration
     - "traefik.enable=true"
-    - "traefik.http.routers.urpuppy.rule=Host(`bastardo.761073128.xyz`)"
-    - "traefik.http.services.urpuppy.loadbalancer.server.port=8000"
+    - "traefik.http.routers.app.rule=Host(`bastardo.761073128.xyz`)"
+    - "traefik.http.services.app.loadbalancer.server.port=8000"
+
+    # Compression middleware
     - "traefik.http.middlewares.compress.compress=true"
-    - "traefik.http.middlewares.static-cache.headers.customresponseheaders.Cache-Control=public, max-age=31536000, immutable"
-    - "traefik.http.routers.urpuppy.middlewares=static-cache@docker"
+
+    # Static assets caching middleware (for JS, CSS, images, fonts)
+    - "traefik.http.middlewares.static-assets-cache.headers.customResponseHeaders.Cache-Control=public, max-age=31536000, immutable"
+    - "traefik.http.middlewares.html-cache.headers.customResponseHeaders.Cache-Control=public, max-age=3600"
+
+    # Router for static assets (JS, CSS, images, fonts)
+    - "traefik.http.routers.static-assets.rule=Host(`bastardo.761073128.xyz`) && PathPathPrefix(`/js/`, `/css/`, `/images/`, `/fonts/`, `/assets/`)"
+    - "traefik.http.routers.static-assets.service=app"
+    - "traefik.http.routers.static-assets.middlewares=compress,static-assets-cache"
+
+    # Router for HTML and other content
+    - "traefik.http.routers.app.middlewares=compress,html-cache"
+
   logging: *default-logging
   restart: always
 
