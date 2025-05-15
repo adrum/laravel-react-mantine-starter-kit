@@ -22,6 +22,7 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { IconChevronDown, IconCode } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
+import AppLogoIcon from '../app-logo-icon';
 import { LanguageSelector } from '../language-selector';
 
 const mockdata = [
@@ -99,9 +100,7 @@ export function SiteHeader() {
                 <header className="relative mx-auto h-18 px-4 text-white">
                     <Group className="mx-auto !max-w-7xl" justify="space-between" h="100%">
                         <Group h="100%" gap={0} visibleFrom="sm">
-                            <h2 className="mr-4 font-bold tracking-wide">
-                                Sassy<span className="text-blue-400">Kit</span>
-                            </h2>
+                            <AppLogoIcon />
                             <a href="#" className="flex items-center px-2 text-sm font-bold">
                                 Home
                             </a>
@@ -153,13 +152,14 @@ export function SiteHeader() {
                                 Academy
                             </a>
                         </Group>
-                        <Group visibleFrom="sm" className="!flex">
+                        <Group visibleFrom="sm" className="">
                             {userAccount(auth, __)}
-
                             <LanguageSelector />
                         </Group>
 
-                        <Group hiddenFrom="sm">Logo</Group>
+                        <Group hiddenFrom="sm">
+                            <AppLogoIcon />
+                        </Group>
                         <Burger color="white" opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
                     </Group>
                 </header>
@@ -189,12 +189,7 @@ export function SiteHeader() {
 
                         <Divider my="sm" />
 
-                        <Group justify="center" grow pb="xl" px="md">
-                            <Button variant="default">Log in</Button>
-                            <Button component={Link} href="/register" variant="default">
-                                Register
-                            </Button>
-                        </Group>
+                        <Group>{userAccount(auth, __)}</Group>
                     </ScrollArea>
                 </Drawer>
             </Box>

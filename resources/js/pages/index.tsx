@@ -13,32 +13,26 @@ export default function Welcome() {
         <>
             <SiteHeader></SiteHeader>
 
-            <div className="h-[700px]"></div>
-            <div className="absolute inset-0 h-[700px]">
-                <div className="relative !h-[700px] w-full">
+            <div className="h-[400px] sm:h-[700px]"></div>
+            <div className="absolute inset-0 h-[400px] sm:h-[700px]">
+                <div className="relative h-[400px] w-full sm:h-[700px]">
                     <img
                         src="/mobile.webp"
-                        alt="Banner"
-                        fetchPriority="high"
-                        loading="eager"
-                        decoding="async"
-                        className="block h-full w-full object-cover brightness-70 sm:hidden"
-                    />
-                    <img
-                        src="/desktop.webp"
                         srcSet="
+    /mobile.webp 600w,
     /desktop-768.webp 768w,
     /desktop-1350.webp 1350w,
     /desktop.webp 1920w
   "
-                        sizes="(max-width: 768px) 100vw, (max-width: 1366px) 1350px, 1920px"
+                        sizes="(max-width: 639px) 100vw,
+         (max-width: 768px) 100vw,
+         (max-width: 1366px) 1350px,
+         1920px"
                         alt="Banner"
                         fetchPriority="high"
                         loading="eager"
                         decoding="async"
-                        width="1350"
-                        height="759"
-                        className="hidden h-full w-full object-cover brightness-70 sm:block"
+                        className="block h-full w-full object-cover brightness-70"
                     />
 
                     <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-black/80" />

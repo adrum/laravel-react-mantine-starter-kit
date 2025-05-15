@@ -49,14 +49,14 @@ export function Footer() {
 
     return (
         <footer className="bg-blue-100 py-8">
-            <Container size={'xl'} className="flex w-full justify-between space-x-2 pb-4">
+            <Container className="flex w-full justify-between space-x-2 pb-4">
                 <div>
                     ApplicationLogo
                     <Text size="xs" c="dimmed">
                         Build fully functional accessible web applications faster than ever
                     </Text>
                 </div>
-                <div className="flex">{groups}</div>
+                <div className="flex flex-wrap">{groups}</div>
             </Container>
             <Container size={'xl'} className="border-t py-4">
                 <Text c="dimmed" size="sm">
