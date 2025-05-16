@@ -39,7 +39,7 @@ jobs:
         run: npm install && npm run build
 
       - name: Run Laravel Server
-        run: php artisan serve --no-reload &
+        run: php artisan serve --port 8010 --no-reload &
 
       - name: Execute tests
         run: php artisan pest:dusk
