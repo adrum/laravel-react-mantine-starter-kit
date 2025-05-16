@@ -28,7 +28,10 @@ export default function Welcome() {
          (max-width: 768px) 100vw,
          (max-width: 1366px) 1350px,
          1920px"
+                        alt="Banner"
                         fetchPriority="high"
+                        loading="eager"
+                        decoding="async"
                         className="block h-full w-full object-cover brightness-70"
                     />
 

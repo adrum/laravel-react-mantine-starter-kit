@@ -21,7 +21,6 @@
         "opcodesio/log-viewer": "^3.17",
         "pxlrbt/filament-environment-indicator": "^2.1",
         "pxlrbt/filament-spotlight": "^1.3",
-        "spatie/laravel-google-fonts": "^1.4",
         "spatie/laravel-permission": "^6.17",
         "stechstudio/filament-impersonate": "^3.16",
         "tightenco/ziggy": "^2.4"
