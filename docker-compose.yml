@@ -31,35 +31,35 @@ x-base: &base
     - '8000:8000'
 
   labels:
-    # Enable Traefik for this container
-    - "traefik.enable=true"
+      - "traefik.enable=true"
 
-    # Main app router (for HTML and app routes)
-    - "traefik.http.routers.app.rule=Host(`bastardo.761073128.xyz`)"
-    - "traefik.http.routers.app.service=app"
-    - "traefik.http.routers.app.middlewares=compress,html-cache"
-    - "traefik.http.services.app.loadbalancer.server.port=8000"
+      # Main app router (for HTML and app routes)
+      - "traefik.http.routers.app.rule=Host(`bastardo.761073128.xyz`)"
+      - "traefik.http.routers.app.service=app"
+      - "traefik.http.routers.app.middlewares=compress,html-cache"
+      - "traefik.http.services.app.loadbalancer.server.port=8000"
 
-    # Compression middleware
-    - "traefik.http.middlewares.compress.compress=true"
+      # Compression middleware
+      - "traefik.http.middlewares.compress.compress=true"
 
-    # HTML cache middleware
-    - "traefik.http.middlewares.html-cache.headers.customResponseHeaders.Cache-Control=public, max-age=7600"
+      # HTML cache middleware
+      - "traefik.http.middlewares.html-cache.headers.customResponseHeaders.Cache-Control=public, max-age=7600"
 
-    # Static assets cache middleware
-    - "traefik.http.middlewares.static-assets-cache.headers.customResponseHeaders.Cache-Control=public, max-age=31536000, immutable"
+      # Static assets cache middleware (for Vite or similar)
+      - "traefik.http.middlewares.static-assets-cache.headers.customResponseHeaders.Cache-Control=public, max-age=31536000, immutable"
 
-    # Static assets router (Vite build assets)
-    - "traefik.http.routers.static-assets.rule=Host(`bastardo.761073128.xyz`) && PathPrefix(`/build/assets/`)"
-    - "traefik.http.routers.static-assets.service=app"
-    - "traefik.http.routers.static-assets.middlewares=compress,static-assets-cache"
+      # Static assets router (e.g., Vite build assets)
+      - "traefik.http.routers.static-assets.rule=Host(`bastardo.761073128.xyz`) && PathPrefix(`/build/assets/`)"
+      - "traefik.http.routers.static-assets.service=app"
+      - "traefik.http.routers.static-assets.middlewares=compress,static-assets-cache"
 
-    - "traefik.http.middlewares.image-cache.headers.customResponseHeaders.Cache-Control=public, max-age=31536000, immutable"
+      # Image cache middleware
+      - "traefik.http.middlewares.image-cache.headers.customResponseHeaders.Cache-Control=public, max-age=31536000, immutable"
 
-    - "traefik.http.routers.images.rule=Host(`bastardo.761073128.xyz`) && PathPrefix(`/images/`, `/img/`, `/desktop.webp`, '/desktop-768.webp', '/desktop-1350.webp', `/mobile.webp`, `/storage/fonts/)"
-    - "traefik.http.routers.images.service=app"
-    - "traefik.http.routers.images.middlewares=compress,image-cache"
-
+      # Image router using PathRegexp for individual webp files and folders
+      - "traefik.http.routers.images.rule=Host(`bastardo.761073128.xyz`) && PathRegexp(`^/(images|img|storage/fonts)/.*|/desktop.*\\.webp|/mobile\\.webp`)"
+      - "traefik.http.routers.images.service=app"
+      - "traefik.http.routers.images.middlewares=compress,image-cache"
 
   logging: *default-logging
   restart: always
