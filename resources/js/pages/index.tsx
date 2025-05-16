@@ -38,9 +38,7 @@ export default function Welcome() {
                 </div>
             </div>
 
-            <WhenVisible data="feat" fallback={<div></div>}>
-                <FeaturesCards />
-            </WhenVisible>
+            <FeaturesCards  />
 
             <WhenVisible data="faq1" fallback={<div></div>}>
                 <FAQ />
