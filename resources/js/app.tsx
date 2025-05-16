@@ -1,6 +1,7 @@
 import '../css/app.css';
 
 import theme from '@/theme';
+
 import { createInertiaApp } from '@inertiajs/react';
 import { MantineProvider } from '@mantine/core';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';

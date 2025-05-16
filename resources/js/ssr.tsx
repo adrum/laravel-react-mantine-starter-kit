@@ -1,3 +1,4 @@
+
 import theme from '@/theme'; // <- Import your Mantine theme
 import { createInertiaApp } from '@inertiajs/react';
 import createServer from '@inertiajs/react/server';
@@ -9,7 +10,7 @@ import { type RouteName, route } from 'ziggy-js';
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 // Use a more efficient glob import strategy
-const pages = import.meta.glob('./pages/**/*.tsx', { eager: true });
+const pages = import.meta.glob('./pages/**/*.tsx', { eager: false });
 
 createServer((page) =>
     createInertiaApp({
