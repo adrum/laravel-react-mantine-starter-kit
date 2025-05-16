@@ -8,7 +8,7 @@ const data = [
         title: 'About',
         links: [
             { label: 'Features', link: '#' },
-            { label: 'Pricing', link: route('plans.index') },
+            { label: 'Pricing', link: "Pricings" },
             { label: 'Support', link: '#' },
             { label: 'FAQ', link: '#' },
         ],
