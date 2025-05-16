@@ -1,8 +1,9 @@
 import tailwindcss from '@tailwindcss/vite';
-import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react-swc';
 import laravel from 'laravel-vite-plugin';
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
+import { compression } from 'vite-plugin-compression2'
 
 export default defineConfig({
     plugins: [
@@ -13,6 +14,7 @@ export default defineConfig({
         }),
         react(),
         tailwindcss(),
+        compression()
     ],
     esbuild: {
         jsx: 'automatic',

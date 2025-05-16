@@ -3,7 +3,6 @@ import { FeaturesCards } from '@/components/site/features-card';
 import { Footer } from '@/components/site/footer';
 import { SiteHeader } from '@/components/site/header';
 import { useTranslation } from '@/hooks/use-translations';
-import { WhenVisible } from '@inertiajs/react';
 import { Button, Text, Title } from '@mantine/core';
 
 export default function Welcome() {
@@ -40,25 +39,11 @@ export default function Welcome() {
 
             <FeaturesCards />
 
-            <WhenVisible data="faq1" fallback={<div></div>}>
-                <FAQ />
-            </WhenVisible>
-
-            <WhenVisible data="faq2" fallback={<div></div>}>
-                <FAQ />
-            </WhenVisible>
-
-            <WhenVisible data="faq3" fallback={<div></div>}>
-                <FAQ />
-            </WhenVisible>
-
-            <WhenVisible data="faq4" fallback={<div></div>}>
-                <FAQ />
-            </WhenVisible>
-
-            <WhenVisible data="footer" fallback={<div></div>}>
-                <Footer></Footer>
-            </WhenVisible>
+            <FAQ />
+            <FAQ />
+            <FAQ />
+            <FAQ />
+            <Footer></Footer>
         </>
     );
 }
