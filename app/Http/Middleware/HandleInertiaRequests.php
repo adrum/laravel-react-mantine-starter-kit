@@ -70,12 +70,13 @@ final class HandleInertiaRequests extends Middleware
                 'hasPassword' => ! is_null($request->user()?->getAuthPassword()),
             ],
             'language' => app()->getLocale(),
-            'translations' => fn () => cache()->rememberForever('translations.'.app()->getLocale(), fn () => collect(File::allFiles(base_path('lang/'.app()->getLocale())))
+            'translations' => cache()->rememberForever('translations.'.app()->getLocale(), fn () => collect(File::allFiles(base_path('lang/'.app()->getLocale())))
                 ->flatMap(fn (SplFileInfo $file) => Arr::dot(
                     File::getRequire($file->getRealPath()),
                     $file->getBasename('.'.$file->getExtension()).'.'
-                ))),
-
+                ))
+                ->toArray()
+            ),
             'languages' => LanguageResource::collection(Language::cases()),
             'ziggy' => fn (): array => [
                 ...(new Ziggy)->toArray(),
