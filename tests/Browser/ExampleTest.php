@@ -17,7 +17,7 @@ final class ExampleTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
                 ->screenshot('homepage')
-                ->assertSee('Sassykit');
+                ->assertSee('SassyKit');
         });
     }
 }

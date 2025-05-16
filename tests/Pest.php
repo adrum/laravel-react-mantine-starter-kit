@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+pest()->extend(Tests\DuskTestCase::class)
+    ->in('Browser');
+//  ->use(Illuminate\Foundation\Testing\DatabaseMigrations::class)
+
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 

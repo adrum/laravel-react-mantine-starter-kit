@@ -1,0 +1,60 @@
+name: Dusk
+
+on: [push]
+jobs:
+  dusk:
+    runs-on: ubuntu-latest
+    env:
+      SOME_SECRET: ${{ secrets.SOME_SECRET }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up MySQL
+        run: |
+          sudo systemctl start mysql
+          mysql --user="root" --password="root" -e "CREATE DATABASE \`myapp_testing\` character set UTF8mb4 collate utf8mb4_bin;"
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Copy .env
+        run: cp .env.dusk.ci .env
+
+      - name: Install Dependencies
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Generate key
+        run: php artisan key:generate
+
+      - name: Install Chrome binaries
+        run: php artisan dusk:chrome-driver --detect
+
+      - name: Start Chrome Driver
+        run: ./vendor/laravel/dusk/bin/chromedriver-linux --port=9515 &
+
+      - name: Build assets
+        run: npm install && npm run build
+
+      - name: Run Laravel Server
+        run: php artisan serve --no-reload &
+
+      - name: Execute tests
+        run: php artisan pest:dusk
+
+      - name: Upload Screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: tests/Browser/screenshots
+
+      - name: Upload Console Logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: console
+          path: tests/Browser/console
+
