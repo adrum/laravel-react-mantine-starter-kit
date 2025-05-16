@@ -40,7 +40,7 @@ export default function AppHeaderLayout({ children, breadcrumbs }: PropsWithChil
             <AppShell.Header className="bg-background!">
                 <div className="md:mx-w-7xl flex h-full items-center justify-between px-6 md:px-4">
                     <Group h="100%">
-                        <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+                        <Burger component={Button} opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
                         <Group h="100%" justify="space-between" style={{ flex: 1 }}>
                             <HeaderMenuButton component={Link} prefetch href={route('dashboard')} className="bg-transparent! px-2!">
                                 <AppLogo />

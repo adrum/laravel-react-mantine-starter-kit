@@ -161,7 +161,7 @@ export function SiteHeader({ variant = 'secondary' }: { variant?: 'primary' | 's
                         <Group hiddenFrom="sm">
                             <AppLogoIcon />
                         </Group>
-                        <Burger color="white" opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
+                        <Burger component={Button} color="white" opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
                     </Group>
                 </header>
 

@@ -8,7 +8,7 @@ const data = [
         title: 'About',
         links: [
             { label: 'Features', link: '#' },
-            { label: 'Pricing', link: "Pricings" },
+            { label: 'Pricing', link: 'Pricings' },
             { label: 'Support', link: '#' },
             { label: 'FAQ', link: '#' },
         ],
@@ -57,7 +57,7 @@ export function Footer() {
     });
 
     return (
-        <footer className="border-t border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
+        <footer className="border-t border-gray-200">
             <Container className="py-12">
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
                     <div className="col-span-1">

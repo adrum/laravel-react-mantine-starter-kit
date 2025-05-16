@@ -27,7 +27,7 @@ export default function Index({ monthly, yearly }: IndexProps) {
             <Head title="Subscription Plans" />
             <SiteHeader variant="primary" />
 
-            <main className="bg-gray-50 py-16 dark:bg-gray-900">
+            <main className="py-16">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="text-center">
                         <h1 className="text-3xl font-extrabold text-gray-900 sm:text-4xl dark:text-white">Choose the Right Plan for You</h1>
@@ -36,7 +36,7 @@ export default function Index({ monthly, yearly }: IndexProps) {
 
                     {/* Billing toggle */}
                     <div className="mt-12 flex justify-center">
-                        <div className="relative inline-flex rounded-lg bg-white p-1 dark:bg-gray-800">
+                        <div className="relative inline-flex rounded-lg bg-white p-1">
                             <button
                                 type="button"
                                 className={`${
@@ -67,7 +67,7 @@ export default function Index({ monthly, yearly }: IndexProps) {
                         <div
                             className={`flex flex-col overflow-hidden rounded-lg shadow-lg ${billingCycle === 'monthly' ? 'ring-2 ring-indigo-600' : ''}`}
                         >
-                            <div className="bg-white px-6 py-8 sm:p-10 sm:pb-6 dark:bg-gray-800">
+                            <div className="bg-white px-6 py-8 sm:p-10 sm:pb-6">
                                 <div>
                                     <h3 className="inline-flex rounded-full bg-indigo-100 px-4 py-1 text-sm font-semibold tracking-wide text-indigo-600 uppercase dark:bg-indigo-900 dark:text-indigo-200">
                                         {monthly.name}
@@ -79,7 +79,7 @@ export default function Index({ monthly, yearly }: IndexProps) {
                                 </div>
                                 <p className="mt-5 text-lg text-gray-500 dark:text-gray-400">Perfect for individuals and small teams.</p>
                             </div>
-                            <div className="flex flex-1 flex-col justify-between space-y-6 bg-gray-50 px-6 pt-6 pb-8 sm:p-10 sm:pt-6 dark:bg-gray-900">
+                            <div className="flex flex-1 flex-col justify-between space-y-6 px-6 pt-6 pb-8 sm:p-10 sm:pt-6 dark:bg-gray-900">
                                 <ul className="space-y-4">
                                     {features.map((feature, index) => (
                                         <li key={index} className="flex items-start">
@@ -102,7 +102,7 @@ export default function Index({ monthly, yearly }: IndexProps) {
                                 <div className="rounded-md shadow">
                                     <a
                                         href={route('checkout', { plan: 'monthly' })}
-                                        className={`flex w-full items-center justify-center rounded-md border border-transparent px-5 py-3 text-base font-medium text-white ${billingCycle === 'monthly' ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-600 hover:bg-gray-700'} transition-colors duration-150`}
+                                        className={`flex w-full items-center justify-center rounded-md border border-transparent px-5 py-3 text-base font-medium text-white ${billingCycle === 'monthly' ? 'bg-indigo-600 hover:bg-indigo-700' : 'hover:bg-gray-700'} transition-colors duration-150`}
                                     >
                                         Get started
                                     </a>
@@ -114,7 +114,7 @@ export default function Index({ monthly, yearly }: IndexProps) {
                         <div
                             className={`flex flex-col overflow-hidden rounded-lg shadow-lg ${billingCycle === 'yearly' ? 'ring-2 ring-indigo-600' : ''}`}
                         >
-                            <div className="bg-white px-6 py-8 sm:p-10 sm:pb-6 dark:bg-gray-800">
+                            <div className="bg-white px-6 py-8 sm:p-10 sm:pb-6">
                                 <div>
                                     <h3 className="inline-flex rounded-full bg-indigo-100 px-4 py-1 text-sm font-semibold tracking-wide text-indigo-600 uppercase dark:bg-indigo-900 dark:text-indigo-200">
                                         {yearly.name}
@@ -128,7 +128,7 @@ export default function Index({ monthly, yearly }: IndexProps) {
                                     Billed annually (${(yearly.price_id / 100).toFixed(2)}/year)
                                 </p>
                             </div>
-                            <div className="flex flex-1 flex-col justify-between space-y-6 bg-gray-50 px-6 pt-6 pb-8 sm:p-10 sm:pt-6 dark:bg-gray-900">
+                            <div className="flex flex-1 flex-col justify-between space-y-6 px-6 pt-6 pb-8 sm:p-10 sm:pt-6 dark:bg-gray-900">
                                 <ul className="space-y-4">
                                     {features.map((feature, index) => (
                                         <li key={index} className="flex items-start">
@@ -151,7 +151,7 @@ export default function Index({ monthly, yearly }: IndexProps) {
                                 <div className="rounded-md shadow">
                                     <a
                                         href={route('checkout', { plan: 'yearly' })}
-                                        className={`flex w-full items-center justify-center rounded-md border border-transparent px-5 py-3 text-base font-medium text-white ${billingCycle === 'yearly' ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-600 hover:bg-gray-700'} transition-colors duration-150`}
+                                        className={`flex w-full items-center justify-center rounded-md border border-transparent px-5 py-3 text-base font-medium text-white ${billingCycle === 'yearly' ? 'bg-indigo-600 hover:bg-indigo-700' : 'hover:bg-gray-700'} transition-colors duration-150`}
                                     >
                                         Get started
                                     </a>

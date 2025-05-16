@@ -1,4 +1,3 @@
-
 import theme from '@/theme'; // <- Import your Mantine theme
 import { createInertiaApp } from '@inertiajs/react';
 import createServer from '@inertiajs/react/server';
