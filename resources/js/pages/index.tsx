@@ -17,22 +17,16 @@ export default function Welcome() {
             <div className="absolute inset-0 h-[400px] sm:h-[700px]">
                 <div className="relative h-[400px] w-full sm:h-[700px]">
                     <img
-                        src="/mobile.webp"
-                        srcSet="
-    /mobile.webp 600w,
-    /desktop-768.webp 768w,
-    /desktop-1350.webp 1350w,
-    /desktop.webp 1920w
-  "
-                        sizes="(max-width: 639px) 100vw,
-         (max-width: 768px) 100vw,
-         (max-width: 1366px) 1350px,
-         1920px"
+                        sizes="(max-width: 639px) 100vw, (max-width: 768px) 100vw, 100vw"
                         alt="Banner"
                         fetchPriority="high"
                         loading="eager"
                         decoding="async"
                         className="block h-full w-full object-cover brightness-70"
+                        srcSet="/mobile.webp 600w,
+          /desktop-768.webp 768w,
+          /desktop-1350.webp 1350w"
+                        src="/desktop-768.webp"
                     />
 
                     <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-black/80" />

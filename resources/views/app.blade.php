@@ -3,6 +3,13 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+<link
+  rel="preload"
+  as="image"
+  href="/desktop-768.webp"
+  imagesrcset="/mobile.webp 600w, /desktop-768.webp 768w, /desktop-1350.webp 1350w"
+  imagesizes="(max-width: 639px) 100vw, (max-width: 768px) 100vw, 100vw"
+/>
 
         {{-- Inline script to detect system dark mode preference and apply it immediately --}}
         <script>
