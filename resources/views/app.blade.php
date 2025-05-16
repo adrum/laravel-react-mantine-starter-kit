@@ -38,7 +38,7 @@
 
     @routes
     @viteReactRefresh
-    @vite(['resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
+    @vite(['resources/js/app.tsx'], ['defer' => true])
     @inertiaHead
 </head>
 
