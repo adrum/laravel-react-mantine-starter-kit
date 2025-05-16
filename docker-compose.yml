@@ -50,7 +50,7 @@ x-base: &base
     - "traefik.http.middlewares.static-assets-cache.headers.customResponseHeaders.Cache-Control=public, max-age=31536000, immutable"
 
     # Static assets router (Vite build assets)
-    - "traefik.http.routers.static-assets.rule=Host(`bastardo.761073128.xyz`) && PathPrefix(`/build/assets/`)"
+    - "traefik.http.routers.static-assets.rule=Host(`bastardo.761073128.xyz`) && PathPrefix(`/build/assets/`, `/fonts/`)"
     - "traefik.http.routers.static-assets.service=app"
     - "traefik.http.routers.static-assets.middlewares=compress,static-assets-cache"
 
