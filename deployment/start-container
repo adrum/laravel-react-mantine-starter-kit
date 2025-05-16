@@ -13,7 +13,7 @@ initialStuff() {
         php artisan migrate --isolated --seed --force || php artisan migrate --seed --force
     fi
 
-   # php artisan optimize:clear; \
+    php artisan storage:link;
    # php artisan optimize;
 }
 
