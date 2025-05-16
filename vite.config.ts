@@ -16,6 +16,32 @@ export default defineConfig({
     ],
     esbuild: {
         jsx: 'automatic',
+        treeShaking: true,
+    },
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    vendor: ['react', 'react-dom'],
+                    ui: ['@mantine/core', '@mantine/hooks'],
+                    icons: ['@tabler/icons-react']
+                },
+            },
+            treeshake: {
+                moduleSideEffects: false,
+                propertyReadSideEffects: false,
+                tryCatchDeoptimization: false
+            },
+        },
+        minify: 'terser',
+        terserOptions: {
+            compress: {
+                drop_console: true,
+                drop_debugger: true,
+            },
+        },
+        cssCodeSplit: true,
+        reportCompressedSize: false,
     },
     resolve: {
         alias: {
@@ -24,6 +50,6 @@ export default defineConfig({
         },
     },
     ssr: {
-      noExternal: true
+        noExternal: true
     },
 });
