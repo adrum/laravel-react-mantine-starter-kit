@@ -6,7 +6,6 @@ import TextLink from '@/components/text-link';
 import AuthLayout from '@/layouts/auth-layout';
 import { type SocialiteUi as SocialiteUiType } from '@/types/socialite-ui';
 import { Button, Checkbox, PasswordInput, TextInput } from '@mantine/core';
-import { Socials } from '@/types';
 
 type LoginForm = {
     email: string;
@@ -17,11 +16,10 @@ type LoginForm = {
 interface LoginProps {
     status?: string;
     canResetPassword: boolean;
-    socials: Socials;
     socialiteUi: SocialiteUiType;
 }
 
-export default function Login({ status, canResetPassword, socialiteUi, socials }: LoginProps) {
+export default function Login({ status, canResetPassword, socialiteUi }: LoginProps) {
     const { data, setData, post, processing, errors, reset } = useForm<Required<LoginForm>>({
         email: '',
         password: '',

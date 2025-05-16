@@ -12,7 +12,7 @@ Route::get('/', function () {
     return Inertia::render('index');
 })->name('home');
 
-Route::get('plans', [PlanController::class, 'index'])->name('plans');
+Route::get('plans', [PlanController::class, 'index'])->name('plans.index');
 
 Route::get('checkout', [CheckoutController::class, 'index'])->name('checkout');
 

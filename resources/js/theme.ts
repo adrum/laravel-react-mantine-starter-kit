@@ -1,5 +1,4 @@
 import {
-    AccordionItem,
     Anchor,
     Button,
     Checkbox,

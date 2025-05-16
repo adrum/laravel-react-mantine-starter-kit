@@ -1,4 +1,5 @@
 import { useTranslation } from '@/hooks/use-translations';
+import { cn } from '@/lib/utils';
 import { SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import {
@@ -22,6 +23,7 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { IconChevronDown, IconCode } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
+import AppLogo from '../app-logo';
 import AppLogoIcon from '../app-logo-icon';
 import { LanguageSelector } from '../language-selector';
 
@@ -57,7 +59,7 @@ function userAccount(auth: SharedData['auth'], __: ReturnType<typeof useTranslat
     );
 }
 
-export function SiteHeader() {
+export function SiteHeader({ variant = 'secondary' }: { variant?: 'primary' | 'secondary' }) {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
     const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
     const theme = useMantineTheme();
@@ -95,15 +97,17 @@ export function SiteHeader() {
     ));
 
     return (
-        <Box className={`sticky top-0 z-2 h-18 w-full transition-colors duration-300 ${scrolled ? 'bg-black/60' : 'bg-transparent'}`}>
+        <Box
+            className={`sticky top-0 z-2 h-18 w-full transition-colors duration-300 ${scrolled ? 'bg-black/60' : variant == 'secondary' ? '' : 'bg-primary'}`}
+        >
             <Box>
-                <header className="relative mx-auto h-18 px-4 text-white">
+                <header className={cn('relative mx-auto h-18 px-4 text-white')}>
                     <Group className="mx-auto !max-w-7xl" justify="space-between" h="100%">
                         <Group h="100%" gap={0} visibleFrom="sm">
-                            <AppLogoIcon />
-                            <a href="#" className="flex items-center px-2 text-sm font-bold">
+                            <AppLogo />
+                            <Link href={route('home')} className="flex items-center px-2 text-sm font-bold">
                                 Home
-                            </a>
+                            </Link>
                             <HoverCard width={600} position="bottom" radius="md" shadow="md" withinPortal>
                                 <HoverCard.Target>
                                     <a href="#" className="flex items-center px-2 text-sm font-bold">
@@ -145,12 +149,9 @@ export function SiteHeader() {
                                     </div>
                                 </HoverCard.Dropdown>
                             </HoverCard>
-                            <a href="#" className="flex items-center px-2 text-sm font-bold">
-                                Learn
-                            </a>
-                            <a href="#" className="flex items-center px-2 text-sm font-bold">
-                                Academy
-                            </a>
+                            <Link href={route('plans.index')} className="flex items-center px-2 text-sm font-bold">
+                                Plans
+                            </Link>
                         </Group>
                         <Group visibleFrom="sm" className="">
                             {userAccount(auth, __)}
@@ -168,9 +169,9 @@ export function SiteHeader() {
                     <ScrollArea h="calc(100vh - 80px" mx="-md">
                         <Divider my="sm" />
 
-                        <a href="#" className="flex items-center px-4">
+                        <Link href={route('home')} className="flex items-center px-4">
                             Home
-                        </a>
+                        </Link>
                         <UnstyledButton className="mx-4 flex items-center" onClick={toggleLinks}>
                             <Center inline>
                                 <Box component="span" mr={5}>
@@ -180,12 +181,9 @@ export function SiteHeader() {
                             </Center>
                         </UnstyledButton>
                         <Collapse in={linksOpened}>{links}</Collapse>
-                        <a href="#" className="flex items-center px-4">
-                            Learn
-                        </a>
-                        <a href="#" className="flex items-center px-4">
-                            Academy
-                        </a>
+                        <Link href={route('plans.index')} className="flex items-center px-4">
+                            Plans
+                        </Link>
 
                         <Divider my="sm" />
 

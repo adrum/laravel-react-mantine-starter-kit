@@ -46,17 +46,16 @@ final class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
+        /** @var array{
+               github: bool,
+               x: bool,
+               facebook: bool,
+               google: bool
+         } $socials */
+        $socials = config('custom.socials', []);
+        $availableSocials = collect($socials)->filter(fn (bool $item): bool => $item)->keys();
 
-        $availableSocials = collect(config('custom.socials', []))->filter(fn ($item) => $item)->keys();
-
-        $socials = collect(SocialiteUi::providers()->toArray())->filter(function (array $item) use ($availableSocials) {
-
-            if (! $availableSocials->contains($item['id'])) {
-                return false;
-            }
-
-            return true;
-        });
+        $socials = collect(SocialiteUi::providers()->toArray())->filter(fn (array $item) => $availableSocials->contains($item['id']));
 
         return [
             ...parent::share($request),

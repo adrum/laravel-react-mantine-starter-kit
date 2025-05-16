@@ -16,8 +16,7 @@ createInertiaApp({
     setup({ el, App, props }) {
         hydrateRoot(
             el,
-            <MantineProvider
-                theme={theme}>
+            <MantineProvider theme={theme}>
                 <App {...props} />
             </MantineProvider>,
         );

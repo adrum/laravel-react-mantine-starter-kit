@@ -15,7 +15,6 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-
     --font-primary: 'Outfit', sans-serif;
     --font-secondary: 'Ancizar Sans', sans-serif;
 
@@ -165,7 +164,7 @@
     }
 
     p {
-        @apply font-secondary
+        @apply font-secondary;
     }
 
     .mantine-Accordion-content {
