@@ -35,6 +35,13 @@ export interface SharedData {
     [key: string]: unknown;
 }
 
+export interface Socials {
+    github: boolean;
+    facebook: boolean;
+    x: boolean;
+    google: boolean;
+}
+
 export interface User {
     id: number;
     name: string;

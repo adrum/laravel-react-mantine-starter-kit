@@ -1,4 +1,5 @@
 import {
+    AccordionItem,
     Anchor,
     Button,
     Checkbox,
@@ -44,9 +45,8 @@ const theme = createTheme({
     colors: {
         myColor,
     },
-
+    fontFamily: 'default, sans-serif',
     defaultRadius: 'md',
-
     components: {
         Anchor: Anchor.extend({
             defaultProps: {

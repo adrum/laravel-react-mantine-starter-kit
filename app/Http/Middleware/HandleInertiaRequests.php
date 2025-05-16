@@ -47,6 +47,17 @@ final class HandleInertiaRequests extends Middleware
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
+        $availableSocials = collect(config('custom.socials', []))->filter(fn ($item) => $item)->keys();
+
+        $socials = collect(SocialiteUi::providers()->toArray())->filter(function (array $item) use ($availableSocials) {
+
+            if (! $availableSocials->contains($item['id'])) {
+                return false;
+            }
+
+            return true;
+        });
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -56,7 +67,7 @@ final class HandleInertiaRequests extends Middleware
             ],
             'socialiteUi' => [
                 'error' => $request->session()->get('socialite-ui.error'),
-                'providers' => SocialiteUi::providers()->toArray(),
+                'providers' => $socials->values()->toArray(),
                 'hasPassword' => ! is_null($request->user()?->getAuthPassword()),
             ],
             'language' => app()->getLocale(),

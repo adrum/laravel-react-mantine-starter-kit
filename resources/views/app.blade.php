@@ -32,6 +32,10 @@
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
+        @googlefonts('primary')
+        @googlefonts('secondary')
+
+
         @routes
         @viteReactRefresh
         @vite(['resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])

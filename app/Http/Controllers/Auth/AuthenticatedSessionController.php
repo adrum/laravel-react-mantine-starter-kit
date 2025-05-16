@@ -20,9 +20,12 @@ final class AuthenticatedSessionController extends Controller
      */
     public function create(Request $request): Response
     {
+        /** @var array{github: bool, x: bool, facebook: bool, google: bool} $socials */
+        $socials = config('custom.socials');
         return Inertia::render('auth/login', [
             'canResetPassword' => Route::has('password.request'),
             'status' => $request->session()->get('status'),
+            'socials' => $socials,
         ]);
     }
 
