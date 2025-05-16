@@ -13,7 +13,7 @@ jobs:
       - name: Set up MySQL
         run: |
           sudo systemctl start mysql
-          mysql --user="root" --password="sassykit" -e "CREATE DATABASE \`sassykit\` character set UTF8mb4 collate utf8mb4_bin;"
+          mysql --user="root" --password="root" -e "CREATE DATABASE \`sassykit\` character set UTF8mb4 collate utf8mb4_bin;"
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -25,6 +25,9 @@ jobs:
 
       - name: Install Dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Migrate
+        run: php artisan migrate
 
       - name: Generate key
         run: php artisan key:generate
