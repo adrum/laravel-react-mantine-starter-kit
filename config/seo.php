@@ -93,7 +93,7 @@ return [
          * where we don't have a description set via an associated ->seo model or via
          * the ->getDynamicSEOData() method.
          */
-        'fallback' => null,
+        'fallback' => 'Sassy Kit Description',
     ],
 
     'image' => [
