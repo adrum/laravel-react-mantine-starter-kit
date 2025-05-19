@@ -3,7 +3,14 @@
     justify-content: space-between;
     padding-top: calc(var(--mantine-spacing-xl) * 4);
     padding-bottom: calc(var(--mantine-spacing-xl) * 4);
+
+    @media (max-width: $mantine-breakpoint-xs) {
+        display: hidden!important;
+    }
+
 }
+
+
 
 .content {
     max-width: 480px;

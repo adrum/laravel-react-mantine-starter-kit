@@ -6,7 +6,7 @@ import classes from './HeroBullets.module.css';
 export function HeroBullets() {
     return (
         <Container size="md">
-            <div className={classes.inner}>
+            <div className="flex-col space-y-12 py-24 md:flex md:flex-row w-full md:space-y-0 ">
                 <div className={classes.content}>
                     <Title className={classes.title}>
                         A <span className={classes.highlight}>modern</span> React <br /> components library
@@ -46,7 +46,7 @@ export function HeroBullets() {
                         </Button>
                     </Group>
                 </div>
-                <Image src={image} className={classes.image} />
+                <Image fetchPriority='high' src={image} className={classes.image} />
             </div>
         </Container>
     );
