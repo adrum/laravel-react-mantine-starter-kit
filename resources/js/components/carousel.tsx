@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
 import { animated, useSpring } from '@react-spring/web';
-import { useDrag } from '@use-gesture/react';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { useDrag } from '@use-gesture/react';
+import React, { useEffect, useState } from 'react';
 
 interface CarouselProps {
     items: React.ReactNode[];
@@ -19,7 +19,7 @@ function Carousel({ items, autoPlay = true, interval = 3000, showArrows = true, 
     }));
 
     const bind = useDrag(
-        ({ down, movement: [mx], direction: [xDir], velocity: [vx], last }) => {
+        ({ movement: [mx], velocity: [vx], last }) => {
             // Update spring based on drag with velocity
             // api.start({
             //     x: down ? mx : 0,
@@ -35,10 +35,10 @@ function Carousel({ items, autoPlay = true, interval = 3000, showArrows = true, 
                 // Determine direction and update index
                 if (mx < 0) {
                     // Dragged left (next slide)
-                    setActiveIndex(prev => Math.min(prev + 1, items.length - 1));
+                    setActiveIndex((prev) => Math.min(prev + 1, items.length - 1));
                 } else {
                     // Dragged right (previous slide)
-                    setActiveIndex(prev => Math.max(prev - 1, 0));
+                    setActiveIndex((prev) => Math.max(prev - 1, 0));
                 }
             }
         },
@@ -47,8 +47,8 @@ function Carousel({ items, autoPlay = true, interval = 3000, showArrows = true, 
             filterTaps: true,
             rubberband: true,
             bounds: { left: -250, right: 250, top: 0, bottom: 0 },
-            axis: 'x'
-        }
+            axis: 'x',
+        },
     );
 
     const goToSlide = (index: number) => {
@@ -83,14 +83,14 @@ function Carousel({ items, autoPlay = true, interval = 3000, showArrows = true, 
                 tension: 500,
                 friction: 40,
                 mass: 0.8,
-                velocity: 0
-            }
+                velocity: 0,
+            },
         });
     }, [activeIndex, api]);
 
     return (
         <div className="h-full overflow-hidden">
-            <div className="inset-0  overflow-hidden ">
+            <div className="inset-0 overflow-hidden">
                 <div
                     className="relative h-full w-full cursor-grab active:cursor-grabbing"
                     {...bind()}
@@ -99,7 +99,7 @@ function Carousel({ items, autoPlay = true, interval = 3000, showArrows = true, 
                         userSelect: 'none',
                         WebkitUserSelect: 'none',
                         MozUserSelect: 'none',
-                        msUserSelect: 'none'
+                        msUserSelect: 'none',
                     }}
                     onDragStart={(e) => e.preventDefault()}
                 >
@@ -123,14 +123,14 @@ function Carousel({ items, autoPlay = true, interval = 3000, showArrows = true, 
                     <>
                         <button
                             onClick={prevSlide}
-                            className="absolute top-1/2 left-2 -translate-y-1/2 rounded-full bg-white/80 p-2 shadow-md transition-colors hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-white"
+                            className="absolute top-1/2 left-2 -translate-y-1/2 rounded-full bg-white/80 p-2 text-white shadow-md transition-colors hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800"
                             aria-label="Previous slide"
                         >
                             <IconChevronLeft size={20} />
                         </button>
                         <button
                             onClick={nextSlide}
-                            className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full bg-white/80 p-2 shadow-md transition-colors hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-white"
+                            className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full bg-white/80 p-2 text-white shadow-md transition-colors hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800"
                             aria-label="Next slide"
                         >
                             <IconChevronRight size={20} />

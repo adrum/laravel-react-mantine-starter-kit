@@ -1,26 +1,26 @@
 .price {
-  color: var(--mantine-color-bright);
+    color: var(--mantine-color-bright);
 }
 
 .carousel {
-  @mixin hover {
-    .carouselControls {
-      opacity: 1;
+    @mixin hover {
+        .carouselControls {
+            opacity: 1;
+        }
     }
-  }
 }
 
 .carouselControls {
-  transition: opacity 150ms ease;
-  opacity: 0;
+    transition: opacity 150ms ease;
+    opacity: 0;
 }
 
 .carouselIndicator {
-  width: 4px;
-  height: 4px;
-  transition: width 250ms ease;
+    width: 4px;
+    height: 4px;
+    transition: width 250ms ease;
 
-  &[data-active] {
-    width: 16px;
-  }
+    &[data-active] {
+        width: 16px;
+    }
 }

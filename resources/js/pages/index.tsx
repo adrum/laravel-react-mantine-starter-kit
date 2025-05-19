@@ -6,14 +6,13 @@ import { Footer } from '@/components/site/footer';
 import { SiteHeader } from '@/components/site/header';
 
 export default function Welcome() {
-
     return (
         <>
-            <SiteHeader variant='primary'></SiteHeader>
+            <SiteHeader variant="primary"></SiteHeader>
             <HeroBullets />
             <FeaturesCards />
 
-            <div className="mx-auto max-w-7xl grid grid-cols-3 gap-4 px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto grid max-w-7xl grid-cols-3 gap-4 px-4 sm:px-6 lg:px-8">
                 <CardCarousel />
                 <CardCarousel />
                 <CardCarousel />

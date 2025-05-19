@@ -25,8 +25,8 @@ import { IconChevronDown, IconCode } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import AppLogo from '../app-logo';
 import AppLogoIcon from '../app-logo-icon';
-import { LanguageSelector } from '../language-selector';
 import { ColorModeSwitch } from '../color-mode-switch';
+import { LanguageSelector } from '../language-selector';
 
 const mockdata = [
     {

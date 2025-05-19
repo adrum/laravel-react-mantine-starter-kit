@@ -42,7 +42,8 @@
             "apexcharts",
             "visualbuilder",
             "tinyeditor",
-            "seo"
+            "seo",
+            "mantine"
         ],
         "paths": []
     }
