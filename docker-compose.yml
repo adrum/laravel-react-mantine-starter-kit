@@ -10,6 +10,7 @@ x-base: &base
     context: .
     dockerfile: Swoole.Dockerfile
     args:
+      APP_ENV: '${APP_ENV}'
       APP_HOST: '${APP_HOST}'
       WWWUSER: ${HOST_UID:-1000}
       WWWGROUP: ${HOST_GID:-1000}
@@ -77,4 +78,3 @@ volumes:
     driver: local
   fonts:
     driver: local
-
