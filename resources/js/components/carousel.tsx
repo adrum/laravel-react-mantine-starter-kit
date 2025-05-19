@@ -1,7 +1,7 @@
-import { animated, useSpring } from '@react-spring/web';
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
-import { useDrag } from '@use-gesture/react';
 import React, { useEffect, useState } from 'react';
+import { animated, useSpring } from '@react-spring/web';
+import { useDrag } from '@use-gesture/react';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
 interface CarouselProps {
     items: React.ReactNode[];
@@ -11,29 +11,45 @@ interface CarouselProps {
     showDots?: boolean;
 }
 
-export default function Carousel({ items, autoPlay = true, interval = 3000, showArrows = true, showDots = true }: CarouselProps) {
+function Carousel({ items, autoPlay = true, interval = 3000, showArrows = true, showDots = true }: CarouselProps) {
     const [activeIndex, setActiveIndex] = useState(0);
     const [springs, api] = useSpring(() => ({
         x: 0,
-        config: { tension: 280, friction: 60 },
+        config: { tension: 300, friction: 40, mass: 0.8 },
     }));
 
-    const bind = useDrag(({ down, movement: [mx], direction: [xDir], cancel }) => {
-        // If we're dragging more than 50px in either direction
-        if (down && Math.abs(mx) > 50) {
-            // Determine direction and update index
-            const newIndex = xDir > 0 ? Math.max(activeIndex - 1, 0) : Math.min(activeIndex + 1, items.length - 1);
+    const bind = useDrag(
+        ({ down, movement: [mx], direction: [xDir], velocity: [vx], last }) => {
+            // Update spring based on drag with velocity
+            // api.start({
+            //     x: down ? mx : 0,
+            //     immediate: down,
+            //     config: {
+            //         tension: down ? 200 : 500,
+            //         friction: down ? 30 : 40
+            //     }
+            // });
 
-            setActiveIndex(newIndex);
-            cancel();
+            // If we're releasing with sufficient movement or velocity
+            if (last && (Math.abs(mx) > 50 || Math.abs(vx) > 0.5)) {
+                // Determine direction and update index
+                if (mx < 0) {
+                    // Dragged left (next slide)
+                    setActiveIndex(prev => Math.min(prev + 1, items.length - 1));
+                } else {
+                    // Dragged right (previous slide)
+                    setActiveIndex(prev => Math.max(prev - 1, 0));
+                }
+            }
+        },
+        {
+            // Configure drag options
+            filterTaps: true,
+            rubberband: true,
+            bounds: { left: -250, right: 250, top: 0, bottom: 0 },
+            axis: 'x'
         }
-
-        // Update spring based on drag
-        api.start({
-            x: down ? mx : 0,
-            immediate: down,
-        });
-    });
+    );
 
     const goToSlide = (index: number) => {
         setActiveIndex(index);
@@ -63,13 +79,30 @@ export default function Carousel({ items, autoPlay = true, interval = 3000, show
         api.start({
             x: 0,
             immediate: false,
+            config: {
+                tension: 500,
+                friction: 40,
+                mass: 0.8,
+                velocity: 0
+            }
         });
     }, [activeIndex, api]);
 
     return (
-        <div className="h-[400px] sm:h-[700px]">
-            <div className="absolute inset-0 h-[400px] overflow-hidden rounded-xl sm:h-[700px]">
-                <div className="relative h-full w-full" {...bind()} style={{ touchAction: 'pan-y' }}>
+        <div className="h-full overflow-hidden">
+            <div className="inset-0  overflow-hidden ">
+                <div
+                    className="relative h-full w-full cursor-grab active:cursor-grabbing"
+                    {...bind()}
+                    style={{
+                        touchAction: 'none',
+                        userSelect: 'none',
+                        WebkitUserSelect: 'none',
+                        MozUserSelect: 'none',
+                        msUserSelect: 'none'
+                    }}
+                    onDragStart={(e) => e.preventDefault()}
+                >
                     <animated.div
                         className="flex transition-transform"
                         style={{
@@ -90,14 +123,14 @@ export default function Carousel({ items, autoPlay = true, interval = 3000, show
                     <>
                         <button
                             onClick={prevSlide}
-                            className="absolute top-1/2 left-2 -translate-y-1/2 rounded-full bg-white/80 p-2 shadow-md transition-colors hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800"
+                            className="absolute top-1/2 left-2 -translate-y-1/2 rounded-full bg-white/80 p-2 shadow-md transition-colors hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-white"
                             aria-label="Previous slide"
                         >
                             <IconChevronLeft size={20} />
                         </button>
                         <button
                             onClick={nextSlide}
-                            className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full bg-white/80 p-2 shadow-md transition-colors hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800"
+                            className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full bg-white/80 p-2 shadow-md transition-colors hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-white"
                             aria-label="Next slide"
                         >
                             <IconChevronRight size={20} />
@@ -124,3 +157,5 @@ export default function Carousel({ items, autoPlay = true, interval = 3000, show
         </div>
     );
 }
+
+export default Carousel;

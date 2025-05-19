@@ -99,7 +99,7 @@ export function SiteHeader({ variant = 'secondary' }: { variant?: 'primary' | 's
 
     return (
         <Box
-            className={`sticky top-0 z-2 h-18 w-full transition-colors duration-300 ${scrolled ? 'bg-black/60' : variant == 'secondary' ? '' : 'bg-primary'}`}
+            className={`sticky top-0 z-2 h-18 w-full transition-colors duration-300 ${scrolled ? 'bg-black/60' : variant == 'secondary' ? '' : 'bg-primary dark:bg-black'}`}
         >
             <Box>
                 <header className={cn('relative mx-auto h-18 px-4 text-white')}>
