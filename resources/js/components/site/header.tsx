@@ -26,6 +26,7 @@ import { useEffect, useState } from 'react';
 import AppLogo from '../app-logo';
 import AppLogoIcon from '../app-logo-icon';
 import { LanguageSelector } from '../language-selector';
+import { ColorModeSwitch } from '../color-mode-switch';
 
 const mockdata = [
     {
@@ -156,12 +157,13 @@ export function SiteHeader({ variant = 'secondary' }: { variant?: 'primary' | 's
                         <Group visibleFrom="sm" className="">
                             {userAccount(auth, __)}
                             <LanguageSelector />
+                            <ColorModeSwitch />
                         </Group>
 
                         <Group hiddenFrom="sm">
                             <AppLogoIcon />
                         </Group>
-                        <Burger component={Button} color="white" opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
+                        <Burger color="white" opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
                     </Group>
                 </header>
 
