@@ -20,16 +20,6 @@ function Carousel({ items, autoPlay = true, interval = 3000, showArrows = true, 
 
     const bind = useDrag(
         ({ movement: [mx], velocity: [vx], last }) => {
-            // Update spring based on drag with velocity
-            // api.start({
-            //     x: down ? mx : 0,
-            //     immediate: down,
-            //     config: {
-            //         tension: down ? 200 : 500,
-            //         friction: down ? 30 : 40
-            //     }
-            // });
-
             // If we're releasing with sufficient movement or velocity
             if (last && (Math.abs(mx) > 50 || Math.abs(vx) > 0.5)) {
                 // Determine direction and update index
@@ -60,17 +50,15 @@ function Carousel({ items, autoPlay = true, interval = 3000, showArrows = true, 
     };
 
     const prevSlide = () => {
-        setActiveIndex((current) => (current === 0 ? items.length - 1 : current));
+        setActiveIndex((current) => (current === 0 ? items.length - 1 : current - 1));
     };
 
     // Auto play functionality
     useEffect(() => {
         if (!autoPlay) return;
-
         const timer = setInterval(() => {
             nextSlide();
         }, interval);
-
         return () => clearInterval(timer);
     }, [autoPlay, interval, activeIndex]);
 
@@ -117,7 +105,6 @@ function Carousel({ items, autoPlay = true, interval = 3000, showArrows = true, 
                         ))}
                     </animated.div>
                 </div>
-
                 {/* Navigation Arrows */}
                 {showArrows && items.length > 1 && (
                     <>
@@ -137,7 +124,6 @@ function Carousel({ items, autoPlay = true, interval = 3000, showArrows = true, 
                         </button>
                     </>
                 )}
-
                 {/* Dots Indicator */}
                 {showDots && items.length > 1 && (
                     <div className="absolute right-0 bottom-4 left-0 flex justify-center gap-2">

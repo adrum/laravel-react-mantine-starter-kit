@@ -79,7 +79,7 @@ export default function Index({ monthly, yearly }: IndexProps) {
                                 </div>
                                 <p className="mt-5 text-lg text-gray-500 dark:text-gray-400">Perfect for individuals and small teams.</p>
                             </div>
-                            <div className="flex flex-1 flex-col justify-between space-y-6 px-6 pt-6 pb-8 sm:p-10 sm:pt-6 dark:bg-gray-900">
+                            <div className="flex flex-1 flex-col justify-between space-y-6 px-6 pt-6 pb-8 sm:p-10 sm:pt-6 ">
                                 <ul className="space-y-4">
                                     {features.map((feature, index) => (
                                         <li key={index} className="flex items-start">
@@ -128,7 +128,7 @@ export default function Index({ monthly, yearly }: IndexProps) {
                                     Billed annually (${(yearly.price_id / 100).toFixed(2)}/year)
                                 </p>
                             </div>
-                            <div className="flex flex-1 flex-col justify-between space-y-6 px-6 pt-6 pb-8 sm:p-10 sm:pt-6 dark:bg-gray-900">
+                            <div className="flex flex-1 flex-col justify-between space-y-6 px-6 pt-6 pb-8 sm:p-10 sm:pt-6 ">
                                 <ul className="space-y-4">
                                     {features.map((feature, index) => (
                                         <li key={index} className="flex items-start">
