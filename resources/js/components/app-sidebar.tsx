@@ -1,4 +1,4 @@
-import { IconGridDots, IconX } from '@tabler/icons-react';
+import { IconGridDots, IconLayoutKanban, IconX } from '@tabler/icons-react';
 
 import { type NavItem } from '@/types';
 
@@ -15,6 +15,11 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: '/dashboard',
         icon: IconGridDots,
+    },
+    {
+        title: 'Kanban',
+        href: '/boards',
+        icon: IconLayoutKanban,
     },
 ];
 
