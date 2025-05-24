@@ -53,3 +53,14 @@ export interface User {
     social_accounts: SocialAccount[];
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export interface Plan {
+    currency: string;
+    title: string;
+}
+
+export interface Invoice {
+    id: string;
+    date: string;
+    total: string;
+}

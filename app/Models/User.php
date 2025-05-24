@@ -37,6 +37,18 @@ final class User extends Authenticatable implements FilamentUser, HasAvatar
         'remember_token',
     ];
 
+    public static function boot(): void
+    {
+        parent::boot();
+
+        self::updated(function (User $user): void {
+            if ($user->hasStripeId()) {
+                $user->syncStripeCustomerDetails();
+            }
+        });
+
+    }
+
     public function getFilamentAvatarUrl(): ?string
     {
         $avatarColumn = config('filament-edit-profile.avatar_column', 'avatar_url');

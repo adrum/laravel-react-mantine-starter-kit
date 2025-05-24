@@ -53,7 +53,7 @@ const theme = createTheme({
                 component: Link,
                 underline: 'always',
                 classNames: {
-                    root: 'text-foreground! hover:text-accent',
+                    root: 'text-foreground! hover:text-accent !no-underline',
                 },
             },
         }),
@@ -61,7 +61,7 @@ const theme = createTheme({
             defaultProps: {
                 size: 'sm',
                 classNames: {
-                    root: '!rounded-full !pt-1',
+                    root: '!rounded-full !pt-0',
                 },
             },
         }),

@@ -4,6 +4,7 @@ import theme from '@/theme';
 
 import { createInertiaApp } from '@inertiajs/react';
 import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { hydrateRoot } from 'react-dom/client';
 import { initializeTheme } from './hooks/use-appearance';
@@ -18,6 +19,7 @@ createInertiaApp({
         hydrateRoot(
             el,
             <MantineProvider theme={theme}>
+                <Notifications />
                 <App {...props} />
             </MantineProvider>,
         );

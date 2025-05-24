@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "bezhansalleh/filament-shield": "^3.3",
+        "dompdf/dompdf": "^3.1",
         "filament/filament": "^3.3",
         "inertiajs/inertia-laravel": "^2.0",
         "joaopaulolndev/filament-edit-profile": "^1.0",

@@ -1,9 +1,14 @@
+import { Title } from '@mantine/core';
+
 export default function AppLogoIcon() {
     return (
         <>
-            <h2 className="mr-4 cursor-pointer text-2xl font-bold tracking-wide">
-                Sassy<span className="text-blue-500">Kit</span>
-            </h2>
+            <div className="dark:text-primary mr-4 flex cursor-pointer items-center text-2xl font-bold tracking-wide text-black">
+                <Title size="2xl">Sassy</Title>
+                <Title size="xl" c="orange">
+                    Kit
+                </Title>
+            </div>
         </>
     );
 }

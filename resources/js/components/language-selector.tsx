@@ -21,7 +21,6 @@ export function LanguageSelector() {
             styles={{
                 input: {
                     backgroundColor: 'transparent',
-                    color: 'white',
                     borderRadius: 90,
                     fontWeight: 500,
                     width: 100,

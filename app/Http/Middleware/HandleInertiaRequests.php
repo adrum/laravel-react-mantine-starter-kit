@@ -77,6 +77,10 @@ final class HandleInertiaRequests extends Middleware
                 ))
                 ->toArray()
             ),
+            'notification' => collect(Arr::only($request->session()->all(), ['success', 'error', 'warning']))
+                ->mapWithKeys(function ($notification, $key) {
+                    return ['type' => $key, 'body' => $notification];
+                }),
             'languages' => LanguageResource::collection(Language::cases()),
             'ziggy' => fn (): array => [
                 ...(new Ziggy)->toArray(),

@@ -12,7 +12,7 @@ const images = [
 ];
 
 export function CardCarousel() {
-    const slides = images.map((image) => <Image loading='lazy' src={image} fit="cover" height={220} />);
+    const slides = images.map((image) => <Image loading="lazy" src={image} fit="cover" height={220} />);
 
     return (
         <Card radius="md" withBorder>
