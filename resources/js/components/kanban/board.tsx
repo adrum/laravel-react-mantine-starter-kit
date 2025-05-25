@@ -10,16 +10,6 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { useEffect, useRef, useState } from 'react';
 
-const initialData = {
-    todo: [
-        { id: '1', title: 'Write docs' },
-        { id: '2', title: 'Fix bug' },
-    ],
-    'in-progress': [{ id: '3', title: 'Design UI' }],
-    done: [{ id: '4', title: 'Completed task' }],
-    berting: [],
-};
-
 const initialColumnNames = {
     todo: 'To Do',
     'in-progress': 'In Progress',
@@ -27,7 +17,7 @@ const initialColumnNames = {
     berting: 'Basura',
 };
 
-export default function Kanban() {
+export default function Kanban({ initialData = {}, initialColumnNames = {} }) {
     const [columns, setColumns] = useState(initialData);
     const [activeId, setActiveId] = useState(null);
     const [activeType, setActiveType] = useState(null);
@@ -35,14 +25,22 @@ export default function Kanban() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [columnOrder, setColumnOrder] = useState(Object.keys(initialData));
     const [columnNames, setColumnNames] = useState(initialColumnNames);
+    const [collapsedColumns, setCollapsedColumns] = useState({});
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
             activationConstraint: {
-                distance: 1,
+                distance: 5,  // Slightly increased from default
             },
         }),
     );
+
+    const toggleColumnCollapse = (columnId) => {
+        setCollapsedColumns(prev => ({
+            ...prev,
+            [columnId]: !prev[columnId]
+        }));
+    };
 
     const findContainer = (id) => {
         if (!id) return null;
@@ -160,10 +158,10 @@ export default function Kanban() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <div className="border-b border-gray-200 bg-white p-6">
+        <div className="min-h-screen">
+            <div className="border-b border-gray-200 p-6">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-2xl font-bold text-gray-900">Kanban Board</h1>
+                    <h1 className="text-2xl font-bold text-gray-900">Boards</h1>
                     <div className="relative">
                         <button
                             onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -218,11 +216,6 @@ export default function Kanban() {
                 onDragStart={handleDragStart}
                 onDragOver={handleDragOver}
                 onDragEnd={handleDragEnd}
-                measuring={{
-                    droppable: {
-                        strategy: 'always',
-                    },
-                }}
             >
                 <SortableContext
                     items={columnOrder}
@@ -237,6 +230,8 @@ export default function Kanban() {
                                 cards={columns[columnId] || []}
                                 viewMode={viewMode}
                                 onNameChange={(newName) => handleColumnNameChange(columnId, newName)}
+                                isCollapsed={collapsedColumns[columnId] || false}
+                                onToggleCollapse={() => toggleColumnCollapse(columnId)}
                             />
                         ))}
                     </div>
@@ -246,23 +241,11 @@ export default function Kanban() {
                     {activeId && activeType === 'Card' ? (
                         <Card id={activeId} title={getActiveItem()?.title || ''} isDragOverlay viewMode={viewMode} />
                     ) : activeId && activeType === 'Column' ? (
-                        <div className={`${viewMode === 'horizontal' ? 'w-72' : 'w-full max-w-4xl'} flex-shrink-0 opacity-80`}>
-                            <div className="flex h-full flex-col rounded-lg border-2 border-blue-400 bg-white shadow-lg">
-                                <div className="border-b border-gray-100 bg-blue-50 p-4">
-                                    <h2 className="font-semibold text-gray-800">{columnNames[activeId] || activeId}</h2>
-                                    <div className="mt-1 text-sm text-gray-500">{(columns[activeId] || []).length} items</div>
-                                </div>
-                                <div className="bg-opacity-50 min-h-[200px] flex-grow bg-blue-50 p-4">
-                                    <div className={`space-y-3 ${viewMode === 'horizontal' ? '' : 'grid grid-cols-4'} `}>
-                                        {(columns[activeId] || []).map((card) => (
-                                            <div key={card.id} className="rounded-lg border border-gray-200 bg-white p-4">
-                                                <div className="text-sm leading-relaxed font-medium text-gray-800">{card.title}</div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <MiniColumnPreview
+                            title={columnNames[activeId] || activeId}
+                            cardCount={(columns[activeId] || []).length}
+                            viewMode={viewMode}
+                        />
                     ) : null}
                 </DragOverlay>
             </DndContext>
@@ -272,11 +255,38 @@ export default function Kanban() {
     );
 }
 
-function Column({ id, title, cards, viewMode, onNameChange }) {
+function MiniColumnPreview({ title, cardCount, viewMode }) {
+    return (
+        <div className={`${viewMode === 'horizontal' ? 'w-72' : 'w-full max-w-md'} flex-shrink-0 opacity-90 rotate-3 transform`}>
+            <div className="flex h-auto flex-col rounded-lg border-2 border-blue-400 bg-white shadow-xl">
+                <div className="border-b border-gray-100 bg-blue-50 p-4">
+                    <div className="flex items-center justify-between">
+                        <h2 className="font-semibold text-gray-800 truncate">{title}</h2>
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-500">{cardCount}</span>
+                            <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div className="bg-blue-50 bg-opacity-50 p-4">
+                    <div className="flex items-center justify-center h-16 rounded border-2 border-dashed border-blue-300">
+                        <div className="text-sm text-blue-600 font-medium">
+                            {cardCount} {cardCount === 1 ? 'card' : 'cards'}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggleCollapse }) {
     const {
         attributes,
         listeners,
-        setNodeRef: setSortableNodeRef,
+        setNodeRef,
         transform,
         transition,
         isDragging,
@@ -287,11 +297,11 @@ function Column({ id, title, cards, viewMode, onNameChange }) {
         },
     });
 
-    const { setNodeRef: setDroppableNodeRef, isOver } = useDroppable({
+    const { setNodeRef: setDroppableNodeRef } = useDroppable({
         id,
         data: {
             type: 'Column',
-            accepts: ['Card'],
+            accepts: ['Card', 'Column'],
         },
     });
 
@@ -299,15 +309,10 @@ function Column({ id, title, cards, viewMode, onNameChange }) {
     const [editedTitle, setEditedTitle] = useState(title);
     const inputRef = useRef(null);
 
-    const setNodeRef = (node) => {
-        setSortableNodeRef(node);
-        setDroppableNodeRef(node);
-    };
-
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
-        opacity: isDragging ? 0.5 : 1,
+        opacity: isDragging ? 0.8 : 1,
     };
 
     useEffect(() => {
@@ -338,82 +343,99 @@ function Column({ id, title, cards, viewMode, onNameChange }) {
     };
 
     return (
-        <div ref={setNodeRef} style={style} {...attributes} className={`${viewMode === 'vertical' ? 'w-full' : 'w-72 flex-shrink-0'}`}>
+        <div
+            ref={(node) => {
+                setNodeRef(node);
+                setDroppableNodeRef(node);
+            }}
+            style={style}
+            className={`${viewMode === 'vertical' ? 'w-full' : 'w-72 flex-shrink-0'} ${isDragging ? 'ring-2 ring-blue-500 z-10' : ''}`}
+        >
             <div
-                className={`flex h-full flex-col rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-200 ${
-                    isOver ? 'shadow-md ring-2 ring-blue-500' : ''
-                } ${isDragging ? 'shadow-lg' : ''}`}
+                className={`flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-200 ${
+                    isDragging ? 'shadow-lg' : ''
+                }`}
             >
                 <div className="border-b border-gray-100 p-4">
                     <div className="flex items-center justify-between">
-                        {isEditing ? (
-                            <input
-                                ref={inputRef}
-                                type="text"
-                                value={editedTitle}
-                                onChange={handleTitleChange}
-                                onBlur={handleTitleBlur}
-                                onKeyDown={handleKeyDown}
-                                className="w-full rounded bg-gray-100 px-2 py-1 font-semibold text-gray-800"
-                            />
-                        ) : (
-                            <h2 className="cursor-text rounded px-2 py-1 font-semibold text-gray-800 hover:bg-gray-100" onClick={handleTitleClick}>
-                                {title}
-                            </h2>
-                        )}
-                        <div className="cursor-grab p-2 active:cursor-grabbing" {...listeners}>
-                            <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
-                            </svg>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={onToggleCollapse}
+                                className="text-gray-400 hover:text-gray-600"
+                            >
+                                <svg
+                                    className="h-4 w-4"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d={isCollapsed ? "M9 5l7 7-7 7" : "M19 9l-7 7-7-7"}
+                                    />
+                                </svg>
+                            </button>
+                            {isEditing ? (
+                                <input
+                                    ref={inputRef}
+                                    type="text"
+                                    value={editedTitle}
+                                    onChange={handleTitleChange}
+                                    onBlur={handleTitleBlur}
+                                    onKeyDown={handleKeyDown}
+                                    className="w-full rounded bg-gray-100 px-2 py-1 font-semibold text-gray-800"
+                                />
+                            ) : (
+                                <h2 className="cursor-text rounded px-2 py-1 font-semibold text-gray-800 hover:bg-gray-100" onClick={handleTitleClick}>
+                                    {title}
+                                </h2>
+                            )}
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-500">{cards.length}</span>
+                            <button
+                                className="cursor-grab p-2 active:cursor-grabbing hover:bg-gray-100 rounded"
+                                {...listeners}
+                                {...attributes}
+                                onClick={(e) => e.preventDefault()} // Prevent accidental clicks
+                            >
+                                <svg className="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
+                                </svg>
+                            </button>
                         </div>
                     </div>
-                    <div className="mt-1 text-sm text-gray-500">{cards.length} items</div>
                 </div>
 
-                <div
-                    className={`relative min-h-[200px] flex-grow p-4 transition-colors ${isOver ? 'bg-blue-100' : ''}`}
-                    style={{
-                        transition: 'background-color 0.15s ease-in-out',
-                        width: '100%',
-                        height: '100%',
-                    }}
-                >
-                    {viewMode === 'horizontal' ? (
-                        <SortableContext items={cards.map((card) => card.id)} strategy={verticalListSortingStrategy}>
-                            <div className="space-y-3">
-                                {cards.map((card) => (
-                                    <Card key={card.id} id={card.id} title={card.title} viewMode={viewMode} />
-                                ))}
-                            </div>
-                        </SortableContext>
-                    ) : (
-                        <SortableContext items={cards.map((card) => card.id)} strategy={rectSortingStrategy}>
+                {!isCollapsed && (
+                    <div className="relative min-h-[200px] flex-grow p-4">
+                        {viewMode === 'horizontal' ? (
+                            <SortableContext items={cards.map((card) => card.id)} strategy={verticalListSortingStrategy}>
+                                <div className="space-y-3">
+                                    {cards.map((card) => (
+                                        <Card key={card.id} id={card.id} title={card.title} viewMode={viewMode} />
+                                    ))}
+                                </div>
+                            </SortableContext>
+                        ) : (
                             <div className="grid grid-cols-5 gap-3">
-                                {cards.map((card) => (
-                                    <Card key={card.id} id={card.id} title={card.title} viewMode={viewMode} />
-                                ))}
+                                <SortableContext items={cards.map((card) => card.id)} strategy={rectSortingStrategy}>
+                                    {cards.map((card) => (
+                                        <Card key={card.id} id={card.id} title={card.title} viewMode={viewMode} />
+                                    ))}
+                                </SortableContext>
                             </div>
-                        </SortableContext>
-                    )}
+                        )}
 
-                    {cards.length === 0 && (
-                        <div
-                            className={`grid place-items-center border-2 border-dashed ${
-                                isOver ? 'border-blue-400 bg-blue-100' : 'border-gray-300'
-                            } h-full min-h-[150px] rounded-lg text-sm text-gray-400`}
-                        >
-                            Drop cards here
-                        </div>
-                    )}
-
-                    {isOver && cards.length > 0 && (
-                        <div
-                            className={`${viewMode === 'vertical' ? 'absolute inset-0 z-10 flex items-center justify-center' : 'mt-3'} bg-opacity-70 pointer-events-none rounded-lg border-2 border-dashed border-blue-400 bg-blue-50 p-2 text-center text-sm text-blue-500`}
-                        >
-                            Drop here
-                        </div>
-                    )}
-                </div>
+                        {cards.length === 0 && (
+                            <div className="grid h-full min-h-[150px] place-items-center rounded-lg border-2 border-dashed border-gray-300 text-sm text-gray-400">
+                                Drop cards here
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );
@@ -439,9 +461,17 @@ function Card({ id, title, isDragOverlay = false, viewMode = 'horizontal' }) {
             style={style}
             {...attributes}
             {...listeners}
-            className={`cursor-grab rounded-lg border border-gray-200 bg-white p-4 transition-all duration-150 hover:border-gray-300 hover:shadow-sm active:cursor-grabbing ${isDragging ? 'opacity-70 shadow-lg' : ''} ${isDragOverlay ? 'cursor-grabbing border-2 border-blue-400 shadow-xl' : ''} ${viewMode === 'vertical' ? 'flex aspect-square items-center justify-center text-center' : ''} `}
+            className={`cursor-grab rounded-lg border border-gray-200 bg-white p-4 transition-all duration-150 hover:border-gray-300 hover:shadow-sm active:cursor-grabbing ${
+                isDragging ? 'opacity-70 shadow-lg' : ''
+            } ${
+                isDragOverlay ? 'cursor-grabbing border-2 border-blue-400 shadow-xl' : ''
+            } ${
+                viewMode === 'vertical' ? 'flex aspect-square items-center justify-center text-center' : ''
+            }`}
         >
-            <div className={`text-sm leading-relaxed font-medium text-gray-800 ${viewMode === 'vertical' ? 'text-center break-words' : ''}`}>
+            <div className={`text-sm leading-relaxed font-medium text-gray-800 ${
+                viewMode === 'vertical' ? 'text-center break-words' : ''
+            }`}>
                 {title}
             </div>
         </div>
