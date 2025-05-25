@@ -45,6 +45,11 @@ final class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+
+        if ($request->wantsModal()) {
+            return [];
+        }
+
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
         /** @var array{
                github: bool,

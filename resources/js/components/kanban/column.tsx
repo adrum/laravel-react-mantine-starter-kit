@@ -1,7 +1,3 @@
 export default function Column() {
-    return (
-        <div>
-            Column
-        </div>
-    )
+    return <div>Column</div>;
 }

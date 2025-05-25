@@ -43,7 +43,8 @@
             "visualbuilder",
             "tinyeditor",
             "seo",
-            "mantine"
+            "mantine",
+            "kanban"
         ],
         "paths": []
     }
