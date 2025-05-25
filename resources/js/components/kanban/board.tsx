@@ -82,10 +82,16 @@ export default function Kanban() {
     const activeContainer = findContainer(active.id);
     const overContainer = findContainer(over.id);
 
-    if (!activeContainer || !overContainer || activeContainer === overContainer) {
+    if (!activeContainer || !overContainer) {
       return;
     }
 
+    // If the container is the same, we don't need to do anything
+    if (activeContainer === overContainer) {
+      return;
+    }
+
+    // Moving to a different container
     setColumns((prev) => {
       const activeItems = prev[activeContainer];
       const overItems = prev[overContainer];
@@ -111,7 +117,13 @@ export default function Kanban() {
     const activeContainer = findContainer(active.id);
     const overContainer = findContainer(over.id);
 
-    if (activeContainer === overContainer && viewMode === 'horizontal') {
+    if (!activeContainer || !overContainer) {
+      setActiveId(null);
+      return;
+    }
+
+    // Check if we're moving within the same container
+    if (activeContainer === overContainer) {
       const activeIndex = columns[activeContainer].findIndex(item => item.id === active.id);
       const overIndex = columns[overContainer].findIndex(item => item.id === over.id);
 
@@ -121,6 +133,9 @@ export default function Kanban() {
           [overContainer]: arrayMove(prev[overContainer], activeIndex, overIndex),
         }));
       }
+    } else {
+      // This handles the case where the card was dropped on a column but not on another card
+      // We already handled the movement in handleDragOver, so we don't need to do anything here
     }
 
     setActiveId(null);
@@ -181,6 +196,12 @@ export default function Kanban() {
         onDragStart={handleDragStart}
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
+        // Increase the sensitivity of the collision detection
+        measuring={{
+          droppable: {
+            strategy: 'always',
+          },
+        }}
       >
         <div className={`p-6 ${viewMode === 'horizontal' ? 'flex gap-6 overflow-x-auto' : 'space-y-6'}`}>
           {Object.keys(columns).map((columnId) => (
@@ -221,14 +242,24 @@ function Column({ id, title, cards, viewMode }) {
     data: {
       type: 'Column',
       accepts: ['Card'],
+    },
+    // Make the entire column a drop target
+    strategy: {
+      activatorEvent: {
+        // Activate on any pointer movement within the column
+        pointerId: null,
+      },
     }
   });
 
   return (
     <div className={`${viewMode === 'vertical' ? 'h-[400px] w-full' : 'w-72 flex-shrink-0'}`}>
       <div className={`bg-white rounded-lg shadow-sm border border-gray-200 transition-all duration-200 h-full flex flex-col ${
-        isOver ? 'ring-2 ring-blue-400 bg-blue-50' : ''
-      }`}>
+        isOver ? 'ring-2 ring-blue-500 shadow-md' : ''
+      }`}
+      style={{
+        transition: 'all 0.2s ease-in-out',
+      }}>
         <div className="p-4 border-b border-gray-100">
           <h2 className="font-semibold text-gray-800">{title}</h2>
           <div className="text-sm text-gray-500 mt-1">{cards.length} items</div>
@@ -237,8 +268,11 @@ function Column({ id, title, cards, viewMode }) {
         <div
           ref={setNodeRef}
           className={`p-4 transition-colors flex-grow min-h-[200px] ${
-            isOver ? 'bg-blue-50' : ''
+            isOver ? 'bg-blue-100' : ''
           }`}
+          style={{
+            transition: 'background-color 0.15s ease-in-out',
+          }}
         >
           {viewMode === 'horizontal' ? (
             <SortableContext
@@ -274,11 +308,18 @@ function Column({ id, title, cards, viewMode }) {
             </SortableContext>
           )}
 
-          {(cards.length === 0 || isOver) && (
+          {cards.length === 0 && (
             <div className={`grid place-items-center border-2 border-dashed ${
-              isOver ? 'border-blue-400 bg-blue-50' : 'border-gray-300'
+              isOver ? 'border-blue-400 bg-blue-100' : 'border-gray-300'
             } rounded-lg text-gray-400 text-sm h-full min-h-[150px]`}>
               Drop cards here
+            </div>
+          )}
+
+          {/* Always show a drop indicator when hovering over the column */}
+          {isOver && cards.length > 0 && (
+            <div className="mt-3 border-2 border-dashed border-blue-400 bg-blue-50 rounded-lg p-2 text-blue-500 text-sm text-center">
+              Drop here
             </div>
           )}
         </div>
