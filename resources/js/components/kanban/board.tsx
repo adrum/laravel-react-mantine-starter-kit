@@ -1,4 +1,4 @@
-import { closestCenter, closestCorners, DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { closestCenter, DndContext, DragOverlay, PointerSensor, useSensor, useSensors, pointerWithin, rectIntersection } from '@dnd-kit/core';
 import {
     arrayMove,
     horizontalListSortingStrategy,
@@ -17,7 +17,7 @@ const initialColumnNames = {
     berting: 'Basura',
 };
 
-export default function Kanban({ initialData = {}, initialColumnNames = {} }) {
+export default function Board({ initialData = {}, initialColumnNames = {} }) {
     const [columns, setColumns] = useState(initialData);
     const [activeId, setActiveId] = useState(null);
     const [activeType, setActiveType] = useState(null);
@@ -75,26 +75,36 @@ export default function Kanban({ initialData = {}, initialColumnNames = {} }) {
         const { active } = event;
         setActiveId(active.id);
         setActiveType(active.data.current?.type || 'Card');
+
+        // Add a class to the body to indicate dragging is in progress
+        document.body.classList.add('dragging-active');
     };
+
+    const [activeContainer, setActiveContainer] = useState(null);
+    const [overContainer, setOverContainer] = useState(null);
 
     const handleDragOver = (event) => {
         const { active, over } = event;
         if (!over) return;
 
-        const activeContainer = findContainer(active.id);
-        const overContainer = findContainer(over.id);
+        const activeContainerId = findContainer(active.id);
+        const overContainerId = findContainer(over.id);
 
-        if (!activeContainer || !overContainer) {
+        // Update the current containers for visual feedback
+        setActiveContainer(activeContainerId);
+        setOverContainer(overContainerId);
+
+        if (!activeContainerId || !overContainerId) {
             return;
         }
 
-        if (activeContainer === overContainer) {
+        if (activeContainerId === overContainerId) {
             return;
         }
 
         setColumns((prev) => {
-            const activeItems = prev[activeContainer] || [];
-            const overItems = prev[overContainer] || [];
+            const activeItems = prev[activeContainerId] || [];
+            const overItems = prev[overContainerId] || [];
             const activeIndex = activeItems.findIndex((item) => item.id === active.id);
 
             if (activeIndex === -1) return prev;
@@ -104,14 +114,21 @@ export default function Kanban({ initialData = {}, initialColumnNames = {} }) {
 
             return {
                 ...prev,
-                [activeContainer]: activeItems.filter((item) => item.id !== active.id),
-                [overContainer]: [...overItems, activeItem],
+                [activeContainerId]: activeItems.filter((item) => item.id !== active.id),
+                [overContainerId]: [...overItems, activeItem],
             };
         });
     };
 
     const handleDragEnd = (event) => {
         const { active, over } = event;
+
+        // Remove the dragging class
+        document.body.classList.remove('dragging-active');
+
+        // Reset container highlights
+        setActiveContainer(null);
+        setOverContainer(null);
 
         if (!over) {
             setActiveId(null);
@@ -123,27 +140,27 @@ export default function Kanban({ initialData = {}, initialColumnNames = {} }) {
             // For columns, we need to check if we're dropping on another column
             const activeColumnId = active.id;
             let overColumnId;
-            
+
             // If dropping over a column, use its ID
             if (over.data.current?.type === 'Column') {
                 overColumnId = over.id;
-            } 
+            }
             // If dropping over a card, find its container column
             else {
                 overColumnId = findContainer(over.id);
             }
-            
+
             if (activeColumnId && overColumnId) {
                 const activeIndex = columnOrder.indexOf(activeColumnId);
                 const overIndex = columnOrder.indexOf(overColumnId);
-                
+
                 if (activeIndex !== -1 && overIndex !== -1 && activeIndex !== overIndex) {
                     // Create a new array with the columns in the new order
                     const newColumnOrder = arrayMove(columnOrder, activeIndex, overIndex);
                     setColumnOrder(newColumnOrder);
                 }
             }
-            
+
             setActiveId(null);
             setActiveType(null);
             return;
@@ -229,7 +246,15 @@ export default function Kanban({ initialData = {}, initialColumnNames = {} }) {
 
             <DndContext
                 sensors={sensors}
-                collisionDetection={closestCenter}
+                collisionDetection={(args) => {
+                    // First try pointer intersection which is more accurate for hovering
+                    const pointerCollisions = pointerWithin(args);
+                    if (pointerCollisions.length > 0) {
+                        return pointerCollisions;
+                    }
+                    // Fall back to rect intersection for better coverage
+                    return rectIntersection(args);
+                }}
                 onDragStart={handleDragStart}
                 onDragOver={handleDragOver}
                 onDragEnd={handleDragEnd}
@@ -254,7 +279,10 @@ export default function Kanban({ initialData = {}, initialColumnNames = {} }) {
                     </div>
                 </SortableContext>
 
-                <DragOverlay adjustScale={false}>
+                <DragOverlay adjustScale={true} dropAnimation={{
+                    duration: 300,
+                    easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
+                }}>
                     {activeId && activeType === 'Card' ? (
                         <Card id={activeId} title={getActiveItem()?.title || ''} isDragOverlay viewMode={viewMode} />
                     ) : activeId && activeType === 'Column' ? (
@@ -274,8 +302,8 @@ export default function Kanban({ initialData = {}, initialColumnNames = {} }) {
 
 function MiniColumnPreview({ title, cardCount, viewMode }) {
     return (
-        <div className={`${viewMode === 'horizontal' ? 'w-72' : 'w-full max-w-md'} flex-shrink-0 opacity-90 rotate-3 transform`}>
-            <div className="flex h-auto flex-col rounded-lg border-2 border-blue-400 bg-white shadow-xl">
+        <div className={`${viewMode === 'horizontal' ? 'w-72' : 'w-full max-w-md'} flex-shrink-0 opacity-95 rotate-2 transform scale-105`}>
+            <div className="flex h-auto flex-col rounded-lg border-2 border-blue-500 bg-white shadow-2xl">
                 <div className="border-b border-gray-100 bg-blue-50 p-4">
                     <div className="flex items-center justify-between">
                         <h2 className="font-semibold text-gray-800 truncate">{title}</h2>
@@ -312,7 +340,10 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
         data: {
             type: 'Column',
         },
-        animateLayoutChanges: () => false, // Disable layout animations for better performance
+        animateLayoutChanges: ({ isSorting, wasDragging }) => {
+            // Only disable animations while sorting
+            return !(isSorting || wasDragging);
+        },
     });
 
     const [isEditing, setIsEditing] = useState(false);
@@ -322,7 +353,8 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
-        opacity: isDragging ? 0.8 : 1,
+        opacity: isDragging ? 0.5 : 1,
+        zIndex: isDragging ? 999 : 'auto',
     };
 
     useEffect(() => {
@@ -356,15 +388,17 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
         <div
             ref={setNodeRef}
             style={style}
-            className={`${viewMode === 'vertical' ? 'w-full' : 'w-72 flex-shrink-0'} ${isDragging ? 'ring-2 ring-blue-500 z-10' : ''}`}
+            className={`${viewMode === 'vertical' ? 'w-full' : 'w-72 flex-shrink-0'} ${
+                isDragging ? 'ring-2 ring-blue-500 z-10 opacity-50' : ''
+            }`}
             data-column-id={id}
         >
             <div
                 className={`flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-200 ${
-                    isDragging ? 'shadow-lg' : ''
-                }`}
+                    isDragging ? 'shadow-xl border-blue-300' : ''
+                } group`}
             >
-                <div 
+                <div
                     className="border-b border-gray-100 p-4 cursor-move"
                     {...attributes}
                     {...listeners}
@@ -413,7 +447,7 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
                 </div>
 
                 {!isCollapsed && (
-                    <div className="relative min-h-[200px] flex-grow p-4">
+                    <div className="relative min-h-[200px] flex-grow p-4 group-hover:bg-blue-50/20 transition-colors duration-150">
                         {viewMode === 'horizontal' ? (
                             <SortableContext items={cards.map((card) => card.id)} strategy={verticalListSortingStrategy}>
                                 <div className="space-y-3">
@@ -433,7 +467,7 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
                         )}
 
                         {cards.length === 0 && (
-                            <div className="grid h-full min-h-[150px] place-items-center rounded-lg border-2 border-dashed border-gray-300 text-sm text-gray-400">
+                            <div className="grid h-full min-h-[150px] place-items-center rounded-lg border-2 border-dashed border-gray-300 text-sm text-gray-400 transition-all duration-200 group-hover:border-blue-300 group-hover:bg-blue-50/20 group-hover:text-blue-500">
                                 Drop cards here
                             </div>
                         )}
@@ -445,7 +479,7 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
 }
 
 function Card({ id, title, isDragOverlay = false, viewMode = 'horizontal' }) {
-    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    const { attributes, listeners, setNodeRef, transform, transition, isDragging, over } = useSortable({
         id,
         data: {
             type: 'Card',
@@ -456,6 +490,7 @@ function Card({ id, title, isDragOverlay = false, viewMode = 'horizontal' }) {
         transform: CSS.Transform.toString(transform),
         transition,
         zIndex: isDragging ? 100 : 'auto',
+        boxShadow: isDragging ? '0 5px 15px rgba(0, 0, 0, 0.1)' : 'none',
     };
 
     return (
@@ -464,13 +499,13 @@ function Card({ id, title, isDragOverlay = false, viewMode = 'horizontal' }) {
             style={style}
             {...attributes}
             {...listeners}
-            className={`cursor-grab rounded-lg border border-gray-200 bg-white p-4 transition-all duration-150 hover:border-gray-300 hover:shadow-sm active:cursor-grabbing ${
-                isDragging ? 'opacity-70 shadow-lg' : ''
-            } ${
-                isDragOverlay ? 'cursor-grabbing border-2 border-blue-400 shadow-xl' : ''
-            } ${
-                viewMode === 'vertical' ? 'flex aspect-square items-center justify-center text-center' : ''
-            }`}
+            className={`cursor-grab rounded-lg border border-gray-200 bg-white p-4 transition-all duration-150
+                hover:border-gray-300 hover:shadow-sm active:cursor-grabbing
+                ${isDragging ? 'opacity-50 shadow-lg border-blue-200 scale-105 z-50' : ''}
+                ${isDragOverlay ? 'cursor-grabbing border-2 border-blue-500 shadow-xl scale-105' : ''}
+                ${over ? 'ring-2 ring-blue-400 bg-blue-50/30' : ''}
+                ${viewMode === 'vertical' ? 'flex aspect-square items-center justify-center text-center' : ''}
+            `}
         >
             <div className={`text-sm leading-relaxed font-medium text-gray-800 ${
                 viewMode === 'vertical' ? 'text-center break-words' : ''
