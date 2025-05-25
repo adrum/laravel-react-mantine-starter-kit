@@ -21,7 +21,7 @@ export default function Board({ initialData = {}, initialColumnNames = {} }) {
     const [columns, setColumns] = useState(initialData);
     const [activeId, setActiveId] = useState(null);
     const [activeType, setActiveType] = useState(null);
-    const [viewMode, setViewMode] = useState('horizontal');
+    const [viewMode, setViewMode] = useState('vertical');
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [columnOrder, setColumnOrder] = useState(Object.keys(initialData));
     const [columnNames, setColumnNames] = useState(initialColumnNames);
@@ -30,7 +30,7 @@ export default function Board({ initialData = {}, initialColumnNames = {} }) {
     const sensors = useSensors(
         useSensor(PointerSensor, {
             activationConstraint: {
-                distance: 3,  // Reduced to make it more responsive
+                distance: 3,
             },
         }),
     );
@@ -75,8 +75,6 @@ export default function Board({ initialData = {}, initialColumnNames = {} }) {
         const { active } = event;
         setActiveId(active.id);
         setActiveType(active.data.current?.type || 'Card');
-
-        // Add a class to the body to indicate dragging is in progress
         document.body.classList.add('dragging-active');
     };
 
@@ -90,15 +88,10 @@ export default function Board({ initialData = {}, initialColumnNames = {} }) {
         const activeContainerId = findContainer(active.id);
         const overContainerId = findContainer(over.id);
 
-        // Update the current containers for visual feedback
         setActiveContainer(activeContainerId);
         setOverContainer(overContainerId);
 
-        if (!activeContainerId || !overContainerId) {
-            return;
-        }
-
-        if (activeContainerId === overContainerId) {
+        if (!activeContainerId || !overContainerId || activeContainerId === overContainerId) {
             return;
         }
 
@@ -122,11 +115,7 @@ export default function Board({ initialData = {}, initialColumnNames = {} }) {
 
     const handleDragEnd = (event) => {
         const { active, over } = event;
-
-        // Remove the dragging class
         document.body.classList.remove('dragging-active');
-
-        // Reset container highlights
         setActiveContainer(null);
         setOverContainer(null);
 
@@ -137,16 +126,12 @@ export default function Board({ initialData = {}, initialColumnNames = {} }) {
         }
 
         if (active.data.current?.type === 'Column') {
-            // For columns, we need to check if we're dropping on another column
             const activeColumnId = active.id;
             let overColumnId;
 
-            // If dropping over a column, use its ID
             if (over.data.current?.type === 'Column') {
                 overColumnId = over.id;
-            }
-            // If dropping over a card, find its container column
-            else {
+            } else {
                 overColumnId = findContainer(over.id);
             }
 
@@ -155,7 +140,6 @@ export default function Board({ initialData = {}, initialColumnNames = {} }) {
                 const overIndex = columnOrder.indexOf(overColumnId);
 
                 if (activeIndex !== -1 && overIndex !== -1 && activeIndex !== overIndex) {
-                    // Create a new array with the columns in the new order
                     const newColumnOrder = arrayMove(columnOrder, activeIndex, overIndex);
                     setColumnOrder(newColumnOrder);
                 }
@@ -247,12 +231,10 @@ export default function Board({ initialData = {}, initialColumnNames = {} }) {
             <DndContext
                 sensors={sensors}
                 collisionDetection={(args) => {
-                    // First try pointer intersection which is more accurate for hovering
                     const pointerCollisions = pointerWithin(args);
                     if (pointerCollisions.length > 0) {
                         return pointerCollisions;
                     }
-                    // Fall back to rect intersection for better coverage
                     return rectIntersection(args);
                 }}
                 onDragStart={handleDragStart}
@@ -263,7 +245,7 @@ export default function Board({ initialData = {}, initialColumnNames = {} }) {
                     items={columnOrder}
                     strategy={viewMode === 'horizontal' ? horizontalListSortingStrategy : verticalListSortingStrategy}
                 >
-                    <div className={`p-6 ${viewMode === 'horizontal' ? 'flex gap-6 overflow-x-auto' : 'mx-auto w-full max-w-4xl space-y-6'}`}>
+                    <div className={`p-6 ${viewMode === 'horizontal' ? 'flex gap-6 overflow-x-auto' : 'mx-auto w-full  space-y-6'}`}>
                         {columnOrder.map((columnId) => (
                             <Column
                                 key={columnId}
@@ -279,10 +261,13 @@ export default function Board({ initialData = {}, initialColumnNames = {} }) {
                     </div>
                 </SortableContext>
 
-                <DragOverlay adjustScale={true} dropAnimation={{
-                    duration: 300,
-                    easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
-                }}>
+                <DragOverlay
+                    adjustScale={false}
+                    dropAnimation={{
+                        duration: 200,
+                        easing: 'ease-out',
+                    }}
+                >
                     {activeId && activeType === 'Card' ? (
                         <Card id={activeId} title={getActiveItem()?.title || ''} isDragOverlay viewMode={viewMode} />
                     ) : activeId && activeType === 'Column' ? (
@@ -302,7 +287,7 @@ export default function Board({ initialData = {}, initialColumnNames = {} }) {
 
 function MiniColumnPreview({ title, cardCount, viewMode }) {
     return (
-        <div className={`${viewMode === 'horizontal' ? 'w-72' : 'w-full max-w-md'} flex-shrink-0 opacity-95 rotate-2 transform scale-105`}>
+        <div className={`${viewMode === 'horizontal' ? 'w-72' : 'w-full max-w-md'} flex-shrink-0 opacity-95 rotate-2 transform`}>
             <div className="flex h-auto flex-col rounded-lg border-2 border-blue-500 bg-white shadow-2xl">
                 <div className="border-b border-gray-100 bg-blue-50 p-4">
                     <div className="flex items-center justify-between">
@@ -340,10 +325,7 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
         data: {
             type: 'Column',
         },
-        animateLayoutChanges: ({ isSorting, wasDragging }) => {
-            // Only disable animations while sorting
-            return !(isSorting || wasDragging);
-        },
+        animateLayoutChanges: ({ isSorting, wasDragging }) => !(isSorting || wasDragging),
     });
 
     const [isEditing, setIsEditing] = useState(false);
@@ -352,9 +334,10 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
 
     const style = {
         transform: CSS.Transform.toString(transform),
-        transition,
+        transition: isDragging ? 'none' : transition,
         opacity: isDragging ? 0.5 : 1,
         zIndex: isDragging ? 999 : 'auto',
+        willChange: isDragging ? 'transform' : 'auto',
     };
 
     useEffect(() => {
@@ -389,12 +372,12 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
             ref={setNodeRef}
             style={style}
             className={`${viewMode === 'vertical' ? 'w-full' : 'w-72 flex-shrink-0'} ${
-                isDragging ? 'ring-2 ring-blue-500 z-10 opacity-50' : ''
+                isDragging ? 'ring-2 ring-blue-500' : ''
             }`}
             data-column-id={id}
         >
             <div
-                className={`flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-200 ${
+                className={`flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm ${
                     isDragging ? 'shadow-xl border-blue-300' : ''
                 } group`}
             >
@@ -441,13 +424,12 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
                         </div>
                         <div className="flex items-center gap-2">
                             <span className="text-sm text-gray-500">{cards.length}</span>
-                            <span className="text-sm text-gray-500">{cards.length}</span>
                         </div>
                     </div>
                 </div>
 
                 {!isCollapsed && (
-                    <div className="relative min-h-[200px] flex-grow p-4 group-hover:bg-blue-50/20 transition-colors duration-150">
+                    <div className="relative min-h-[200px] flex-grow p-4 group-hover:bg-blue-50/20">
                         {viewMode === 'horizontal' ? (
                             <SortableContext items={cards.map((card) => card.id)} strategy={verticalListSortingStrategy}>
                                 <div className="space-y-3">
@@ -488,9 +470,10 @@ function Card({ id, title, isDragOverlay = false, viewMode = 'horizontal' }) {
 
     const style = {
         transform: CSS.Transform.toString(transform),
-        transition,
-        zIndex: isDragging ? 100 : 'auto',
-        boxShadow: isDragging ? '0 5px 15px rgba(0, 0, 0, 0.1)' : 'none',
+        transition: isDragging ? 'none' : transition,
+        zIndex: isDragOverlay ? 999 : isDragging ? 100 : 'auto',
+        opacity: isDragging && !isDragOverlay ? 0.5 : 1,
+        willChange: isDragging ? 'transform' : 'auto',
     };
 
     return (
@@ -499,10 +482,9 @@ function Card({ id, title, isDragOverlay = false, viewMode = 'horizontal' }) {
             style={style}
             {...attributes}
             {...listeners}
-            className={`cursor-grab rounded-lg border border-gray-200 bg-white p-4 transition-all duration-150
+            className={`cursor-grab rounded-lg border border-gray-200 bg-white p-4
                 hover:border-gray-300 hover:shadow-sm active:cursor-grabbing
-                ${isDragging ? 'opacity-50 shadow-lg border-blue-200 scale-105 z-50' : ''}
-                ${isDragOverlay ? 'cursor-grabbing border-2 border-blue-500 shadow-xl scale-105' : ''}
+                ${isDragOverlay ? 'cursor-grabbing border-2 border-blue-500 shadow-xl' : ''}
                 ${over ? 'ring-2 ring-blue-400 bg-blue-50/30' : ''}
                 ${viewMode === 'vertical' ? 'flex aspect-square items-center justify-center text-center' : ''}
             `}
