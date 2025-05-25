@@ -1,4 +1,4 @@
-import { closestCorners, DndContext, DragOverlay, PointerSensor, useDroppable, useSensor, useSensors } from '@dnd-kit/core';
+import { closestCenter, closestCorners, DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import {
     arrayMove,
     horizontalListSortingStrategy,
@@ -30,7 +30,7 @@ export default function Kanban({ initialData = {}, initialColumnNames = {} }) {
     const sensors = useSensors(
         useSensor(PointerSensor, {
             activationConstraint: {
-                distance: 5,  // Slightly increased from default
+                distance: 3,  // Reduced to make it more responsive
             },
         }),
     );
@@ -119,14 +119,31 @@ export default function Kanban({ initialData = {}, initialColumnNames = {} }) {
             return;
         }
 
-        if (active.data.current?.type === 'Column' && over.data.current?.type === 'Column') {
-            const activeIndex = columnOrder.indexOf(active.id);
-            const overIndex = columnOrder.indexOf(over.id);
-
-            if (activeIndex !== -1 && overIndex !== -1 && activeIndex !== overIndex) {
-                setColumnOrder(arrayMove(columnOrder, activeIndex, overIndex));
+        if (active.data.current?.type === 'Column') {
+            // For columns, we need to check if we're dropping on another column
+            const activeColumnId = active.id;
+            let overColumnId;
+            
+            // If dropping over a column, use its ID
+            if (over.data.current?.type === 'Column') {
+                overColumnId = over.id;
+            } 
+            // If dropping over a card, find its container column
+            else {
+                overColumnId = findContainer(over.id);
             }
-
+            
+            if (activeColumnId && overColumnId) {
+                const activeIndex = columnOrder.indexOf(activeColumnId);
+                const overIndex = columnOrder.indexOf(overColumnId);
+                
+                if (activeIndex !== -1 && overIndex !== -1 && activeIndex !== overIndex) {
+                    // Create a new array with the columns in the new order
+                    const newColumnOrder = arrayMove(columnOrder, activeIndex, overIndex);
+                    setColumnOrder(newColumnOrder);
+                }
+            }
+            
             setActiveId(null);
             setActiveType(null);
             return;
@@ -212,7 +229,7 @@ export default function Kanban({ initialData = {}, initialColumnNames = {} }) {
 
             <DndContext
                 sensors={sensors}
-                collisionDetection={closestCorners}
+                collisionDetection={closestCenter}
                 onDragStart={handleDragStart}
                 onDragOver={handleDragOver}
                 onDragEnd={handleDragEnd}
@@ -295,14 +312,7 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
         data: {
             type: 'Column',
         },
-    });
-
-    const { setNodeRef: setDroppableNodeRef } = useDroppable({
-        id,
-        data: {
-            type: 'Column',
-            accepts: ['Card', 'Column'],
-        },
+        animateLayoutChanges: () => false, // Disable layout animations for better performance
     });
 
     const [isEditing, setIsEditing] = useState(false);
@@ -344,19 +354,21 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
 
     return (
         <div
-            ref={(node) => {
-                setNodeRef(node);
-                setDroppableNodeRef(node);
-            }}
+            ref={setNodeRef}
             style={style}
             className={`${viewMode === 'vertical' ? 'w-full' : 'w-72 flex-shrink-0'} ${isDragging ? 'ring-2 ring-blue-500 z-10' : ''}`}
+            data-column-id={id}
         >
             <div
                 className={`flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-200 ${
                     isDragging ? 'shadow-lg' : ''
                 }`}
             >
-                <div className="border-b border-gray-100 p-4">
+                <div 
+                    className="border-b border-gray-100 p-4 cursor-move"
+                    {...attributes}
+                    {...listeners}
+                >
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <button
@@ -395,16 +407,7 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
                         </div>
                         <div className="flex items-center gap-2">
                             <span className="text-sm text-gray-500">{cards.length}</span>
-                            <button
-                                className="cursor-grab p-2 active:cursor-grabbing hover:bg-gray-100 rounded"
-                                {...listeners}
-                                {...attributes}
-                                onClick={(e) => e.preventDefault()} // Prevent accidental clicks
-                            >
-                                <svg className="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
-                                </svg>
-                            </button>
+                            <span className="text-sm text-gray-500">{cards.length}</span>
                         </div>
                     </div>
                 </div>
