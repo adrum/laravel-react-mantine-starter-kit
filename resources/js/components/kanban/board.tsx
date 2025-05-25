@@ -242,13 +242,6 @@ function Column({ id, title, cards, viewMode }) {
     data: {
       type: 'Column',
       accepts: ['Card'],
-    },
-    // Make the entire column a drop target
-    strategy: {
-      activatorEvent: {
-        // Activate on any pointer movement within the column
-        pointerId: null,
-      },
     }
   });
 
@@ -267,11 +260,13 @@ function Column({ id, title, cards, viewMode }) {
 
         <div
           ref={setNodeRef}
-          className={`p-4 transition-colors flex-grow min-h-[200px] ${
+          className={`p-4 transition-colors flex-grow min-h-[200px] relative ${
             isOver ? 'bg-blue-100' : ''
           }`}
           style={{
             transition: 'background-color 0.15s ease-in-out',
+            width: '100%',
+            height: '100%'
           }}
         >
           {viewMode === 'horizontal' ? (
@@ -318,7 +313,8 @@ function Column({ id, title, cards, viewMode }) {
 
           {/* Always show a drop indicator when hovering over the column */}
           {isOver && cards.length > 0 && (
-            <div className="mt-3 border-2 border-dashed border-blue-400 bg-blue-50 rounded-lg p-2 text-blue-500 text-sm text-center">
+            <div className={`${viewMode === 'vertical' ? 'absolute inset-0 flex items-center justify-center z-10' : 'mt-3'} 
+              border-2 border-dashed border-blue-400 bg-blue-50 bg-opacity-70 rounded-lg p-2 text-blue-500 text-sm text-center pointer-events-none`}>
               Drop here
             </div>
           )}
