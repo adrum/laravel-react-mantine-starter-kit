@@ -6,7 +6,6 @@ export function useNotifications() {
     const { props } = usePage();
 
     useEffect(() => {
-        // Check if there's a notification in the props
         if (props.notification && props.notification.body) {
             const { type, body } = props.notification;
 

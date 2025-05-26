@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Module\kanban\Actions;
+namespace Module\Kanban\Actions;
 
 final class CreateBoard
 {

@@ -12,7 +12,9 @@ export default function Modal({ children, show, onClose }: ModalProps) {
         if (!show) return;
 
         const handleKey = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') onClose?.();
+            if (e.key === 'Escape' && onClose) {
+                onClose();
+            }
         };
 
         window.addEventListener('keydown', handleKey);
@@ -20,7 +22,14 @@ export default function Modal({ children, show, onClose }: ModalProps) {
     }, [show, onClose]);
 
     const handleClickAway = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (e.target === e.currentTarget) onClose?.();
+        // Make sure we're clicking on the backdrop, not the modal content
+        if (e.target instanceof Element &&
+            e.target.hasAttribute('data-modal-backdrop') &&
+            onClose) {
+            e.preventDefault();
+            e.stopPropagation();
+            onClose();
+        }
     };
 
     if (!show) return null;
@@ -28,10 +37,11 @@ export default function Modal({ children, show, onClose }: ModalProps) {
     return (
         <Teleport target="app">
             <div
-                className="fixed inset-0 z-50 flex items-center justify-center bg-black/75"
+                className="fixed inset-0 z-[50000] flex items-center justify-center bg-black/75"
                 onClick={handleClickAway}
+                data-modal-backdrop
             >
-                <div className="rounded-lg bg-white p-4">
+                <div className="rounded-lg bg-white dark:bg-card p-4">
                     {children}
                 </div>
             </div>

@@ -85,7 +85,13 @@ export function setModal(data: any) {
 
 export function close() {
   if (!modalState.show) return;
-  modalState.show = false;
+
+  // Create a new object to ensure state change is detected
+  modalState = {
+    ...modalState,
+    show: false
+  };
+
   notify();
 }
 

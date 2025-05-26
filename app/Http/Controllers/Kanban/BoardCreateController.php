@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use Module\kanban\Actions\CreateBoard;
+use Module\Kanban\Actions\CreateBoard;
 
 final class BoardCreateController extends Controller
 {
@@ -21,6 +21,5 @@ final class BoardCreateController extends Controller
     public function store(Request $request, CreateBoard $createBoard): Response
     {
         $createBoard->handle();
-        dd('adi');
     }
 }

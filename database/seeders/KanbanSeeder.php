@@ -6,7 +6,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Modules\kanban\Models\Card;
+use Modules\Kanban\Models\Card;
 
 final class KanbanSeeder extends Seeder
 {

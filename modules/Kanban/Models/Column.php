@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\kanban\Models;
+namespace Module\Kanban\Models;
 
 use Database\Factories\ColumnFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

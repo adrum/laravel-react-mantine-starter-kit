@@ -26,7 +26,7 @@ const InputStyles = {
     },
     input: {
         color: 'var(--foreground)',
-        backgroundColor: 'transparent',
+        backgroundColor: 'var(--background)',
     },
 };
 

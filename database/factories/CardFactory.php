@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Modules\kanban\Models\Card;
-use Modules\kanban\Models\Column;
+use Modules\Kanban\Models\Card;
+use Modules\Kanban\Models\Column;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\SocialAccount>

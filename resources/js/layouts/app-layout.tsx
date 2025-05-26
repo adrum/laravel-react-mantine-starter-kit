@@ -3,10 +3,6 @@ import { useAppearance } from '@/hooks/use-appearance';
 import { useNotifications } from '@/hooks/use-notifications';
 import AppLayoutTemplate from '@/layouts/app/app-sidebar-layout';
 import { type BreadcrumbItem } from '@/types';
-
-import { close } from '@/useModal';
-
-
 import { type ReactNode } from 'react';
 
 interface AppLayoutProps {
@@ -20,7 +16,7 @@ export default ({ children, breadcrumbs, ...props }: AppLayoutProps) => {
     return (
         <AppLayoutTemplate breadcrumbs={breadcrumbs} {...props}>
             {children}
-            <ModalContainer onClose={close} />
+            <ModalContainer />
         </AppLayoutTemplate>
     );
 };

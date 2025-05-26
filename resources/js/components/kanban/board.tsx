@@ -185,7 +185,7 @@ export default function Board({ initialData = {}, initialColumnNames = {} }) {
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-bold text-gray-900">Boards</h1>
                     <div className="relative z-50">
-                        <ModalLink href={route('module.kanban.board.create')}>Create Column</ModalLink>
+                        <ModalLink href={route('module.kanban.column.create')}>Create Column</ModalLink>
                         <Modal show={isModalOpen !== false} onClose={() => setIsModalOpen(false)}>
                             Add here baby
                             <button onClick={() => setIsModalOpen(false)}>Close</button>
@@ -193,7 +193,7 @@ export default function Board({ initialData = {}, initialColumnNames = {} }) {
 
                         <button
                             onClick={() => setDropdownOpen(!dropdownOpen)}
-                            className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            className="flex items-center gap-2 rounded-lg border border-gray-300  px-4 py-2 hover: focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         >
                             <span className="text-sm font-medium text-gray-700">
                                 {viewMode === 'horizontal' ? 'Horizontal View' : 'Vertical View'}
@@ -209,7 +209,7 @@ export default function Board({ initialData = {}, initialColumnNames = {} }) {
                         </button>
 
                         {dropdownOpen && (
-                            <div className="absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg">
+                            <div className="absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 shadow-lg">
                                 <button
                                     onClick={() => {
                                         setViewMode('horizontal');
@@ -298,7 +298,7 @@ export default function Board({ initialData = {}, initialColumnNames = {} }) {
 function MiniColumnPreview({ title, cardCount, viewMode }) {
     return (
         <div className={`${viewMode === 'horizontal' ? 'w-72' : 'w-full max-w-md'} flex-shrink-0 rotate-2 transform opacity-95`}>
-            <div className="flex h-auto flex-col rounded-lg border-2 border-blue-500 bg-white shadow-2xl">
+            <div className="flex h-auto flex-col rounded-lg border-2 border-blue-500  shadow-2xl">
                 <div className="border-b border-gray-100 bg-blue-50 p-4">
                     <div className="flex items-center justify-between">
                         <h2 className="truncate font-semibold text-gray-800">{title}</h2>
@@ -378,7 +378,7 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
             data-column-id={id}
         >
             <div
-                className={`flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm ${
+                className={`flex flex-col rounded-lg border border-gray-200  shadow-sm ${
                     isDragging ? 'border-blue-300 shadow-xl' : ''
                 } group`}
             >
@@ -407,7 +407,7 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
                                 />
                             ) : (
                                 <h2
-                                    className="cursor-text rounded px-2 py-1 font-semibold text-gray-800 hover:bg-gray-100"
+                                    className="cursor-text rounded px-2 py-1 font-semibold hover:bg-gray-100"
                                     onClick={handleTitleClick}
                                 >
                                     {title}
@@ -421,7 +421,7 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
                 </div>
 
                 {!isCollapsed && (
-                    <div className="relative min-h-[200px] flex-grow p-4 group-hover:bg-blue-50/20">
+                    <div className="relative min-h-[200px] flex-grow p-4 group-hog-blue-50/20">
                         {viewMode === 'horizontal' ? (
                             <SortableContext items={cards.map((card) => card.id)} strategy={verticalListSortingStrategy}>
                                 <div className="space-y-3">
@@ -474,9 +474,9 @@ function Card({ id, title, isDragOverlay = false, viewMode = 'horizontal' }) {
             style={style}
             {...attributes}
             {...listeners}
-            className={`cursor-grab rounded-lg border border-gray-200 bg-white p-4 hover:border-gray-300 hover:shadow-sm active:cursor-grabbing ${isDragOverlay ? 'cursor-grabbing border-2 border-blue-500 shadow-xl' : ''} ${over ? 'bg-blue-50/30 ring-2 ring-blue-400' : ''} ${viewMode === 'vertical' ? 'flex aspect-square items-center justify-center text-center' : ''} `}
+            className={`cursor-grab rounded-lg border border-gray-200  p-4 hover:border-gray-300 hover:shadow-sm active:cursor-grabbing ${isDragOverlay ? 'cursor-grabbing border-2 border-blue-500 shadow-xl' : ''} ${over ? 'bg-blue-50/30 ring-2 ring-blue-400' : ''} ${viewMode === 'vertical' ? 'flex aspect-square items-center justify-center text-center' : ''} `}
         >
-            <div className={`text-sm leading-relaxed font-medium text-gray-800 ${viewMode === 'vertical' ? 'text-center break-words' : ''}`}>
+            <div className={`text-sm leading-relaxed font-medium  ${viewMode === 'vertical' ? 'text-center break-words' : ''}`}>
                 {title}
             </div>
         </div>

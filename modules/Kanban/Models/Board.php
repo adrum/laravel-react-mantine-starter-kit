@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\kanban\Models;
+namespace Module\Kanban\Models;
 
 use App\Models\User;
 use Database\Factories\BoardFactory;
