@@ -7,6 +7,9 @@ export function HeroBullets() {
     return (
         <Container size="md">
             <div className="w-full flex-col space-y-12 py-24 md:flex md:flex-row md:space-y-0">
+
+                <div className="motion-preset-blur-right motion-duration-[2s] py-16" style={{ animationDelay: '500ms' }}>
+
                 <div className={classes.content}>
                     <Title className={classes.title}>
                         A <span className={classes.highlight}>modern</span> React <br /> components library
@@ -46,7 +49,12 @@ export function HeroBullets() {
                         </Button>
                     </Group>
                 </div>
+                </div>
+
+                <div className="motion-preset-blur-left motion-duration-[2s] py-16" style={{ animationDelay: '500ms' }}>
                 <Image fetchPriority="high" src={image} className={classes.image} />
+
+                </div>
             </div>
         </Container>
     );

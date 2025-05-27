@@ -13,8 +13,6 @@ use Module\Kanban\Actions\CreateBoard;
 use Module\Kanban\Actions\DeleteBoard;
 use Module\Kanban\DTOs\BoardData;
 use Module\Kanban\Models\Board;
-use Module\Kanban\Models\Card;
-use Module\Kanban\Models\Column;
 
 final class BoardCreateController extends Controller
 {
@@ -75,7 +73,7 @@ final class BoardCreateController extends Controller
         return back()->with('success', 'Board deleted successfully');
     }
 
-    public function show(int $id): Response
+    public function show(int|string $id): Response
     {
         $board = Board::with('columns.cards')->findOrFail($id);
 

@@ -16,7 +16,7 @@ final class KanbanController extends Controller
 
         $columns = Column::query()->get()->mapWithKeys(function (Column $column) {
             return [$column->name => [
-                'totnak squad'
+                'totnak squad',
             ]];
         });
 

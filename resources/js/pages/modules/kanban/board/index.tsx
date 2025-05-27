@@ -34,9 +34,7 @@ export default function Index({
                 buttons={
                     <>
                         <ModalLink href={route('module.kanban.board.create')}>Create Board</ModalLink>
-                        <Modal show={isModalOpen !== false} onClose={() => setIsModalOpen(false)}>
-                            <button onClick={() => setIsModalOpen(false)}>Close</button>
-                        </Modal>
+
                     </>
                 }
                 columns={[

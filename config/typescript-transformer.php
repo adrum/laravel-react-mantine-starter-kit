@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 return [
 
@@ -10,7 +11,7 @@ return [
 
     'auto_discover_types' => [
         app_path(),
-        base_path('modules')
+        base_path('modules'),
     ],
 
     /*
@@ -43,7 +44,7 @@ return [
      */
 
     'default_type_replacements' => [
-        DateTime::class => 'string',
+        DateTimeImmutable::class => 'string',
         DateTimeImmutable::class => 'string',
         Carbon\CarbonInterface::class => 'string',
         Carbon\CarbonImmutable::class => 'string',

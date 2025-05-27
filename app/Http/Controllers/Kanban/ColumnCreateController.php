@@ -13,21 +13,23 @@ use Module\Kanban\Actions\CreateColumn;
 
 final class ColumnCreateController extends Controller
 {
-    public function create(): Response
+
+    public function create(int $board_id): Response
     {
-        return Inertia::render('modules/kanban/modals/create-column');
+        return Inertia::render('modules/kanban/modals/create-column', [
+            'board_id' => $board_id,
+        ]);
     }
 
     public function store(Request $request, CreateColumn $createColumn): RedirectResponse
     {
         $data = $request->validate([
             'title' => ['required'],
+            'board_id' => 'required|exists:Module\Kanban\Models\Board,id',
         ]);
 
         $createColumn->handle($data);
-        session()->flash('success', 'Column created successfully');
 
-        return redirect()->route('module.kanban.column.create')
-            ->with('success', 'Column created successfully');
+        return back()->with('success', 'Column created successfully');
     }
 }

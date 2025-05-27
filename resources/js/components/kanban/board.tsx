@@ -8,14 +8,11 @@ import {
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { Flex } from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
-import Modal from '../modal';
 import ModalLink from '../modal-link';
 
-export default function Board({ initialData = {}, initialColumnNames = {}, board = null } : any) {
-
-    console.log(initialData);
-
+export default function Board({ initialData = {}, initialColumnNames = {}, board = null }: any) {
     const [columns, setColumns] = useState(initialData);
     const [activeId, setActiveId] = useState(null);
     const [activeType, setActiveType] = useState(null);
@@ -111,79 +108,17 @@ export default function Board({ initialData = {}, initialColumnNames = {}, board
         });
     };
 
-    const handleDragEnd = (event) => {
-        const { active, over } = event;
-        document.body.classList.remove('dragging-active');
-        setActiveContainer(null);
-        setOverContainer(null);
 
-        if (!over) {
-            setActiveId(null);
-            setActiveType(null);
-            return;
-        }
-
-        if (active.data.current?.type === 'Column') {
-            const activeColumnId = active.id;
-            let overColumnId;
-
-            if (over.data.current?.type === 'Column') {
-                overColumnId = over.id;
-            } else {
-                overColumnId = findContainer(over.id);
-            }
-
-            if (activeColumnId && overColumnId) {
-                const activeIndex = columnOrder.indexOf(activeColumnId);
-                const overIndex = columnOrder.indexOf(overColumnId);
-
-                if (activeIndex !== -1 && overIndex !== -1 && activeIndex !== overIndex) {
-                    const newColumnOrder = arrayMove(columnOrder, activeIndex, overIndex);
-                    setColumnOrder(newColumnOrder);
-                }
-            }
-
-            setActiveId(null);
-            setActiveType(null);
-            return;
-        }
-
-        const activeContainer = findContainer(active.id);
-        const overContainer = findContainer(over.id);
-
-        if (!activeContainer || !overContainer) {
-            setActiveId(null);
-            setActiveType(null);
-            return;
-        }
-
-        if (activeContainer === overContainer) {
-            const activeIndex = columns[activeContainer]?.findIndex((item) => item.id === active.id) ?? -1;
-            const overIndex = columns[overContainer]?.findIndex((item) => item.id === over.id) ?? -1;
-
-            if (activeIndex !== -1 && overIndex !== -1 && activeIndex !== overIndex) {
-                setColumns((prev) => ({
-                    ...prev,
-                    [overContainer]: arrayMove(prev[overContainer], activeIndex, overIndex),
-                }));
-            }
-        }
-
-        setActiveId(null);
-        setActiveType(null);
-    };
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
         <div className="min-h-screen">
-            <div className="border-b border-gray-200 p-6">
+            <div className="border-b border-gray-200 py-4">
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-bold text-gray-900">Board: {board?.title ?? ''}</h1>
                     <div className="relative z-50">
                         <button
                             onClick={() => setDropdownOpen(!dropdownOpen)}
-                            className="flex items-center gap-2 rounded-lg border border-gray-300  px-4 py-2 hover: focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            className="hover: flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         >
                             <span className="text-sm font-medium text-gray-700">
                                 {viewMode === 'horizontal' ? 'Horizontal View' : 'Vertical View'}
@@ -227,6 +162,9 @@ export default function Board({ initialData = {}, initialColumnNames = {}, board
                     </div>
                 </div>
             </div>
+            <Flex justify={'end'} py={'xs'}>
+                <ModalLink href={route('module.kanban.column.create', { board_id: board?.id })}>Create Column</ModalLink>
+            </Flex>
 
             <DndContext
                 sensors={sensors}
@@ -245,20 +183,21 @@ export default function Board({ initialData = {}, initialColumnNames = {}, board
                     items={columnOrder}
                     strategy={viewMode === 'horizontal' ? horizontalListSortingStrategy : verticalListSortingStrategy}
                 >
-                    <div className={`p-6 ${viewMode === 'horizontal' ? 'flex gap-6 overflow-x-auto' : 'mx-auto w-full space-y-6'}`}>
+                    <div className={`py-6 ${viewMode === 'horizontal' ? 'flex gap-6 overflow-x-auto' : 'mx-auto w-full space-y-6'}`}>
                         {columnOrder.map((columnId) => (
                             <>
-                            <Column
-                                key={columnId}
-                                id={columnId}
-                                title={columnNames[columnId]}
-                                cards={columns[columnId] || []}
-                                viewMode={viewMode}
-                                onNameChange={(newName) => handleColumnNameChange(columnId, newName)}
-                                isCollapsed={collapsedColumns[columnId] || false}
-                                onToggleCollapse={() => toggleColumnCollapse(columnId)}
-                            />
-</>
+                                <Column
+                                    key={columnId}
+                                    id={columnId}
+                                    board_id={board?.id}
+                                    title={columnNames[columnId]}
+                                    cards={columns[columnId] || []}
+                                    viewMode={viewMode}
+                                    onNameChange={(newName) => handleColumnNameChange(columnId, newName)}
+                                    isCollapsed={collapsedColumns[columnId] || false}
+                                    onToggleCollapse={() => toggleColumnCollapse(columnId)}
+                                />
+                            </>
                         ))}
                     </div>
                 </SortableContext>
@@ -290,7 +229,7 @@ export default function Board({ initialData = {}, initialColumnNames = {}, board
 function MiniColumnPreview({ title, cardCount, viewMode }) {
     return (
         <div className={`${viewMode === 'horizontal' ? 'w-72' : 'w-full max-w-md'} flex-shrink-0 rotate-2 transform opacity-95`}>
-            <div className="flex h-auto flex-col rounded-lg border-2 border-blue-500  shadow-2xl">
+            <div className="flex h-auto flex-col rounded-lg border-2 border-blue-500 shadow-2xl">
                 <div className="border-b border-gray-100 bg-blue-50 p-4">
                     <div className="flex items-center justify-between">
                         <h2 className="truncate font-semibold text-gray-800">{title}</h2>
@@ -314,9 +253,7 @@ function MiniColumnPreview({ title, cardCount, viewMode }) {
     );
 }
 
-function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggleCollapse }) {
-
-    console.log(cards)
+function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggleCollapse, board_id }) {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
         id,
         data: {
@@ -371,11 +308,7 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
             className={`${viewMode === 'vertical' ? 'w-full' : 'w-72 flex-shrink-0'} ${isDragging ? 'ring-2 ring-blue-500' : ''}`}
             data-column-id={id}
         >
-            <div
-                className={`flex flex-col rounded-lg border border-gray-200  shadow-sm ${
-                    isDragging ? 'border-blue-300 shadow-xl' : ''
-                } group`}
-            >
+            <div className={`flex flex-col rounded-lg border border-gray-200 shadow-sm ${isDragging ? 'border-blue-300 shadow-xl' : ''} group`}>
                 <div className="cursor-move border-b border-gray-100 p-4" {...attributes} {...listeners}>
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
@@ -400,22 +333,20 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
                                     className="w-full rounded bg-gray-100 px-2 py-1 font-semibold text-gray-800"
                                 />
                             ) : (
-                                <h2
-                                    className="cursor-text rounded px-2 py-1 font-semibold hover:bg-gray-100"
-                                    onClick={handleTitleClick}
-                                >
+                                <h2 className="cursor-text rounded px-2 py-1 font-semibold hover:bg-gray-100" onClick={handleTitleClick}>
                                     {title}
                                 </h2>
                             )}
                         </div>
                         <div className="flex items-center gap-2">
+                            <ModalLink href={`${route('module.kanban.card.create',  { column_id:  id, board_id: board_id })}`}>Add Card</ModalLink>
                             <span className="text-sm text-gray-500">{cards.length}</span>
                         </div>
                     </div>
                 </div>
 
                 {!isCollapsed && (
-                    <div className="relative min-h-[200px] flex-grow p-4 group-hog-blue-50/20">
+                    <div className="group-hog-blue-50/20 relative min-h-[200px] flex-grow p-4">
                         {viewMode === 'horizontal' ? (
                             <SortableContext items={cards.map((card) => card.id)} strategy={verticalListSortingStrategy}>
                                 <div className="space-y-3">
@@ -468,11 +399,9 @@ function Card({ id, title, isDragOverlay = false, viewMode = 'horizontal' }) {
             style={style}
             {...attributes}
             {...listeners}
-            className={`cursor-grab rounded-lg border border-gray-200  p-4 hover:border-gray-300 hover:shadow-sm active:cursor-grabbing ${isDragOverlay ? 'cursor-grabbing border-2 border-blue-500 shadow-xl' : ''} ${over ? 'bg-blue-50/30 ring-2 ring-blue-400' : ''} ${viewMode === 'vertical' ? 'flex aspect-square items-center justify-center text-center' : ''} `}
+            className={`cursor-grab rounded-lg border border-gray-200 p-4 hover:border-gray-300 hover:shadow-sm active:cursor-grabbing ${isDragOverlay ? 'cursor-grabbing border-2 border-blue-500 shadow-xl' : ''} ${over ? 'bg-blue-50/30 ring-2 ring-blue-400' : ''} ${viewMode === 'vertical' ? 'flex aspect-square items-center justify-center text-center' : ''} `}
         >
-            <div className={`text-sm leading-relaxed font-medium  ${viewMode === 'vertical' ? 'text-center break-words' : ''}`}>
-                {title}
-            </div>
+            <div className={`text-sm leading-relaxed font-medium ${viewMode === 'vertical' ? 'text-center break-words' : ''}`}>{title}</div>
         </div>
     );
 }
