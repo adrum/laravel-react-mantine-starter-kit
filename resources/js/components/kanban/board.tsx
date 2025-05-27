@@ -12,14 +12,10 @@ import { useEffect, useRef, useState } from 'react';
 import Modal from '../modal';
 import ModalLink from '../modal-link';
 
-const initialColumnNames = {
-    todo: 'To Do',
-    'in-progress': 'In Progress',
-    done: 'Done',
-    berting: 'Basura',
-};
+export default function Board({ initialData = {}, initialColumnNames = {}, board = null } : any) {
 
-export default function Board({ initialData = {}, initialColumnNames = {} }) {
+    console.log(initialData);
+
     const [columns, setColumns] = useState(initialData);
     const [activeId, setActiveId] = useState(null);
     const [activeType, setActiveType] = useState(null);
@@ -183,14 +179,8 @@ export default function Board({ initialData = {}, initialColumnNames = {} }) {
         <div className="min-h-screen">
             <div className="border-b border-gray-200 p-6">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-2xl font-bold text-gray-900">Boards</h1>
+                    <h1 className="text-2xl font-bold text-gray-900">Board: {board?.title ?? ''}</h1>
                     <div className="relative z-50">
-                        <ModalLink href={route('module.kanban.column.create')}>Create Column</ModalLink>
-                        <Modal show={isModalOpen !== false} onClose={() => setIsModalOpen(false)}>
-                            Add here baby
-                            <button onClick={() => setIsModalOpen(false)}>Close</button>
-                        </Modal>
-
                         <button
                             onClick={() => setDropdownOpen(!dropdownOpen)}
                             className="flex items-center gap-2 rounded-lg border border-gray-300  px-4 py-2 hover: focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -257,6 +247,7 @@ export default function Board({ initialData = {}, initialColumnNames = {} }) {
                 >
                     <div className={`p-6 ${viewMode === 'horizontal' ? 'flex gap-6 overflow-x-auto' : 'mx-auto w-full space-y-6'}`}>
                         {columnOrder.map((columnId) => (
+                            <>
                             <Column
                                 key={columnId}
                                 id={columnId}
@@ -267,6 +258,7 @@ export default function Board({ initialData = {}, initialColumnNames = {} }) {
                                 isCollapsed={collapsedColumns[columnId] || false}
                                 onToggleCollapse={() => toggleColumnCollapse(columnId)}
                             />
+</>
                         ))}
                     </div>
                 </SortableContext>
@@ -323,6 +315,8 @@ function MiniColumnPreview({ title, cardCount, viewMode }) {
 }
 
 function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggleCollapse }) {
+
+    console.log(cards)
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
         id,
         data: {

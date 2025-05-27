@@ -1,16 +1,17 @@
 import { close } from '@/useModal';
 import { useForm } from '@inertiajs/react';
 import { Button, Checkbox, Group, TextInput } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { FormEventHandler } from 'react';
 
 type ColumnForm = {
-    name: string;
+    title: string;
 }
 
 export default function CreateColumn() {
 
     const { data, setData, post, errors, processing, recentlySuccessful } = useForm<Required<ColumnForm>>({
-        name: '',
+        title: '',
     });
 
    const submit: FormEventHandler = (e) => {
@@ -18,9 +19,18 @@ export default function CreateColumn() {
 
         post(route('module.kanban.column.store'), {
             preserveScroll: true,
+            onSuccess: () => {
+                notifications.show({
+                    title: 'Success',
+                    message: 'Column created successfully',
+                    color: 'green',
+                    autoClose: 5000,
+                })
+
+                close();
+            }
         });
 
-        close();
     };
 
 
@@ -28,11 +38,11 @@ export default function CreateColumn() {
     <form onSubmit={submit}>
       <TextInput
         withAsterisk
-        label="Email"
-        placeholder="your@email.com"
-        value={data.name}
-        onChange={(e) => setData('name', e.target.value)}
-        error={errors.name}
+        label="Title"
+        placeholder="title"
+        value={data.title}
+        onChange={(e) => setData('title', e.target.value)}
+        error={errors.title}
       />
 
       <Group justify="flex-end" mt="md">

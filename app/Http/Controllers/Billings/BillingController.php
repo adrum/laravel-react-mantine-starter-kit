@@ -24,7 +24,7 @@ final class BillingController extends Controller
         $isSubscriptionCanceled = $user->subscribed() && $user->subscription('default')->canceled();
 
         $description = 'Upcoming Invoice At: ';
-        $dateString = $user->upcomingInvoice()->date()->toDateString();
+        $dateString = $user->upcomingInvoice()?->date()?->toDateString();
 
         if ($isSubscriptionCanceled) {
             $description = 'Ends At: ';
@@ -41,7 +41,7 @@ final class BillingController extends Controller
             'upcoming' => ['date' => $dateString],
             'is_canceled' => $isSubscriptionCanceled,
             'description' => $description,
-            'total' => $user->upcomingInvoice()->total(),
+            'total' => $user->upcomingInvoice()?->total(),
             'invoices' => InvoiceResource::collection($user->invoices()),
         ])->with('success', 'Okay ka kokey');
     }

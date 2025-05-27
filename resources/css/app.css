@@ -1,16 +1,12 @@
 @import 'tailwindcss';
 
-/**
+
  @plugin 'tailwindcss-animate';
-*/
+ @plugin 'tailwindcss-motion';
 
-/**
 @source '../views';
-*/
 
-/**
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-*/
 
 @custom-variant dark (&:is(.dark *));
 
@@ -174,4 +170,11 @@
     body {
         @apply bg-background text-foreground;
     }
+}
+
+
+.mrt-table-pagination {
+    display: flex !important;
+    justify-content: space-between !important;
+    width: 100% !important;
 }

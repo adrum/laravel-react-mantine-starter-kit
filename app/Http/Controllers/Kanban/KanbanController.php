@@ -7,11 +7,20 @@ namespace App\Http\Controllers\Kanban;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Inertia\Response;
+use Module\Kanban\Models\Column;
 
 final class KanbanController extends Controller
 {
     public function index(): Response
     {
+
+        $columns = Column::query()->get()->mapWithKeys(function (Column $column) {
+            return [$column->name => [
+                'totnak squad'
+            ]];
+        });
+
+        dd($columns);
 
         return Inertia::render('modules/kanban/index', [
             'initialData' => (object) [

@@ -6,7 +6,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Modules\Kanban\Models\Card;
+use Module\Kanban\Models\Card as ModelsCard;
 
 final class KanbanSeeder extends Seeder
 {
@@ -15,6 +15,6 @@ final class KanbanSeeder extends Seeder
      */
     public function run(): void
     {
-        Card::factory()->times(5)->create();
+        ModelsCard::factory()->times(5)->create();
     }
 }

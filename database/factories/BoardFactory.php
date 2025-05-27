@@ -6,7 +6,7 @@ namespace Database\Factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Modules\Kanban\Models\Board;
+use Module\Kanban\Models\Board;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\SocialAccount>

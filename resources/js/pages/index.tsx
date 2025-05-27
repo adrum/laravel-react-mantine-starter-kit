@@ -8,14 +8,21 @@ export default function Welcome() {
     return (
         <>
             <SiteLayout variant="secondary">
-                <HeroBullets />
-                <FeaturesCards />
+                <section className="motion-preset-blur-up motion-duration-[2s] py-16" style={{ animationDelay: '1000ms' }}>
+                    <HeroBullets />
+                </section>
 
-                <div className="mx-auto grid max-w-7xl grid-cols-3 gap-4 px-4 sm:px-6 lg:px-8">
-                    <CardCarousel />
-                    <CardCarousel />
-                    <CardCarousel />
-                </div>
+                <section className="motion-preset-blur-up motion-duration-[2s] py-16" style={{ animationDelay: '1000ms' }}>
+                    <FeaturesCards />
+                </section>
+
+                <section className="motion-preset-blur-up motion-duration-[2s] py-16" style={{ animationDelay: '1000ms' }}>
+                    <div className="mx-auto grid max-w-7xl grid-cols-3 gap-4 px-4 sm:px-6 lg:px-8">
+                        <CardCarousel />
+                        <CardCarousel />
+                        <CardCarousel />
+                    </div>
+                </section>
 
                 <FAQ />
             </SiteLayout>

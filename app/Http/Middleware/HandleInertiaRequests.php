@@ -50,11 +50,6 @@ final class HandleInertiaRequests extends Middleware
             return [];
         }
 
-        $notifications = collect(Arr::only(session()->all(), ['success', 'error', 'warning']))
-            ->mapWithKeys(function ($notification, $key) {
-                return ['type' => $key, 'body' => $notification];
-            });
-
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
         /** @var array{
                github: bool,
@@ -87,7 +82,10 @@ final class HandleInertiaRequests extends Middleware
                 ))
                 ->toArray()
             ),
-            'notification' => fn () => $notifications,
+            'notification' => collect(Arr::only(session()->all(), ['success', 'error', 'warning']))
+            ->mapWithKeys(function ($notification, $key) {
+                return ['type' => $key, 'body' => $notification];
+            }),
             'languages' => LanguageResource::collection(Language::cases()),
             'ziggy' => fn (): array => [
                 ...(new Ziggy)->toArray(),
