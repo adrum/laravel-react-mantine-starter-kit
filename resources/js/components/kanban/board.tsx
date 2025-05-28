@@ -8,6 +8,7 @@ import {
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { router } from '@inertiajs/react';
 import { Flex } from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
 import ModalLink from '../modal-link';
@@ -64,6 +65,19 @@ export default function Board({ initialData = {}, initialColumnNames = {}, board
             ...prev,
             [columnId]: newName,
         }));
+
+        router.patch(
+            route('module.kanban.column.update-title'),
+            {
+                column_id: columnId,
+                board_id: board.id,
+                title: newName,
+            },
+            {
+                preserveScroll: true,
+            },
+        );
+
     };
 
     const handleDragStart = (event) => {
@@ -108,7 +122,93 @@ export default function Board({ initialData = {}, initialColumnNames = {}, board
         });
     };
 
+    const handleDragEnd = (event) => {
+        const { active, over } = event;
 
+        console.log('Drag ended');
+
+        if (!over) {
+            setActiveId(null);
+            setActiveType(null);
+            document.body.classList.remove('dragging-active');
+            return;
+        }
+
+        const activeType = active.data.current?.type || 'Card';
+
+        // Handle column reordering
+        if (activeType === 'Column') {
+            if (active.id !== over.id) {
+                setColumnOrder((items) => {
+                    const oldIndex = items.indexOf(active.id);
+                    const newIndex = items.indexOf(over.id);
+                    const newOrder = arrayMove(items, oldIndex, newIndex);
+                    router.post(
+                        route('module.kanban.column.reorder'),
+                        { order: newOrder, board_id: board.id, column_id: active.id },
+                        { preserveScroll: true },
+                    );
+                    return newOrder;
+                });
+            }
+        }
+        // Handle card reordering
+        else {
+            const activeContainerId = findContainer(active.id);
+            const overContainerId = findContainer(over.id);
+
+            if (!activeContainerId || !overContainerId) {
+                setActiveId(null);
+                setActiveType(null);
+                document.body.classList.remove('dragging-active');
+                return;
+            }
+
+            if (activeContainerId === overContainerId) {
+                // Reordering within the same column
+                setColumns((prev) => {
+                    const items = [...prev[activeContainerId]];
+                    const activeIndex = items.findIndex((item) => item.id === active.id);
+                    const overIndex = items.findIndex((item) => item.id === over.id);
+
+                    if (activeIndex !== overIndex) {
+                        const newItems = arrayMove(items, activeIndex, overIndex);
+                        const result = {
+                            ...prev,
+                            [activeContainerId]: newItems,
+                        };
+
+                        // router.post(
+                        //     route('module.kanban.card.reorder', {
+                        //         order: newItems,
+                        //         board_id: board.id,
+                        //         column_id: activeContainerId,
+                        //     }),
+                        // );
+                        return result;
+                    }
+                    return prev;
+                });
+            }
+        }
+
+        if (activeType === 'Card') {
+            const columns_with_card_ids = Object.entries(columns).map(([columnId, cards]) => ({
+                column_id: columnId,
+                card_ids: cards.map((card) => card.id),
+            }));
+
+            router.post(
+                route('module.kanban.card.reorder'),
+                { columns_with_card_ids, board_id: board.id }, // send using key that matches Laravel expectations
+                {  preserveScroll: true },
+            );
+        }
+
+        setActiveId(null);
+        setActiveType(null);
+        document.body.classList.remove('dragging-active');
+    };
 
     return (
         <div className="min-h-screen">
@@ -185,7 +285,6 @@ export default function Board({ initialData = {}, initialColumnNames = {}, board
                 >
                     <div className={`py-6 ${viewMode === 'horizontal' ? 'flex gap-6 overflow-x-auto' : 'mx-auto w-full space-y-6'}`}>
                         {columnOrder.map((columnId) => (
-                            <>
                                 <Column
                                     key={columnId}
                                     id={columnId}
@@ -197,7 +296,6 @@ export default function Board({ initialData = {}, initialColumnNames = {}, board
                                     isCollapsed={collapsedColumns[columnId] || false}
                                     onToggleCollapse={() => toggleColumnCollapse(columnId)}
                                 />
-                            </>
                         ))}
                     </div>
                 </SortableContext>
@@ -339,7 +437,14 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
                             )}
                         </div>
                         <div className="flex items-center gap-2">
-                            <ModalLink href={`${route('module.kanban.card.create',  { column_id:  id, board_id: board_id })}`}>Add Card</ModalLink>
+                            <ModalLink href={`${route('module.kanban.card.create', { column_id: id, board_id: board_id })}`}>Add Card</ModalLink>
+                            <ModalLink
+                                variant="danger"
+                                href={`${route('module.kanban.column.confirm-delete', { column_id: id, board_id: board_id })}`}
+                            >
+                                Delete
+                            </ModalLink>
+
                             <span className="text-sm text-gray-500">{cards.length}</span>
                         </div>
                     </div>
@@ -401,7 +506,7 @@ function Card({ id, title, isDragOverlay = false, viewMode = 'horizontal' }) {
             {...listeners}
             className={`cursor-grab rounded-lg border border-gray-200 p-4 hover:border-gray-300 hover:shadow-sm active:cursor-grabbing ${isDragOverlay ? 'cursor-grabbing border-2 border-blue-500 shadow-xl' : ''} ${over ? 'bg-blue-50/30 ring-2 ring-blue-400' : ''} ${viewMode === 'vertical' ? 'flex aspect-square items-center justify-center text-center' : ''} `}
         >
-            <div className={`text-sm leading-relaxed font-medium ${viewMode === 'vertical' ? 'text-center break-words' : ''}`}>{title}</div>
+            <div className={`text-sm leading-relaxed font-medium ${viewMode === 'vertical' ? 'text-center break-words' : ''}`}>{title} {id}</div>
         </div>
     );
 }

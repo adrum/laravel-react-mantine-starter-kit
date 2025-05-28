@@ -26,7 +26,7 @@ final class Column extends Model
 
     public function cards(): HasMany
     {
-        return $this->hasMany(Card::class)->orderBy('position');
+        return $this->hasMany(Card::class)->orderBy('order');
     }
 
     public function addCard(Card $card): void

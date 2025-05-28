@@ -26,7 +26,7 @@ final class Board extends Model
 
     public function columns(): HasMany
     {
-        return $this->hasMany(Column::class)->oldest();
+        return $this->hasMany(Column::class)->orderBy('order');
     }
 
     public function addColumn(Column $column): void

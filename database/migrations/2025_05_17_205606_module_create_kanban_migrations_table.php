@@ -21,13 +21,14 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->foreignId('board_id')->constrained();
+            $table->integer('order')->default(0);
             $table->timestamps();
         });
 
         Schema::create('cards', function (Blueprint $table) {
             $table->id();
             $table->string('content')->nullable();
-            $table->integer('position');
+            $table->integer('order')->default(0);
             $table->foreignId('column_id')->constrained();
             $table->timestamps();
         });
