@@ -1,4 +1,5 @@
 import { DndContext, DragOverlay, PointerSensor, pointerWithin, rectIntersection, useSensor, useSensors } from '@dnd-kit/core';
+import { produce } from 'immer';
 import {
     arrayMove,
     horizontalListSortingStrategy,
@@ -122,93 +123,111 @@ export default function Board({ initialData = {}, initialColumnNames = {}, board
         });
     };
 
-    const handleDragEnd = (event) => {
-        const { active, over } = event;
+    const handleDragEnd = async (event) => {
+    const { active, over } = event;
 
-        console.log('Drag ended');
+    if (!over) {
+        setActiveId(null);
+        setActiveType(null);
+        document.body.classList.remove('dragging-active');
+        return;
+    }
 
-        if (!over) {
+    const activeType = active.data.current?.type || 'Card';
+
+    // Handle column reordering
+    if (activeType === 'Column') {
+        if (active.id !== over.id) {
+            setColumnOrder((items) => {
+                const oldIndex = items.indexOf(active.id);
+                const newIndex = items.indexOf(over.id);
+                const newOrder = arrayMove(items, oldIndex, newIndex);
+                router.post(
+                    route('module.kanban.column.reorder'),
+                    { order: newOrder, board_id: board.id, column_id: active.id },
+                    { preserveScroll: true },
+                );
+                return newOrder;
+            });
+        }
+    }
+    // Handle card reordering
+    else {
+        const activeContainerId = findContainer(active.id);
+        const overContainerId = findContainer(over.id);
+
+        if (!activeContainerId || !overContainerId) {
             setActiveId(null);
             setActiveType(null);
             document.body.classList.remove('dragging-active');
             return;
         }
 
-        const activeType = active.data.current?.type || 'Card';
+        if (activeContainerId === overContainerId) {
+            // Reordering within the same column
+            const newColumns = produce(columns, (draft) => {
+                const items = [...draft[activeContainerId]];
+                const activeIndex = items.findIndex((item) => item.id === active.id);
+                const overIndex = items.findIndex((item) => item.id === over.id);
 
-        // Handle column reordering
-        if (activeType === 'Column') {
-            if (active.id !== over.id) {
-                setColumnOrder((items) => {
-                    const oldIndex = items.indexOf(active.id);
-                    const newIndex = items.indexOf(over.id);
-                    const newOrder = arrayMove(items, oldIndex, newIndex);
-                    router.post(
-                        route('module.kanban.column.reorder'),
-                        { order: newOrder, board_id: board.id, column_id: active.id },
-                        { preserveScroll: true },
-                    );
-                    return newOrder;
-                });
-            }
-        }
-        // Handle card reordering
-        else {
-            const activeContainerId = findContainer(active.id);
-            const overContainerId = findContainer(over.id);
+                if (activeIndex !== overIndex) {
+                    draft[activeContainerId] = arrayMove(items, activeIndex, overIndex);
+                }
+            });
 
-            if (!activeContainerId || !overContainerId) {
-                setActiveId(null);
-                setActiveType(null);
-                document.body.classList.remove('dragging-active');
-                return;
-            }
+            // Update state immediately
+            setColumns(newColumns);
 
-            if (activeContainerId === overContainerId) {
-                // Reordering within the same column
-                setColumns((prev) => {
-                    const items = [...prev[activeContainerId]];
-                    const activeIndex = items.findIndex((item) => item.id === active.id);
-                    const overIndex = items.findIndex((item) => item.id === over.id);
-
-                    if (activeIndex !== overIndex) {
-                        const newItems = arrayMove(items, activeIndex, overIndex);
-                        const result = {
-                            ...prev,
-                            [activeContainerId]: newItems,
-                        };
-
-                        // router.post(
-                        //     route('module.kanban.card.reorder', {
-                        //         order: newItems,
-                        //         board_id: board.id,
-                        //         column_id: activeContainerId,
-                        //     }),
-                        // );
-                        return result;
-                    }
-                    return prev;
-                });
-            }
-        }
-
-        if (activeType === 'Card') {
-            const columns_with_card_ids = Object.entries(columns).map(([columnId, cards]) => ({
+            // Prepare the data to send to server
+            const columns_with_card_ids = Object.entries(newColumns).map(([columnId, cards]) => ({
                 column_id: columnId,
                 card_ids: cards.map((card) => card.id),
             }));
 
+            // Send to server
             router.post(
                 route('module.kanban.card.reorder'),
-                { columns_with_card_ids, board_id: board.id }, // send using key that matches Laravel expectations
-                {  preserveScroll: true },
+                { columns_with_card_ids, board_id: board.id },
+                { preserveScroll: true },
+            );
+        } else {
+            // Moving between columns
+            const newColumns = produce(columns, (draft) => {
+                const activeItems = [...draft[activeContainerId]];
+                const overItems = [...draft[overContainerId]];
+                const activeIndex = activeItems.findIndex((item) => item.id === active.id);
+
+                if (activeIndex !== -1) {
+                    const [removed] = activeItems.splice(activeIndex, 1);
+                    overItems.push(removed);
+                    draft[activeContainerId] = activeItems;
+                    draft[overContainerId] = overItems;
+                }
+            });
+
+            // Update state immediately
+            setColumns(newColumns);
+
+            // Prepare the data to send to server
+            const columns_with_card_ids = Object.entries(newColumns).map(([columnId, cards]) => ({
+                column_id: columnId,
+                card_ids: cards.map((card) => card.id),
+            }));
+
+            // Send to server
+            router.post(
+                route('module.kanban.card.reorder'),
+                { columns_with_card_ids, board_id: board.id },
+                { preserveScroll: true },
             );
         }
+    }
 
-        setActiveId(null);
-        setActiveType(null);
-        document.body.classList.remove('dragging-active');
-    };
+    setActiveId(null);
+    setActiveType(null);
+    document.body.classList.remove('dragging-active');
+};
+
 
     return (
         <div className="min-h-screen">
