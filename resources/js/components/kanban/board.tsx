@@ -1,5 +1,4 @@
 import { DndContext, DragOverlay, PointerSensor, pointerWithin, rectIntersection, useSensor, useSensors } from '@dnd-kit/core';
-import { produce } from 'immer';
 import {
     arrayMove,
     horizontalListSortingStrategy,
@@ -11,6 +10,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { router } from '@inertiajs/react';
 import { Flex } from '@mantine/core';
+import { produce } from 'immer';
 import { useEffect, useRef, useState } from 'react';
 import ModalLink from '../modal-link';
 
@@ -78,7 +78,6 @@ export default function Board({ initialData = {}, initialColumnNames = {}, board
                 preserveScroll: true,
             },
         );
-
     };
 
     const handleDragStart = (event) => {
@@ -124,110 +123,101 @@ export default function Board({ initialData = {}, initialColumnNames = {}, board
     };
 
     const handleDragEnd = async (event) => {
-    const { active, over } = event;
+        const { active, over } = event;
 
-    if (!over) {
-        setActiveId(null);
-        setActiveType(null);
-        document.body.classList.remove('dragging-active');
-        return;
-    }
-
-    const activeType = active.data.current?.type || 'Card';
-
-    // Handle column reordering
-    if (activeType === 'Column') {
-        if (active.id !== over.id) {
-            setColumnOrder((items) => {
-                const oldIndex = items.indexOf(active.id);
-                const newIndex = items.indexOf(over.id);
-                const newOrder = arrayMove(items, oldIndex, newIndex);
-                router.post(
-                    route('module.kanban.column.reorder'),
-                    { order: newOrder, board_id: board.id, column_id: active.id },
-                    { preserveScroll: true },
-                );
-                return newOrder;
-            });
-        }
-    }
-    // Handle card reordering
-    else {
-        const activeContainerId = findContainer(active.id);
-        const overContainerId = findContainer(over.id);
-
-        if (!activeContainerId || !overContainerId) {
+        if (!over) {
             setActiveId(null);
             setActiveType(null);
             document.body.classList.remove('dragging-active');
             return;
         }
 
-        if (activeContainerId === overContainerId) {
-            // Reordering within the same column
-            const newColumns = produce(columns, (draft) => {
-                const items = [...draft[activeContainerId]];
-                const activeIndex = items.findIndex((item) => item.id === active.id);
-                const overIndex = items.findIndex((item) => item.id === over.id);
+        const activeType = active.data.current?.type || 'Card';
 
-                if (activeIndex !== overIndex) {
-                    draft[activeContainerId] = arrayMove(items, activeIndex, overIndex);
-                }
-            });
-
-            // Update state immediately
-            setColumns(newColumns);
-
-            // Prepare the data to send to server
-            const columns_with_card_ids = Object.entries(newColumns).map(([columnId, cards]) => ({
-                column_id: columnId,
-                card_ids: cards.map((card) => card.id),
-            }));
-
-            // Send to server
-            router.post(
-                route('module.kanban.card.reorder'),
-                { columns_with_card_ids, board_id: board.id },
-                { preserveScroll: true },
-            );
-        } else {
-            // Moving between columns
-            const newColumns = produce(columns, (draft) => {
-                const activeItems = [...draft[activeContainerId]];
-                const overItems = [...draft[overContainerId]];
-                const activeIndex = activeItems.findIndex((item) => item.id === active.id);
-
-                if (activeIndex !== -1) {
-                    const [removed] = activeItems.splice(activeIndex, 1);
-                    overItems.push(removed);
-                    draft[activeContainerId] = activeItems;
-                    draft[overContainerId] = overItems;
-                }
-            });
-
-            // Update state immediately
-            setColumns(newColumns);
-
-            // Prepare the data to send to server
-            const columns_with_card_ids = Object.entries(newColumns).map(([columnId, cards]) => ({
-                column_id: columnId,
-                card_ids: cards.map((card) => card.id),
-            }));
-
-            // Send to server
-            router.post(
-                route('module.kanban.card.reorder'),
-                { columns_with_card_ids, board_id: board.id },
-                { preserveScroll: true },
-            );
+        // Handle column reordering
+        if (activeType === 'Column') {
+            if (active.id !== over.id) {
+                setColumnOrder((items) => {
+                    const oldIndex = items.indexOf(active.id);
+                    const newIndex = items.indexOf(over.id);
+                    const newOrder = arrayMove(items, oldIndex, newIndex);
+                    router.post(
+                        route('module.kanban.column.reorder'),
+                        { order: newOrder, board_id: board.id, column_id: active.id },
+                        { preserveScroll: true },
+                    );
+                    return newOrder;
+                });
+            }
         }
-    }
+        // Handle card reordering
+        else {
+            const activeContainerId = findContainer(active.id);
+            const overContainerId = findContainer(over.id);
 
-    setActiveId(null);
-    setActiveType(null);
-    document.body.classList.remove('dragging-active');
-};
+            if (!activeContainerId || !overContainerId) {
+                setActiveId(null);
+                setActiveType(null);
+                document.body.classList.remove('dragging-active');
+                return;
+            }
 
+            if (activeContainerId === overContainerId) {
+                // Reordering within the same column
+                const newColumns = produce(columns, (draft) => {
+                    const items = [...draft[activeContainerId]];
+                    const activeIndex = items.findIndex((item) => item.id === active.id);
+                    const overIndex = items.findIndex((item) => item.id === over.id);
+
+                    if (activeIndex !== overIndex) {
+                        draft[activeContainerId] = arrayMove(items, activeIndex, overIndex);
+                    }
+                });
+
+                // Update state immediately
+                setColumns(newColumns);
+
+                // Prepare the data to send to server
+                const columns_with_card_ids = Object.entries(newColumns).map(([columnId, cards]) => ({
+                    column_id: columnId,
+                    card_ids: cards.map((card) => card.id),
+                }));
+
+                // Send to server
+                router.post(route('module.kanban.card.reorder'), { columns_with_card_ids, board_id: board.id }, { preserveScroll: true });
+            } else {
+                // Moving between columns
+                const newColumns = produce(columns, (draft) => {
+                    const activeItems = [...draft[activeContainerId]];
+                    const overItems = [...draft[overContainerId]];
+                    const activeIndex = activeItems.findIndex((item) => item.id === active.id);
+
+                    if (activeIndex !== -1) {
+                        const [removed] = activeItems.splice(activeIndex, 1);
+                        overItems.push(removed);
+                        draft[activeContainerId] = activeItems;
+                        draft[overContainerId] = overItems;
+                    }
+                });
+
+                // Update state immediately
+                setColumns(newColumns);
+
+                // Prepare the data to send to server
+                const columns_with_card_ids = Object.entries(newColumns).map(([columnId, cards]) => ({
+                    column_id: columnId,
+                    card_ids: cards.map((card) => card.id),
+                }));
+
+                // Send to server
+                router.post(route('module.kanban.card.reorder'), { columns_with_card_ids, board_id: board.id }, { preserveScroll: true });
+            }
+        }
+
+        setActiveId(null);
+        setActiveType(null);
+        document.body.classList.remove('dragging-active');
+    };
 
     return (
         <div className="min-h-screen">
@@ -304,17 +294,17 @@ export default function Board({ initialData = {}, initialColumnNames = {}, board
                 >
                     <div className={`py-6 ${viewMode === 'horizontal' ? 'flex gap-6 overflow-x-auto' : 'mx-auto w-full space-y-6'}`}>
                         {columnOrder.map((columnId) => (
-                                <Column
-                                    key={columnId}
-                                    id={columnId}
-                                    board_id={board?.id}
-                                    title={columnNames[columnId]}
-                                    cards={columns[columnId] || []}
-                                    viewMode={viewMode}
-                                    onNameChange={(newName) => handleColumnNameChange(columnId, newName)}
-                                    isCollapsed={collapsedColumns[columnId] || false}
-                                    onToggleCollapse={() => toggleColumnCollapse(columnId)}
-                                />
+                            <Column
+                                key={columnId}
+                                id={columnId}
+                                board_id={board?.id}
+                                title={columnNames[columnId]}
+                                cards={columns[columnId] || []}
+                                viewMode={viewMode}
+                                onNameChange={(newName) => handleColumnNameChange(columnId, newName)}
+                                isCollapsed={collapsedColumns[columnId] || false}
+                                onToggleCollapse={() => toggleColumnCollapse(columnId)}
+                            />
                         ))}
                     </div>
                 </SortableContext>
@@ -327,7 +317,7 @@ export default function Board({ initialData = {}, initialColumnNames = {}, board
                     }}
                 >
                     {activeId && activeType === 'Card' ? (
-                        <Card id={activeId} title={getActiveItem()?.title || ''} isDragOverlay viewMode={viewMode} />
+                        <Card id={activeId} image={getActiveItem()?.image} title={getActiveItem()?.title || ''} isDragOverlay viewMode={viewMode} />
                     ) : activeId && activeType === 'Column' ? (
                         <MiniColumnPreview
                             title={columnNames[activeId] || activeId}
@@ -457,6 +447,7 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
                         </div>
                         <div className="flex items-center gap-2">
                             <ModalLink href={`${route('module.kanban.card.create', { column_id: id, board_id: board_id })}`}>Add Card</ModalLink>
+                            <ModalLink href={`${route('module.kanban.card.create-files', { column_id: id, board_id: board_id })}`}>Add Files</ModalLink>
                             <ModalLink
                                 variant="danger"
                                 href={`${route('module.kanban.column.confirm-delete', { column_id: id, board_id: board_id })}`}
@@ -475,15 +466,15 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
                             <SortableContext items={cards.map((card) => card.id)} strategy={verticalListSortingStrategy}>
                                 <div className="space-y-3">
                                     {cards.map((card) => (
-                                        <Card key={card.id} id={card.id} title={card.title} viewMode={viewMode} />
+                                        <Card key={card.id} id={card.id} image={card.image} title={card.title} viewMode={viewMode} />
                                     ))}
                                 </div>
                             </SortableContext>
                         ) : (
-                            <div className="grid grid-cols-5 gap-3">
+                            <div className="grid sm:grid-cols-5 grid-cols-2 gap-3">
                                 <SortableContext items={cards.map((card) => card.id)} strategy={rectSortingStrategy}>
                                     {cards.map((card) => (
-                                        <Card key={card.id} id={card.id} title={card.title} viewMode={viewMode} />
+                                        <Card key={card.id} id={card.id} image={card.image} title={card.title} viewMode={viewMode} />
                                     ))}
                                 </SortableContext>
                             </div>
@@ -501,7 +492,8 @@ function Column({ id, title, cards, viewMode, onNameChange, isCollapsed, onToggl
     );
 }
 
-function Card({ id, title, isDragOverlay = false, viewMode = 'horizontal' }) {
+
+function Card({ id, title, image, isDragOverlay = false, viewMode = 'horizontal'  }) {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging, over } = useSortable({
         id,
         data: {
@@ -523,9 +515,49 @@ function Card({ id, title, isDragOverlay = false, viewMode = 'horizontal' }) {
             style={style}
             {...attributes}
             {...listeners}
-            className={`cursor-grab rounded-lg border border-gray-200 p-4 hover:border-gray-300 hover:shadow-sm active:cursor-grabbing ${isDragOverlay ? 'cursor-grabbing border-2 border-blue-500 shadow-xl' : ''} ${over ? 'bg-blue-50/30 ring-2 ring-blue-400' : ''} ${viewMode === 'vertical' ? 'flex aspect-square items-center justify-center text-center' : ''} `}
+            className={`group relative cursor-grab rounded-lg border border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm active:cursor-grabbing ${
+                isDragOverlay ? 'cursor-grabbing border-2 border-blue-500 shadow-xl' : ''
+            } ${over ? 'bg-blue-50/30 ring-2 ring-blue-400' : ''} ${
+                viewMode === 'vertical' ? 'flex aspect-square flex-col' : 'min-h-[100px]'
+            }`}
         >
-            <div className={`text-sm leading-relaxed font-medium ${viewMode === 'vertical' ? 'text-center break-words' : ''}`}>{title} {id}</div>
+            {/* Delete button - only shows on hover */}
+            {!isDragOverlay && (
+                <div className="absolute right-2 top-2 z-10 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                    <ModalLink
+                        variant="danger"
+                        size="xs"
+                        href={route('module.kanban.card.confirm-delete', { id: id })}
+                        className="rounded-full p-1 shadow-md"
+                    >
+                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </ModalLink>
+                </div>
+            )}
+
+            {/* Card content */}
+            <div className={`flex h-full flex-col  ${viewMode === 'vertical' ? 'justify-between' : ''}`}>
+                <div className={`text-sm font-medium ${viewMode === 'vertical' ? 'text-center' : ''}`}>
+                    {title}
+                </div>
+
+                {image && !title && (
+                    <div className={`rounded-md overflow-hidden ${viewMode === 'vertical' ? 'flex-grow' : 'h-32'}`}>
+                        <img
+                            className="h-full w-full object-cover"
+                            src={image}
+                            alt={title}
+                            style={{
+                                aspectRatio: '1/1', // Ensures square aspect ratio
+                            }}
+                        />
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
+
+

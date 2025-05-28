@@ -8,10 +8,13 @@ use Database\Factories\CardFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Plank\Mediable\Mediable;
+use Plank\Mediable\MediableInterface;
 
-final class Card extends Model
+final class Card extends Model implements MediableInterface
 {
     use HasFactory;
+    use Mediable;
 
     protected $fillable = [
         'content',
@@ -27,5 +30,10 @@ final class Card extends Model
     protected static function newFactory()
     {
         return CardFactory::new();
+    }
+
+    public function getImageAttribute()
+    {
+        return $this->getMedia('card')->first()?->getUrl() ?? '/';
     }
 }

@@ -11,7 +11,7 @@ final class CreateColumn
 {
     public function handle(array $data): Column
     {
-        $lastOrder = Board::find($data['board_id'])->columns()->reorder()->orderByDesc('order')->first()->order;
+        $lastOrder = Board::find($data['board_id'])->columns()->reorder()->orderByDesc('order')->first()?->order ?? 1;
         return Column::create($data + ['order' => ++$lastOrder]);
     }
 }

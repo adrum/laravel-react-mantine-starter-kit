@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\Kanban\BoardCreateController;
 use App\Http\Controllers\Kanban\BoardOrderController;
 use App\Http\Controllers\Kanban\CardCreateController;
+use App\Http\Controllers\Kanban\CardFilesController;
 use App\Http\Controllers\Kanban\CardOrderController;
 use App\Http\Controllers\Kanban\ColumnCreateController;
 use App\Http\Controllers\Kanban\ColumnOrderController;
@@ -33,6 +34,12 @@ Route::group(['prefix' => 'columns', 'middleware' => 'auth'], function () {
 Route::group(['prefix' => 'cards', 'middleware' => 'auth'], function () {
 
     Route::get('/create/{column_id}', [CardCreateController::class, 'create'])->name('module.kanban.card.create');
+    Route::get('/create-files/{column_id}', [CardFilesController::class, 'create'])->name('module.kanban.card.create-files');
+
+    Route::get('/confirm-delete', [CardCreateController::class, 'confirmDelete'])->name('module.kanban.card.confirm-delete');
+
+    Route::delete('/delete', [CardCreateController::class, 'destroy'])->name('module.kanban.card.delete');
     Route::post('/reorder-card', [BoardOrderController::class, 'update'])->name('module.kanban.card.reorder');
     Route::post('/store', [CardCreateController::class, 'store'])->name('module.kanban.card.store');
+    Route::post('/storeFiles', [CardCreateController::class, 'storeFiles'])->name('module.kanban.card.store-files');
 });

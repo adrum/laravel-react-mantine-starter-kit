@@ -83,6 +83,7 @@ final class BoardCreateController extends Controller
                     return [
                         'id' => $card->id,
                         'title' => $card->content,
+                        'image' => $card->image,
                     ];
                 })->toArray(),
             ];

@@ -20,6 +20,7 @@
         "leandrocfe/filament-apex-charts": "^3.1",
         "nunomaduro/essentials": "@dev",
         "opcodesio/log-viewer": "^3.17",
+        "plank/laravel-mediable": "^6.3",
         "pxlrbt/filament-environment-indicator": "^2.1",
         "pxlrbt/filament-spotlight": "^1.3",
         "ralphjsmit/laravel-seo": "^1.7",
