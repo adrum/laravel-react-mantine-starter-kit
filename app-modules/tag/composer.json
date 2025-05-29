@@ -1,0 +1,24 @@
+{
+	"name": "modules/tag",
+	"description": "",
+	"type": "library",
+	"version": "1.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"Modules\\Tag\\": "src/",
+			"Modules\\Tag\\Tests\\": "tests/",
+			"Modules\\Tag\\Database\\Factories\\": "database/factories/",
+			"Modules\\Tag\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"Modules\\Tag\\Providers\\TagServiceProvider"
+			]
+		}
+	}
+}

@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
-uses(TestCase::class);
 
 it('sets the chosen locale', function () {
 
