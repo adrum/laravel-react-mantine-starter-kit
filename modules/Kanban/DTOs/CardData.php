@@ -12,7 +12,9 @@ final class CardData extends Data
 {
     public function __construct(
         public int $id,
-        public string $content,
-        public string $image,
+        public ColumnData $column,
+        public ?string $content,
+        public ?string $media_card,
+        public ?string $media_type
     ) {}
 }

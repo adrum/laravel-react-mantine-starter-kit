@@ -5,9 +5,14 @@ import { Head } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Kanban',
+        title: 'Board',
         href: '/boards',
     },
+    {
+        title: 'Columns',
+        href: '/boards',
+    },
+
 ];
 
 export default function Index({ initialData, initialColumnNames, board }: { initialData: any; initialColumnNames: any, board: Module.Kanban.DTOs.BoardData }) {

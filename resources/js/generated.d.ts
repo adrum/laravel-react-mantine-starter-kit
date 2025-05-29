@@ -6,8 +6,15 @@ export type BoardData = {
 id: number;
 title: string;
 };
+export type CardData = {
+id: number;
+column: Module.Kanban.DTOs.ColumnData;
+content: string | null;
+media_card: string | null;
+media_type: string | null;
+};
 export type ColumnData = {
 title: string;
-boardData: Module.Kanban.DTOs.BoardData;
+board: Module.Kanban.DTOs.BoardData;
 };
 }

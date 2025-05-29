@@ -12,6 +12,6 @@ final class ColumnData extends Data
 {
     public function __construct(
         public string $title,
-        public BoardData $boardData
+        public BoardData $board
     ) {}
 }

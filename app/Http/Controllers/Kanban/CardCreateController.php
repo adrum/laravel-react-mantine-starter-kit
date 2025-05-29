@@ -13,6 +13,8 @@ use Module\Kanban\Actions\CreateCard;
 use Module\Kanban\Actions\CreateCardFiles;
 use Module\Kanban\Actions\CreateColumn;
 use Module\Kanban\Actions\DeleteCard;
+use Module\Kanban\DTOs\CardData;
+use Module\Kanban\Models\Card;
 
 final class CardCreateController extends Controller
 {
@@ -76,5 +78,17 @@ final class CardCreateController extends Controller
         ]);
     }
 
+    public function show(Request $request): Response
+    {
+        $data = $request->validate([
+            'card_id' => 'required|exists:Module\Kanban\Models\Card,id',
+        ]);
+
+        $card = Card::with('column', 'column.board')->find($data['card_id']);
+
+        return Inertia::render('modules/kanban/card/show', [
+            'card' => CardData::from($card),
+        ]);
+    }
 
 }

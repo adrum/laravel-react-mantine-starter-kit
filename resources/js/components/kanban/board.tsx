@@ -8,8 +8,8 @@ import {
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { router } from '@inertiajs/react';
-import { Flex } from '@mantine/core';
+import { Link, router } from '@inertiajs/react';
+import { Button, Flex } from '@mantine/core';
 import { produce } from 'immer';
 import { useEffect, useRef, useState } from 'react';
 import ModalLink from '../modal-link';
@@ -545,6 +545,7 @@ function Card({ id, title, image, isDragOverlay = false, viewMode = 'horizontal'
 
                 {image && !title && (
                     <div className={`rounded-md overflow-hidden ${viewMode === 'vertical' ? 'flex-grow' : 'h-32'}`}>
+                        <Link href={route('module.kanban.card.show', { card_id: id })}>
                         <img
                             className="h-full w-full object-cover"
                             src={image}
@@ -553,6 +554,7 @@ function Card({ id, title, image, isDragOverlay = false, viewMode = 'horizontal'
                                 aspectRatio: '1/1', // Ensures square aspect ratio
                             }}
                         />
+</Link>
                     </div>
                 )}
             </div>

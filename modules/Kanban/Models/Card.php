@@ -32,8 +32,13 @@ final class Card extends Model implements MediableInterface
         return CardFactory::new();
     }
 
-    public function getImageAttribute()
+    public function getMediaCardAttribute()
     {
         return $this->getMedia('card')->first()?->getUrl() ?? '/';
+    }
+
+    public function getMediaTypeAttribute()
+    {
+        return $this->getMedia('card')->first()?->aggregate_type ?? 'image';
     }
 }

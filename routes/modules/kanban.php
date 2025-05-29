@@ -42,4 +42,5 @@ Route::group(['prefix' => 'cards', 'middleware' => 'auth'], function () {
     Route::post('/reorder-card', [BoardOrderController::class, 'update'])->name('module.kanban.card.reorder');
     Route::post('/store', [CardCreateController::class, 'store'])->name('module.kanban.card.store');
     Route::post('/storeFiles', [CardCreateController::class, 'storeFiles'])->name('module.kanban.card.store-files');
+    Route::get('/show', [CardCreateController::class, 'show'])->name('module.kanban.card.show');
 });

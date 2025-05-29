@@ -10,7 +10,7 @@ import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Kanban',
+        title: 'Board',
         href: '/boards',
     },
 ];
@@ -26,7 +26,7 @@ export default function Index({
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Boards Table" />
 
             <GenericTable

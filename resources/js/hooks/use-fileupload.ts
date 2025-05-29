@@ -22,10 +22,12 @@ export interface UploadConfig {
 export function useFileUpload(options: UseFileUploadOptions = {}) {
     const {
         maxFiles = 10,
-        maxFileSize = 10 * 1024 * 1024, // 10MB default
+        maxFileSize = 10 * 50024 * 50024, // 10MB default
         acceptedTypes = ['image/*', 'audio/*', 'video/*'],
         autoUpload = false,
     } = options;
+
+    console.log(maxFileSize)
 
     const [files, setFiles] = useState<FileWithPath[]>([]);
     const [isUploading, setIsUploading] = useState(false);

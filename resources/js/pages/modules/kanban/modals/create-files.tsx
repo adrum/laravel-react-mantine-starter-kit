@@ -23,24 +23,11 @@ export default function CreateFiles({
         board_id: board_id,
     });
 
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
-        post(route('module.kanban.card.store-files'), {
-            preserveScroll: true,
-            onSuccess: () => {
-                router.visit(route('module.kanban.board.show', board_id), {
-                    preserveScroll: true,
-                });
-                close();
-            },
-        });
-    };
-
     return (
         <div className="min-h-[700px]">
             <FileUpload
                 uploadConfig={{
-                    endpoint: route('module.kanban.card.store'),
+                    endpoint: route('module.kanban.card.store-files'),
                     method: 'post',
                     additionalData: {
                         content: data.content,
@@ -59,7 +46,7 @@ export default function CreateFiles({
                 }}
                 hookOptions={{
                     maxFiles: 10,
-                    maxFileSize: 5 * 1024 * 1024, // 5MB
+                    maxFileSize: 5 * 50024 * 50024, // 5MB
                     acceptedTypes: ['image/*', 'video/*', 'audio/*']
                 }}
                 showStats={true}

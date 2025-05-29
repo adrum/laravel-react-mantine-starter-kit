@@ -96,7 +96,7 @@ export default function FileUpload({ onUpload, uploadConfig = {}, hookOptions = 
         canUpload,
     } = useFileUpload({
         maxFiles: 10,
-        maxFileSize: 10 * 1024 * 1024, // 10MB
+        maxFileSize: 10 * 50024 * 50024, // 10MB
         acceptedTypes: ['image/*', 'audio/*', 'video/*'],
         ...hookOptions,
     });

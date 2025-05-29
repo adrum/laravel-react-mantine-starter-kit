@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use Module\Kanban\Actions\CreateCard;
+use Module\Kanban\Actions\CreateCardFiles;
 use Module\Kanban\Actions\CreateColumn;
 
 final class CardFilesController extends Controller
@@ -22,15 +23,15 @@ final class CardFilesController extends Controller
         ]);
     }
 
-    public function store(Request $request, CreateCard $createCard): RedirectResponse
+    public function store(Request $request, CreateCardFiles $createCardFiles): RedirectResponse
     {
         $data = $request->validate([
-            'content' => ['required'],
+            'files' => ['required|array'],
             'board_id' => 'required|exists:Module\Kanban\Models\Board,id',
             'column_id' => 'required',
         ]);
 
-        $createCard->handle($data);
+        $createCardFiles->handle($data);
 
         return back()->with('success', 'Card created successfully');
     }
