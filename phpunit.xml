@@ -5,9 +5,8 @@
             <directory>tests/Unit</directory>
         </testsuite>
         <testsuite name="Module Tag Tests">
-            <directory suffix="Test.php">./app-modules/tag/tests</directory>
+            <directory suffix="Test.php">./app-modules/*/tests</directory>
         </testsuite>
-
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
         </testsuite>

@@ -1,0 +1,24 @@
+{
+	"name": "modules/media",
+	"description": "",
+	"type": "library",
+	"version": "1.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"Modules\\Media\\": "src/",
+			"Modules\\Media\\Tests\\": "tests/",
+			"Modules\\Media\\Database\\Factories\\": "database/factories/",
+			"Modules\\Media\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"Modules\\Media\\Providers\\MediaServiceProvider"
+			]
+		}
+	}
+}

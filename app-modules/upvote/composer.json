@@ -1,0 +1,24 @@
+{
+	"name": "modules/upvote",
+	"description": "",
+	"type": "library",
+	"version": "1.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"Modules\\Upvote\\": "src/",
+			"Modules\\Upvote\\Tests\\": "tests/",
+			"Modules\\Upvote\\Database\\Factories\\": "database/factories/",
+			"Modules\\Upvote\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"Modules\\Upvote\\Providers\\UpvoteServiceProvider"
+			]
+		}
+	}
+}
