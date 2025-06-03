@@ -25,6 +25,7 @@
         "modules/media": "*",
         "modules/tag": "*",
         "modules/upvote": "*",
+        "modules/team": "*",
         "nunomaduro/essentials": "@dev",
         "opcodesio/log-viewer": "^3.17",
         "plank/laravel-mediable": "^6.3",

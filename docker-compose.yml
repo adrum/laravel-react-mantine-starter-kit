@@ -28,7 +28,7 @@ x-base: &base
     - 'db:/var/www/html/db'
     - 'fonts:/var/www/html/storage/fonts'
   ports:
-    - '8000:8000'
+    - '8050:8000'
 
   labels:
       - "traefik.enable=true"

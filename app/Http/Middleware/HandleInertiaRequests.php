@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Enums\Feature;
 use App\Enums\Language;
 use App\Http\Resources\LanguageResource;
+use App\Support\InertiaSharedData;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -50,7 +52,6 @@ final class HandleInertiaRequests extends Middleware
             return [];
         }
 
-        [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
         /** @var array{
                github: bool,
                x: bool,
@@ -62,10 +63,9 @@ final class HandleInertiaRequests extends Middleware
 
         $socials = collect(SocialiteUi::providers()->toArray())->filter(fn (array $item) => $availableSocials->contains($item['id']));
 
-        return [
+        return array_merge([
             ...parent::share($request),
             'name' => config('app.name'),
-            'quote' => ['message' => mb_trim((string) $message), 'author' => mb_trim((string) $author)],
             'auth' => [
                 'user' => $request->user()?->load('socialAccounts'),
             ],
@@ -93,6 +93,10 @@ final class HandleInertiaRequests extends Middleware
             ],
             'csrf_token' => csrf_token(),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
-        ];
+            'features' => collect(config('custom.features', []))->pluck('value'),
+            'module' => [
+                'has_team' => false
+            ]
+        ], app(InertiaSharedData::class)->all());
     }
 }

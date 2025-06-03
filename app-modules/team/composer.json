@@ -1,0 +1,24 @@
+{
+	"name": "modules/team",
+	"description": "",
+	"type": "library",
+	"version": "1.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"Modules\\Team\\": "src/",
+			"Modules\\Team\\Tests\\": "tests/",
+			"Modules\\Team\\Database\\Factories\\": "database/factories/",
+			"Modules\\Team\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"Modules\\Team\\Providers\\TeamServiceProvider"
+			]
+		}
+	}
+}

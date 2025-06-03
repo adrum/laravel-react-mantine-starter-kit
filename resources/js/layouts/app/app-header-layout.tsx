@@ -19,16 +19,7 @@ const mainNavItems: NavItem[] = [
 ];
 
 const footerNavItems: (NavItem & { icon: Icon })[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/adrum/laravel-react-mantine-starter-kit',
-        icon: IconFolder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits',
-        icon: IconBook,
-    },
+
 ];
 
 export default function AppHeaderLayout({ children, breadcrumbs }: PropsWithChildren<{ breadcrumbs?: BreadcrumbItem[] }>) {

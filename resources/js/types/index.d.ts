@@ -32,6 +32,10 @@ export interface SharedData {
     languages: { label: string; value: string }[];
     translations: [];
     language: string;
+    features: [];
+    module: {
+       team: Modules.Team.DTOs.TeamModuleData
+    }
     [key: string]: unknown;
 }
 

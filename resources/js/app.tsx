@@ -14,7 +14,19 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 // Use dynamic imports for page components to enable code splitting
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
-    resolve: (name) => resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx', { eager: false })),
+    resolve: (name) => {
+        // If `name` is a `module::page`, return the page from the module
+        if (name.includes('::')) {
+            const [module, page] = name.split('::');
+
+            return resolvePageComponent(
+                `../../app-modules/${module}/resources/js/pages/${page}.tsx`,
+                import.meta.glob('../../app-modules/*/resources/js/pages/**/*.tsx'),
+            );
+        } else {
+            return resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx'));
+        }
+    },
     setup({ el, App, props }) {
         hydrateRoot(
             el,
