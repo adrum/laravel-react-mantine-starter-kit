@@ -1,3 +1,11 @@
+declare namespace App.Data {
+export type UserData = {
+id: number;
+name: string;
+email: string;
+currentTeam: Modules.Team.DTOs.TeamData;
+};
+}
 declare namespace App.Enums {
 export type Feature = 'teams';
 export type Language = 'en' | 'en_PH';
@@ -23,6 +31,14 @@ declare namespace Modules.Team.DTOs {
 export type TeamData = {
 id: number;
 name: string;
+members: Array<Modules.Team.DTOs.TeamMemberData>;
+};
+export type TeamMemberData = {
+id: number;
+name: string;
+role: string;
+email: string;
+avatar_url: string;
 };
 export type TeamModuleData = {
 has_team: boolean;

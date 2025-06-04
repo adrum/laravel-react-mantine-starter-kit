@@ -37,66 +37,73 @@ export default function Overview({
             <Head title="Profile settings" />
 
             <BillingsLayout>
-                <div className="space-y-6">
-                    <HeadingSmall title="Manage Subscription" description="Manage your subscription" />
-                    {plan.title}
-                    <br />
-                    {upcoming && (
-                        <p className="text-muted-foreground text-sm">
-                            {description}: {upcoming.short_date} {upcoming.date}
-                        </p>
-                    )}
+                {plan ? (
+                    <>
+                        <div className="space-y-6">
+                            <HeadingSmall title="Manage Subscription" description="Manage your subscription" />
 
-                    <p className="text-muted-foreground text-sm">Total: {total}</p>
+                            {plan.title}
+                            <br />
+                            {upcoming && (
+                                <p className="text-muted-foreground text-sm">
+                                    {description}: {upcoming.short_date} {upcoming.date}
+                                </p>
+                            )}
 
-                    <Button component="a" href={route('subscription.portal')}>
-                        Manage
-                    </Button>
-                </div>
+                            <p className="text-muted-foreground text-sm">Total: {total}</p>
 
-                <div className="space-y-6">
-                    <HeadingSmall title="Control Subscription" description="Manage your subscription" />
+                            <Button component="a" href={route('subscription.portal')}>
+                                Manage
+                            </Button>
+                        </div>
 
-                    {is_canceled ? (
-                        <Button href={route('subscription.resume')} component={Link}>
-                            Resume
-                        </Button>
-                    ) : (
-                        <Button href={route('subscription.cancel')} component={Link}>
-                            Cancel
-                        </Button>
-                    )}
+                        <div className="space-y-6">
+                            <HeadingSmall title="Control Subscription" description="Manage your subscription" />
 
-                    <br />
-                </div>
+                            {is_canceled ? (
+                                <Button href={route('subscription.resume')} component={Link}>
+                                    Resume
+                                </Button>
+                            ) : (
+                                <Button href={route('subscription.cancel')} component={Link}>
+                                    Cancel
+                                </Button>
+                            )}
 
-                <div className="space-y-6">
-                    <HeadingSmall title="Invoices" description="List of your invoices" />
+                            <br />
+                        </div>
 
-                    {invoices.length > 0
-                        ? invoices.map((invoice: Invoice) => (
-                              <>
-                                  {invoice.date} - {invoice.total}{' '}
-                                  <a
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      href={route('subscription.invoice', {
-                                          invoice: invoice.id,
-                                      })}
-                                  >
-                                      Download
-                                  </a>
-                                  <br />
-                              </>
-                          ))
-                        : ''}
+                        <div className="space-y-6">
+                            <HeadingSmall title="Invoices" description="List of your invoices" />
 
-                    <br />
+                            {invoices.length > 0
+                                ? invoices.map((invoice: Invoice) => (
+                                      <>
+                                          {invoice.date} - {invoice.total}{' '}
+                                          <a
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              href={route('subscription.invoice', {
+                                                  invoice: invoice.id,
+                                              })}
+                                          >
+                                              Download
+                                          </a>
+                                          <br />
+                                      </>
+                                  ))
+                                : ''}
 
-                    <Button component={Link} href={route('burat')}>
-                        Shit
-                    </Button>
-                </div>
+                            <br />
+
+                            <Button component={Link} href={route('burat')}>
+                                Shit
+                            </Button>
+                        </div>
+                    </>
+                ): (
+                    <p>No plan</p>
+                )}
             </BillingsLayout>
         </AppLayout>
     );

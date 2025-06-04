@@ -15,9 +15,12 @@ final class AdminRoleSeeder extends Seeder
      */
     public function run(): void
     {
-        $role = Role::firstOrCreate(['name' => 'team admin']);
+        $role = Role::firstOrCreate(['name' => 'team admin', 'guard_name' => 'web']);
 
-        $role->givePermissionTo(Permission::firstOrCreate(['name' => 'update team']));
+        $role->givePermissionTo(Permission::firstOrCreate(['name' => 'update team', 'guard_name' => 'web']));
+        $role->givePermissionTo(Permission::firstOrCreate(['name' => 'view team members', 'guard_name' => 'web']));
+        $role->givePermissionTo(Permission::firstOrCreate(['name' => 'remove team members', 'guard_name' => 'web']));
+
 
     }
 }

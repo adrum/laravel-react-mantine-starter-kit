@@ -23,7 +23,6 @@ final class TeamServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        User::observe(UserObserver::class);
 
         User::resolveRelationUsing('teams', function ($userModel) {
             return $userModel->belongsToMany(Team::class, 'team_user', 'user_id', 'team_id')
@@ -34,6 +33,7 @@ final class TeamServiceProvider extends ServiceProvider
             return $userModel->belongsTo(Team::class, 'current_team_id');
         });
 
+        User::observe(UserObserver::class);
 
         App::resolving(InertiaSharedData::class, function (InertiaSharedData $inertia) {
             $inertia->share('module.has_team', fn () => true);
@@ -41,9 +41,9 @@ final class TeamServiceProvider extends ServiceProvider
             if (auth()->user()) {
 
             $inertia->share('module.team.teams', fn () => auth()->check() ?
-               TeamData::collect(auth()->user()->teams)
+               TeamData::collect(auth()->user()->load(['teams'])->teams()->with(['members'])->get())
                 : []);
-            $inertia->share('module.team.current_team', fn () => TeamData::from(auth()->user()?->currentTeam));
+            $inertia->share('module.team.current_team', fn () => TeamData::from(auth()->user()?->currentTeam()->with('members')->first()));
 
             }
 

@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use App\Models\User;
+use Inertia\Testing\AssertableInertia;
+use Modules\Team\Http\Middleware\TeamsPermission;
 use Modules\Team\Models\Team;
 
 use function Pest\Laravel\actingAs;
@@ -63,7 +65,7 @@ it('cannot switch to team that user does not belong to', function () {
 
     actingAs($user)
         ->patch(route('module.team.set-current', $anotherTeam))
-    ->assertForbidden();
+        ->assertForbidden();
 
     expect($user->currentTeam->id)->not->toBe($anotherTeam->id);
 
@@ -72,7 +74,6 @@ it('cannot switch to team that user does not belong to', function () {
 it('can update team', function () {
 
     $user = User::factory()->create();
-
 
     actingAs($user)
         ->patch(route('module.team.update', $user->currentTeam), [
@@ -88,12 +89,11 @@ it('cannot update if not in team', function () {
     $user = User::factory()->create();
     $anotherUser = User::factory()->create();
 
-
     actingAs($user)
         ->patch(route('module.team.update', $anotherUser->currentTeam), [
-            'name' => 'Burkashing'
+            'name' => 'Burkashing',
         ])
-    ->assertForbidden();
+        ->assertForbidden();
 });
 
 it('gives the admin role to the personal team', function () {
@@ -103,3 +103,64 @@ it('gives the admin role to the personal team', function () {
     expect($user->hasRole('team admin'))->toBeTrue();
 
 });
+
+it('cannot update a team without permission', function () {
+
+    $user = User::factory()->create();
+
+    $user->teams()->attach(
+        $anotherTeam = Team::factory()->create()
+    );
+
+    setPermissionsTeamId($anotherTeam->id);
+
+    actingAs($user)
+        ->withoutMiddleware(TeamsPermission::class)
+        ->patch(route('module.team.update', $anotherTeam), [
+            'name' => 'new team name',
+        ])
+        ->assertForbidden();
+
+});
+
+it('can leave a team', function () {
+
+    $user = User::factory()->create();
+
+    $user->teams()->attach(
+        Team::factory()->create()
+    );
+
+    $teamToLeave = $user->currentTeam;
+
+    actingAs($user)
+        ->post(route('module.team.leave', $teamToLeave))
+        ->assertRedirect('/dashboard');
+
+    expect($user->fresh()->teams->contains($teamToLeave->id))->toBe(false)
+        ->and($user->fresh()->currentTeam->id)->not->toBe($teamToLeave->id);
+
+    /* dd($user->teams()->count()); */
+
+});
+
+it('can not leave team if have one team remaining', function () {
+    $user = User::factory()->create();
+
+    actingAs($user)
+        ->post(route('module.team.leave', $user->currentTeam))
+        ->assertForbidden();
+
+});
+
+it('cannot leave a team that it does not belong to', function () {
+    $user = User::factory()->create();
+
+    $anotherUser = User::factory()->create();
+
+    actingAs($user)
+        ->post(route('module.team.leave', $anotherUser->currentTeam))
+        ->assertForbidden();
+
+});
+

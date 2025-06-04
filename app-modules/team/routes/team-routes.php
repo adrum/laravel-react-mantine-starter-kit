@@ -3,18 +3,21 @@
 // use Modules\Team\Http\Controllers\TeamController;
 //
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Modules\Team\Http\Controllers\TeamController;
+use Modules\Team\Http\Controllers\TeamMemberController;
 
-Route::middleware('web')->group(function () {
+Route::middleware(['web', 'auth'])->group(function () {
 
     Route::patch('/teams/{team}', [TeamController::class, 'update'])->name('module.team.update');
+    Route::post('/teams/{team}/leave', [TeamController::class, 'leave'])->name('module.team.leave');
     Route::patch('/teams/{team}/set-current', [TeamController::class, 'setCurrent'])->name('module.team.set-current');
     Route::get('/teams/index', [TeamController::class, 'index'])->name('module.team.index');
 
+    Route::delete('/team-member/{team}/{user}', [TeamMemberController::class, 'destroy'])->name('module.team-member.delete');
+
 });
-
-
 
 
 // Route::get('/teams', [TeamController::class, 'index'])->name('teams.index');

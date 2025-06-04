@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
-use App\Enums\Feature;
 use App\Enums\Language;
 use App\Http\Resources\LanguageResource;
 use App\Support\InertiaSharedData;
-use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
@@ -47,11 +45,9 @@ final class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-
         if ($request->wantsModal()) {
             return [];
         }
-
         /** @var array{
                github: bool,
                x: bool,
@@ -68,19 +64,36 @@ final class HandleInertiaRequests extends Middleware
             'name' => config('app.name'),
             'auth' => [
                 'user' => $request->user()?->load('socialAccounts'),
+                'can' => optional($request->user()?->loadMissing('roles.permissions'))->roles
+                    ?->flatMap(function ($role) {
+                        return $role->permissions ?? [];
+                    })->mapWithKeys(function ($permission) {
+                        $title = $permission['name'] ?? null;
+                        if ($title && auth()->check()) {
+                            $canDo = auth()->user()->can($title);
+                            $formattedKey = str_replace(' ', '_', $title);
+
+                            return [
+                                $formattedKey => $canDo,    // Add formatted version for easy frontend access
+                            ];
+                        }
+
+                        return [];
+                    })?->all() ?? [],
+
             ],
             'socialiteUi' => [
-                'error' => $request->session()->get('socialite-ui.error'),
-                'providers' => $socials->values()->toArray(),
-                'hasPassword' => ! is_null($request->user()?->getAuthPassword()),
-            ],
+                            'error' => $request->session()->get('socialite-ui.error'),
+                            'providers' => $socials->values()->toArray(),
+                            'hasPassword' => ! is_null($request->user()?->getAuthPassword()),
+                        ],
             'language' => app()->getLocale(),
             'translations' => cache()->rememberForever('translations.'.app()->getLocale(), fn () => collect(File::allFiles(base_path('lang/'.app()->getLocale())))
-                ->flatMap(fn (SplFileInfo $file) => Arr::dot(
-                    File::getRequire($file->getRealPath()),
-                    $file->getBasename('.'.$file->getExtension()).'.'
-                ))
-                ->toArray()
+                            ->flatMap(fn (SplFileInfo $file) => Arr::dot(
+                                File::getRequire($file->getRealPath()),
+                                $file->getBasename('.'.$file->getExtension()).'.'
+                            ))
+                            ->toArray()
             ),
             'notification' => collect(Arr::only(session()->all(), ['success', 'error', 'warning']))
                 ->mapWithKeys(function ($notification, $key) {
@@ -95,8 +108,8 @@ final class HandleInertiaRequests extends Middleware
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'features' => collect(config('custom.features', []))->pluck('value'),
             'module' => [
-                'has_team' => false
-            ]
+                'has_team' => false,
+            ],
         ], app(InertiaSharedData::class)->all());
     }
 }

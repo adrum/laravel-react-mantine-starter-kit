@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Team\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,9 +13,8 @@ final class Team extends Model
     /** @use HasFactory<\Database\Factories\TeamFactory> */
     use HasFactory;
 
-    public function users()
+    public function members()
     {
-        return $this->belongsToMany(\App\Models\User::class, 'team_user', 'team_id', 'user_id')
-            ->withTimestamps();
+       return $this->belongsToMany(User::class);
     }
 }

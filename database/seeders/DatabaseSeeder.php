@@ -7,6 +7,8 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Modules\Team\Database\Seeders\AdminRoleSeeder;
+use Modules\Team\Database\Seeders\MemberRoleSeeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -20,6 +22,9 @@ final class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+
+        $this->call(AdminRoleSeeder::class);
+        $this->call(MemberRoleSeeder::class);
 
         $role = Role::create([
             'name' => 'super_admin',

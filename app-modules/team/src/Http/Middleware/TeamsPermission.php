@@ -16,9 +16,12 @@ class TeamsPermission
     public function handle(Request $request, Closure $next): Response
     {
         if ($user = auth()->user()) {
+            abort_unless($user->teams->contains($user->currentTeam), 403);
+
             setPermissionsTeamId($user->currentTeam->id);
         }
 
         return $next($request);
     }
+
 }

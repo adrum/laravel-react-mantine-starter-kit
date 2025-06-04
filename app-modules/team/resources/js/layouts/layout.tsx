@@ -54,8 +54,8 @@ export default function TeamLayout({ children }: PropsWithChildren) {
 
                 <div className="bg-border my-6 border-2 md:hidden" />
 
-                <div className="flex-1 md:max-w-2xl">
-                    <section className="max-w-xl space-y-12">{children}</section>
+                <div className="flex-1 md:max-w-4xl">
+                    <section className="max-w-4xl space-y-12">{children}</section>
                 </div>
             </div>
         </div>
