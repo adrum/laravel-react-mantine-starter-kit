@@ -110,7 +110,7 @@ export default function Login({
                         </div>
 
                         {canRegister && (
-                            <div className="text-muted-foreground text-center text-sm">
+                            <div className="text-center text-sm text-muted-foreground">
                                 Don't have an account?{' '}
                                 <TextLink href={register()} tabIndex={5}>
                                     Sign up
