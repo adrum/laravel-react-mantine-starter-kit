@@ -1,26 +1,29 @@
-import { Breadcrumbs } from '@/components/breadcrumbs';
-import { useInitials } from '@/hooks/use-initials';
-import { cn, resolveUrl } from '@/lib/utils';
-import { dashboard } from '@/routes';
-import { NavItem, type BreadcrumbItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { Avatar, Burger, Button, Group, Menu } from '@mantine/core';
+import type { Icon } from '@tabler/icons-react';
 import {
-    Icon,
     IconBook,
     IconFolder,
     IconLayoutGrid,
     IconSearch,
 } from '@tabler/icons-react';
+import { Breadcrumbs } from '@/components/breadcrumbs';
+import { useCurrentUrl } from '@/hooks/use-current-url';
+import { useInitials } from '@/hooks/use-initials';
+import { cn, toUrl } from '@/lib/utils';
+import { dashboard } from '@/routes';
+import type { NavItem } from '@/types';
+import { type BreadcrumbItem, type SharedData } from '@/types';
 import AppLogo from './app-logo';
 import HeaderMenuButton from './header-menu-button';
 import SidebarMenuButton from './sidebar-menu-button';
 import { UserMenuContent } from './user-menu-content';
-interface AppHeaderProps {
+
+type Props = {
     breadcrumbs?: BreadcrumbItem[];
     opened: boolean;
     toggle: () => void;
-}
+};
 
 const mainNavItems: NavItem[] = [
     {
@@ -43,15 +46,11 @@ const rightNavItems: (NavItem & { icon: Icon })[] = [
     },
 ];
 
-export function AppHeader({
-    breadcrumbs = [],
-    opened,
-    toggle,
-}: AppHeaderProps) {
+export function AppHeader({ breadcrumbs = [], opened, toggle }: Props) {
     const page = usePage<SharedData>();
     const { auth } = page.props;
     const getInitials = useInitials();
-    const currentPath = window.location.pathname;
+    const { isCurrentUrl } = useCurrentUrl();
     return (
         <>
             <div className="flex h-full items-center justify-between px-6 md:mx-auto md:max-w-7xl md:px-4">
@@ -74,12 +73,10 @@ export function AppHeader({
                         <Group h="100%" ml="xl" gap={0} visibleFrom="sm">
                             {mainNavItems.map((item) => (
                                 <HeaderMenuButton
-                                    key={resolveUrl(item.href)}
+                                    key={toUrl(item.href)}
                                     component={Link}
-                                    href={resolveUrl(item.href)}
-                                    isActive={currentPath.startsWith(
-                                        resolveUrl(item.href),
-                                    )}
+                                    href={toUrl(item.href)}
+                                    isActive={isCurrentUrl(toUrl(item.href))}
                                     leftSection={
                                         item.icon && <item.icon size={20} />
                                     }
@@ -104,9 +101,10 @@ export function AppHeader({
                     </HeaderMenuButton>
                     {rightNavItems.map((item) => (
                         <HeaderMenuButton
-                            key={resolveUrl(item.href)}
+                            key={toUrl(item.href)}
                             component={Link}
-                            href={resolveUrl(item.href)}
+                            href={toUrl(item.href)}
+                            isActive={isCurrentUrl(toUrl(item.href))}
                             tooltip={item.title}
                             classNames={{
                                 root: 'bg-transparent! hover:bg-muted! px-2! hidden! md:block!',
@@ -162,33 +160,19 @@ export function AppHeaderNavBar() {
         <div className="flex h-full flex-col justify-between">
             <div className="flex flex-col gap-y-2">
                 {mainNavItems.map((item) => (
-                    <Button
-                        key={
-                            typeof item.href === 'string'
-                                ? item.href
-                                : item.href.url
-                        }
+                    <HeaderMenuButton
+                        key={toUrl(item.href)}
                         component={Link}
-                        href={item.href}
-                        justify="start"
-                        size="sm"
-                        leftSection={item.icon && <item.icon size={20} />}
-                        classNames={{
-                            root: 'bg-transparent! hover:bg-muted!',
-                        }}
+                        href={toUrl(item.href)}
                     >
                         {item.title}
-                    </Button>
+                    </HeaderMenuButton>
                 ))}
             </div>
             <div className="flex flex-col gap-y-2">
                 {rightNavItems.map((item) => (
                     <Button
-                        key={
-                            typeof item.href === 'string'
-                                ? item.href
-                                : item.href.url
-                        }
+                        key={toUrl(item.href)}
                         component={Link}
                         href={item.href}
                         justify="start"

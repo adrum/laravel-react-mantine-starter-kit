@@ -1,12 +1,11 @@
 import { Form, Head } from '@inertiajs/react';
 
+import { Button, Checkbox, PasswordInput, TextInput } from '@mantine/core';
 import TextLink from '@/components/text-link';
 import AuthLayout from '@/layouts/auth-layout';
 import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
-
-import { Button, Checkbox, PasswordInput, TextInput } from '@mantine/core';
 
 interface LoginProps {
     status?: string;

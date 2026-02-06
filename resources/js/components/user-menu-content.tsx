@@ -6,7 +6,7 @@ import { UserInfo } from '@/components/user-info';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { logout } from '@/routes';
 import { edit } from '@/routes/profile';
-import { User } from '@/types';
+import type { User } from '@/types';
 
 interface UserMenuContentProps {
     user: User;
@@ -33,6 +33,7 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
                 <Menu.Item
                     component={Link}
                     href={edit()}
+                    className="block w-full cursor-pointer"
                     leftSection={<IconSettings color="gray" size={20} />}
                 >
                     Settings
@@ -45,6 +46,7 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
                     }}
                 >
                     <Menu.Item
+                        className="block w-full cursor-pointer"
                         leftSection={<IconLogout color="gray" />}
                         type="submit"
                         data-test="logout-button"

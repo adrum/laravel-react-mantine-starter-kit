@@ -1,13 +1,14 @@
+import { Link } from '@inertiajs/react';
+import { Button } from '@mantine/core';
+import { type PropsWithChildren } from 'react';
 import Heading from '@/components/heading';
-import { isSameUrl, resolveUrl } from '@/lib/utils';
+import { useCurrentUrl } from '@/hooks/use-current-url';
+import { toUrl } from '@/lib/utils';
 import { edit as editAppearance } from '@/routes/appearance';
 import { edit } from '@/routes/profile';
 import { show } from '@/routes/two-factor';
 import { edit as editPassword } from '@/routes/user-password';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
-import { Button } from '@mantine/core';
-import { type PropsWithChildren } from 'react';
 
 const sidebarNavItems: NavItem[] = [
     {
@@ -33,12 +34,12 @@ const sidebarNavItems: NavItem[] = [
 ];
 
 export default function SettingsLayout({ children }: PropsWithChildren) {
+    const { isCurrentUrl } = useCurrentUrl();
+
     // When server-side rendering, we only render the layout on the client...
     if (typeof window === 'undefined') {
         return null;
     }
-
-    const currentPath = window.location.pathname;
 
     return (
         <div className="px-4 py-6">
@@ -49,11 +50,14 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
 
             <div className="flex flex-col lg:flex-row lg:space-x-12">
                 <aside className="w-full max-w-xl lg:w-48">
-                    <nav className="flex flex-col space-y-1 space-x-0">
+                    <nav
+                        className="flex flex-col space-y-1 space-x-0"
+                        aria-label="Settings"
+                    >
                         {sidebarNavItems.map((item, index) => (
                             <Button
-                                key={`${resolveUrl(item.href)}-${index}`}
-                                href={resolveUrl(item.href)}
+                                key={`${toUrl(item.href)}-${index}`}
+                                href={toUrl(item.href)}
                                 component={Link}
                                 prefetch
                                 size="sm"
@@ -67,10 +71,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                                 }
                                 styles={{
                                     root: {
-                                        ...(isSameUrl(
-                                            item.href,
-                                            currentPath,
-                                        ) && {
+                                        ...(isCurrentUrl(toUrl(item.href)) && {
                                             backgroundColor:
                                                 'var(--color-muted)',
                                         }),
