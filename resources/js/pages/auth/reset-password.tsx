@@ -4,12 +4,12 @@ import { Button, PasswordInput, TextInput } from '@mantine/core';
 import AuthLayout from '@/layouts/auth-layout';
 import { update } from '@/routes/password';
 
-interface ResetPasswordProps {
+type Props = {
     token: string;
     email: string;
-}
+};
 
-export default function ResetPassword({ token, email }: ResetPasswordProps) {
+export default function ResetPassword({ token, email }: Props) {
     return (
         <AuthLayout
             title="Reset password"
