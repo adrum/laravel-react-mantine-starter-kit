@@ -82,13 +82,15 @@ export default function TwoFactorChallenge() {
                                 </div>
                             )}
 
-                            <Button
-                                type="submit"
-                                className="w-full"
-                                disabled={processing}
-                            >
-                                Continue
-                            </Button>
+                            <div className="flex items-center justify-center">
+                                <Button
+                                    type="submit"
+                                    className="flex-1"
+                                    disabled={processing}
+                                >
+                                    Continue
+                                </Button>
+                            </div>
 
                             <div className="text-center text-sm text-muted-foreground">
                                 <span>or you can </span>
