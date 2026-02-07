@@ -34,9 +34,12 @@ const InputStyles = {
 const theme = createTheme({
     colors,
 
-    primaryColor: 'dark',
+    primaryColor: 'primary',
+    // primaryShade: 9,
 
     defaultRadius: 'md',
+
+    autoContrast: true,
 
     components: {
         Anchor: Anchor.extend({
