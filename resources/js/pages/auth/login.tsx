@@ -52,7 +52,6 @@ export default function Login({
                             <div className="grid gap-2">
                                 <PasswordInput
                                     id="password"
-                                    type="password"
                                     name="password"
                                     required
                                     withAsterisk={false}

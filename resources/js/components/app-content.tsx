@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
+import type { AppVariant } from '@/types';
 
 type Props = React.ComponentProps<'div'> & {
-    variant?: 'header' | 'sidebar';
+    variant?: AppVariant;
 };
 
 export function AppContent({ children, className, ...props }: Props) {

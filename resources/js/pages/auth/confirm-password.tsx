@@ -17,7 +17,6 @@ export default function ConfirmPassword() {
                         <div className="grid gap-2">
                             <PasswordInput
                                 id="password"
-                                type="password"
                                 name="password"
                                 label="Password"
                                 error={errors.password}

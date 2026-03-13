@@ -6,6 +6,7 @@ import type { MantineColorsTuple } from '@mantine/core';
  */
 function createTailwindColor(name: string): MantineColorsTuple {
     const shades = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
+
     return shades.map(
         (shade) => `var(--color-${name}-${shade})`,
     ) as unknown as MantineColorsTuple;
@@ -16,6 +17,7 @@ function createTailwindColor(name: string): MantineColorsTuple {
  */
 function createCustomColor(prefix: string): MantineColorsTuple {
     const shades = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
+
     return shades.map(
         (shade) => `var(--${prefix}-${shade})`,
     ) as unknown as MantineColorsTuple;

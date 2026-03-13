@@ -26,7 +26,6 @@ Check out my other Laravel starter kits:
 - [Laravel Jetstream + React (Typescript) Starter Kit](https://github.com/adrum/laravel-jetstream-react-typescript): A React starter kit based on Laravel Jetstream which provides a robust, modern starting point for building Laravel applications with a React frontend using Inertia.
 - [Laravel Jetstream + React (Mantine) Starter Kit](https://github.com/adrum/laravel-jetstream-react-mantine): Same as the above, except it swaps HeadlessUI with [Mantine](https://mantine.dev).
 
-
 ## License
 
 The Laravel + React (Mantine) starter kit is open-sourced software licensed under the MIT license.

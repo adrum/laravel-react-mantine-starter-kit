@@ -1,14 +1,13 @@
 import { Link } from '@inertiajs/react';
 import { Button } from '@mantine/core';
-import { type PropsWithChildren } from 'react';
+import type {PropsWithChildren} from 'react';
 import Heading from '@/components/heading';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { toUrl } from '@/lib/utils';
 import { edit as editAppearance } from '@/routes/appearance';
 import { edit } from '@/routes/profile';
-import { show } from '@/routes/two-factor';
-import { edit as editPassword } from '@/routes/user-password';
-import { type NavItem } from '@/types';
+import { edit as editSecurity } from '@/routes/security';
+import type { NavItem } from '@/types';
 
 const sidebarNavItems: NavItem[] = [
     {
@@ -17,13 +16,8 @@ const sidebarNavItems: NavItem[] = [
         icon: null,
     },
     {
-        title: 'Password',
-        href: editPassword(),
-        icon: null,
-    },
-    {
-        title: 'Two-Factor Auth',
-        href: show(),
+        title: 'Security',
+        href: editSecurity(),
         icon: null,
     },
     {
@@ -34,7 +28,7 @@ const sidebarNavItems: NavItem[] = [
 ];
 
 export default function SettingsLayout({ children }: PropsWithChildren) {
-    const { isCurrentUrl } = useCurrentUrl();
+    const { isCurrentOrParentUrl } = useCurrentUrl();
 
     // When server-side rendering, we only render the layout on the client...
     if (typeof window === 'undefined') {
@@ -71,7 +65,9 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                                 }
                                 styles={{
                                     root: {
-                                        ...(isCurrentUrl(toUrl(item.href)) && {
+                                        ...(isCurrentOrParentUrl(
+                                            toUrl(item.href),
+                                        ) && {
                                             backgroundColor:
                                                 'var(--color-muted)',
                                         }),

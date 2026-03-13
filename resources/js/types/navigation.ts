@@ -3,7 +3,7 @@ import type { Icon } from '@tabler/icons-react';
 
 export type BreadcrumbItem = {
     title: string;
-    href: string;
+    href: NonNullable<InertiaLinkProps['href']>;
 };
 
 export type NavItem = {

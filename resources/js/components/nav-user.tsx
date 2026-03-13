@@ -5,12 +5,11 @@ import { useInitials } from '@/hooks/use-initials';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useSideBar } from '@/hooks/use-sidebar';
 import { cn } from '@/lib/utils';
-import type { SharedData } from '@/types';
 import SidebarMenuButton from './sidebar-menu-button';
 import { UserMenuContent } from './user-menu-content';
 
 export function NavUser() {
-    const { auth } = usePage<SharedData>().props;
+    const { auth } = usePage().props;
     const { state: desktopOpened } = useSideBar();
     const isMobile = useIsMobile();
 

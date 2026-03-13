@@ -57,7 +57,6 @@ export default function Register() {
                             <div className="grid gap-2">
                                 <PasswordInput
                                     id="password"
-                                    type="password"
                                     name="password"
                                     required
                                     withAsterisk={false}
@@ -73,7 +72,6 @@ export default function Register() {
                             <div className="grid gap-2">
                                 <PasswordInput
                                     id="password_confirmation"
-                                    type="password"
                                     name="password_confirmation"
                                     required
                                     withAsterisk={false}

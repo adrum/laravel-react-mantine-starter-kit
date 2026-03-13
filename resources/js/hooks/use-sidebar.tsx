@@ -10,6 +10,7 @@ export function useSideBar() {
     const toggle = () => {
         setState(opened ? false : true);
     };
+
     return {
         state: opened,
         toggle,

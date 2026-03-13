@@ -43,7 +43,6 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
                         <div className="grid gap-2">
                             <PasswordInput
                                 id="password"
-                                type="password"
                                 name="password"
                                 label="Password"
                                 error={errors.password}
@@ -57,7 +56,6 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
                         <div className="grid gap-2">
                             <PasswordInput
                                 id="password_confirmation"
-                                type="password"
                                 name="password_confirmation"
                                 autoComplete="new-password"
                                 label="Confirm password"

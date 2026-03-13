@@ -13,7 +13,7 @@ import { useInitials } from '@/hooks/use-initials';
 import { cn, toUrl } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
-import { type BreadcrumbItem, type SharedData } from '@/types';
+import type { BreadcrumbItem } from '@/types';
 import AppLogo from './app-logo';
 import HeaderMenuButton from './header-menu-button';
 import SidebarMenuButton from './sidebar-menu-button';
@@ -47,10 +47,11 @@ const rightNavItems: (NavItem & { icon: Icon })[] = [
 ];
 
 export function AppHeader({ breadcrumbs = [], opened, toggle }: Props) {
-    const page = usePage<SharedData>();
+    const page = usePage();
     const { auth } = page.props;
     const getInitials = useInitials();
     const { isCurrentUrl } = useCurrentUrl();
+
     return (
         <>
             <div className="flex h-full items-center justify-between px-6 md:mx-auto md:max-w-7xl md:px-4">

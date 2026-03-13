@@ -8,7 +8,6 @@ import {
 } from '@tabler/icons-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { regenerateRecoveryCodes } from '@/routes/two-factor';
-import AlertError from './alert-error';
 
 type Props = {
     recoveryCodesList: string[];
@@ -55,7 +54,7 @@ export default function TwoFactorRecoveryCodes({
             <Card.Section p="lg">
                 <div className="flex items-center gap-2 text-white">
                     <IconLock size="16" aria-hidden="true" />
-                    2FA Recovery Codes
+                    2FA recovery codes
                 </div>
                 <div className="text-sm text-muted-foreground">
                     Recovery codes let you regain access if you lose your 2FA
@@ -75,7 +74,7 @@ export default function TwoFactorRecoveryCodes({
                             className="mr-2"
                             aria-hidden="true"
                         />
-                        {codesAreVisible ? 'Hide' : 'View'} Recovery Codes
+                        {codesAreVisible ? 'Hide' : 'View'} recovery codes
                     </Button>
 
                     {canRegenerateCodes && (
@@ -92,7 +91,7 @@ export default function TwoFactorRecoveryCodes({
                                     aria-describedby="regenerate-warning"
                                 >
                                     <IconRefresh size="16" className="mr-2" />{' '}
-                                    Regenerate Codes
+                                    Regenerate codes
                                 </Button>
                             )}
                         </Form>
@@ -149,7 +148,7 @@ export default function TwoFactorRecoveryCodes({
                                         access your account and will be removed
                                         after use. If you need more, click{' '}
                                         <span className="font-bold">
-                                            Regenerate Codes
+                                            Regenerate codes
                                         </span>{' '}
                                         above.
                                     </p>

@@ -1,7 +1,7 @@
 import { Button } from '@mantine/core';
 import { IconLayoutSidebar } from '@tabler/icons-react';
 import { Breadcrumbs } from '@/components/breadcrumbs';
-import { type BreadcrumbItem } from '@/types';
+import type {BreadcrumbItem} from '@/types';
 
 type Props = {
     breadcrumbs?: BreadcrumbItem[];

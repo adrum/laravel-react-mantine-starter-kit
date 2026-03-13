@@ -1,6 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { Card } from '@mantine/core';
-import { type PropsWithChildren } from 'react';
+import type {PropsWithChildren} from 'react';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { home } from '@/routes';
 
