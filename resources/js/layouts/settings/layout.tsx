@@ -1,6 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { Button } from '@mantine/core';
-import type {PropsWithChildren} from 'react';
+import type { PropsWithChildren } from 'react';
 import Heading from '@/components/heading';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { toUrl } from '@/lib/utils';
