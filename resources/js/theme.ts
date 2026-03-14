@@ -25,6 +25,13 @@ const InputStyles = {
     label: {
         color: 'var(--foreground)',
     },
+    wrapper: {
+        '--input-bd': 'var(--border)',
+        '--input-bd-focus': 'var(--color-primary-500)',
+        '&:focusWithin': {
+            '--input-bd': 'var(--color-primary-500)',
+        },
+    },
     input: {
         color: 'var(--foreground)',
         backgroundColor: 'transparent',
@@ -34,14 +41,17 @@ const InputStyles = {
 const theme = createTheme({
     colors,
 
-    primaryColor: 'dark',
+    primaryColor: 'primary',
+
+    primaryShade: 5,
 
     defaultRadius: 'md',
+
+    autoContrast: true,
 
     components: {
         Anchor: Anchor.extend({
             defaultProps: {
-                // @ts-expect-error - Component is not defined in the Mantine core props
                 component: Link,
                 underline: 'always',
                 classNames: {
