@@ -21,9 +21,6 @@ export default defineConfig({
             formVariants: true,
         }),
     ],
-    esbuild: {
-        jsx: 'automatic',
-    },
     resolve: {
         alias: {
             '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs',
