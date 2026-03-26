@@ -1,28 +1,35 @@
 import '../css/app.css';
 
-import theme from '@/theme';
 import { createInertiaApp } from '@inertiajs/react';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
+
+import AppLayout from '@/layouts/app-layout';
+import AuthLayout from '@/layouts/auth-layout';
+import SettingsLayout from '@/layouts/settings/layout';
+import theme from '@/theme';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
-    resolve: (name) =>
-        resolvePageComponent(
-            `./pages/${name}.tsx`,
-            import.meta.glob('./pages/**/*.tsx'),
-        ),
-    setup({ el, App, props }) {
-        const root = createRoot(el);
-
-        root.render(
-            <StrictMode>
+    layout: (name) => {
+        switch (true) {
+            case name === 'welcome':
+                return null;
+            case name.startsWith('auth/'):
+                return AuthLayout;
+            case name.startsWith('settings/'):
+                return [AppLayout, SettingsLayout];
+            default:
+                return AppLayout;
+        }
+    },
+    strictMode: true,
+    withApp(app) {
+        return (
+            <>
                 <ColorSchemeScript
                     nonce="8IBTHwOdqNKAWeKl7plt8g=="
                     defaultColorScheme="auto"
@@ -30,10 +37,10 @@ createInertiaApp({
                 <MantineProvider defaultColorScheme="auto" theme={theme}>
                     <ModalsProvider>
                         <Notifications />
-                        <App {...props} />
+                        {app}
                     </ModalsProvider>
                 </MantineProvider>
-            </StrictMode>,
+            </>
         );
     },
     progress: {

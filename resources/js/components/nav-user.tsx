@@ -1,12 +1,12 @@
 import { usePage } from '@inertiajs/react';
 import { Avatar, Menu } from '@mantine/core';
 import { IconSelector } from '@tabler/icons-react';
-import SidebarMenuButton from './sidebar-menu-button';
-import { UserMenuContent } from './user-menu-content';
 import { useInitials } from '@/hooks/use-initials';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useSideBar } from '@/hooks/use-sidebar';
 import { cn } from '@/lib/utils';
+import SidebarMenuButton from './sidebar-menu-button';
+import { UserMenuContent } from './user-menu-content';
 
 export function NavUser() {
     const { auth } = usePage().props;
@@ -15,6 +15,10 @@ export function NavUser() {
 
     const collapsed = isMobile ? false : !desktopOpened;
     const getInitials = useInitials();
+
+    if (!auth.user) {
+        return null;
+    }
 
     return (
         <Menu

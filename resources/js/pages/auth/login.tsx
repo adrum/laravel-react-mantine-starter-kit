@@ -2,7 +2,6 @@ import { Form, Head } from '@inertiajs/react';
 
 import { Button, Checkbox, PasswordInput, TextInput } from '@mantine/core';
 import TextLink from '@/components/text-link';
-import AuthLayout from '@/layouts/auth-layout';
 import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
@@ -19,10 +18,7 @@ export default function Login({
     canRegister,
 }: LoginProps) {
     return (
-        <AuthLayout
-            title="Log in to your account"
-            description="Enter your email and password below to log in"
-        >
+        <>
             <Head title="Log in" />
 
             <Form
@@ -124,6 +120,11 @@ export default function Login({
                     {status}
                 </div>
             )}
-        </AuthLayout>
+        </>
     );
 }
+
+Login.layout = {
+    title: 'Log in to your account',
+    description: 'Enter your email and password below to log in',
+};

@@ -17,6 +17,7 @@ function createTailwindColor(
     const shades = [
         50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950,
     ] as const;
+
     return shades.map((shade) => color[shade]) as unknown as MantineColorsTuple;
 }
 
@@ -26,6 +27,7 @@ function createTailwindColor(
  */
 function createCustomColor(prefix: string): MantineColorsTuple {
     const shades = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
+
     return shades.map(
         (shade) => `var(--${prefix}-${shade})`,
     ) as unknown as MantineColorsTuple;

@@ -2,16 +2,12 @@
 import { Form, Head } from '@inertiajs/react';
 import { Button, TextInput } from '@mantine/core';
 import TextLink from '@/components/text-link';
-import AuthLayout from '@/layouts/auth-layout';
 import { login } from '@/routes';
 import { email } from '@/routes/password';
 
 export default function ForgotPassword({ status }: { status?: string }) {
     return (
-        <AuthLayout
-            title="Forgot password"
-            description="Enter your email to receive a password reset link"
-        >
+        <>
             <Head title="Forgot password" />
 
             {status && (
@@ -57,6 +53,11 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     <TextLink href={login()}>log in</TextLink>
                 </div>
             </div>
-        </AuthLayout>
+        </>
     );
 }
+
+ForgotPassword.layout = {
+    title: 'Forgot password',
+    description: 'Enter your email to receive a password reset link',
+};

@@ -115,34 +115,36 @@ export function AppHeader({ breadcrumbs = [], opened, toggle }: Props) {
                         </HeaderMenuButton>
                     ))}
 
-                    <Menu
-                        shadow="md"
-                        width={230}
-                        position={'bottom-end'}
-                        classNames={{ dropdown: 'border-1! -mt-2' }}
-                    >
-                        <Menu.Target>
-                            <SidebarMenuButton
-                                component="button"
-                                className={cn('group h-12! p-0.5! px-1!')}
-                                classNames={{
-                                    inner: 'items-stretch! justify-between!',
-                                }}
-                            >
-                                <Avatar
-                                    src={auth.user.avatar}
-                                    name={getInitials(auth.user.name)}
-                                    size="md"
-                                    radius="xl"
-                                    imageProps={{
-                                        src: auth.user.avatar,
-                                        alt: auth.user.name,
+                    {auth.user && (
+                        <Menu
+                            shadow="md"
+                            width={230}
+                            position={'bottom-end'}
+                            classNames={{ dropdown: 'border-1! -mt-2' }}
+                        >
+                            <Menu.Target>
+                                <SidebarMenuButton
+                                    component="button"
+                                    className={cn('group h-12! p-0.5! px-1!')}
+                                    classNames={{
+                                        inner: 'items-stretch! justify-between!',
                                     }}
-                                />
-                            </SidebarMenuButton>
-                        </Menu.Target>
-                        <UserMenuContent user={auth.user} />
-                    </Menu>
+                                >
+                                    <Avatar
+                                        src={auth.user.avatar}
+                                        name={getInitials(auth.user.name)}
+                                        size="md"
+                                        radius="xl"
+                                        imageProps={{
+                                            src: auth.user.avatar,
+                                            alt: auth.user.name,
+                                        }}
+                                    />
+                                </SidebarMenuButton>
+                            </Menu.Target>
+                            <UserMenuContent user={auth.user} />
+                        </Menu>
+                    )}
                 </div>
             </div>
             {breadcrumbs && breadcrumbs.length > 1 && (
