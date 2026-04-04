@@ -1,4 +1,4 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, setLayoutProps } from '@inertiajs/react';
 import { Button, InputError, PinInput, TextInput } from '@mantine/core';
 import { useMemo, useState } from 'react';
 import { OTP_MAX_LENGTH } from '@/hooks/use-two-factor-auth';

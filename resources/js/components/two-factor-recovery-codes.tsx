@@ -8,6 +8,7 @@ import {
 } from '@tabler/icons-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { regenerateRecoveryCodes } from '@/routes/two-factor';
+import AlertError from './alert-error';
 
 type Props = {
     recoveryCodesList: string[];
