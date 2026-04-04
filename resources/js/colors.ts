@@ -52,12 +52,14 @@ declare module '@mantine/core' {
 
 // Tailwind color palette converted to Mantine format
 const colors = {
-    // Tailwind colors
+    // Tailwind colors (filter out non-object entries like black, white, transparent, etc.)
     ...Object.fromEntries(
-        Object.entries(twColors).map(([key, value]) => [
-            key,
-            createTailwindColor(value as Record<string, string>),
-        ]),
+        Object.entries(twColors)
+            .filter(([, value]) => typeof value === 'object' && value !== null)
+            .map(([key, value]) => [
+                key,
+                createTailwindColor(value as Record<string, string>),
+            ]),
     ),
 
     // Custom CSS variable colors
