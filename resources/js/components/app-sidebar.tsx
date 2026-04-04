@@ -6,14 +6,13 @@ import {
     IconLayoutGrid,
     IconX,
 } from '@tabler/icons-react';
+import AppLogo from './app-logo';
+import { NavUser } from './nav-user';
+import SidebarMenuButton from './sidebar-menu-button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
-
-import AppLogo from './app-logo';
-import { NavUser } from './nav-user';
-import SidebarMenuButton from './sidebar-menu-button';
 
 const mainNavItems: NavItem[] = [
     {
@@ -74,6 +73,7 @@ export function AppSidebar({
                 )}
             >
                 <SidebarMenuButton
+                    // @ts-expect-error - Mantine polymorphic types require `component` to also be `string`
                     component={Link}
                     href={dashboard()}
                     prefetch

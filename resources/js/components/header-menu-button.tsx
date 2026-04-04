@@ -1,18 +1,19 @@
+import type { InertiaLinkProps } from '@inertiajs/react';
 import type { ButtonProps } from '@mantine/core';
 import { Button, Tooltip } from '@mantine/core';
 import React from 'react';
 import { cn } from '@/lib/utils';
 
-type Props<T extends React.ElementType> = {
-    component?: T;
+type Props = {
+    component?: React.ElementType;
     icon?: React.ReactNode | null;
     iconOnly?: boolean;
     tooltip?: string;
     isActive?: boolean;
-} & ButtonProps &
-    React.ComponentPropsWithoutRef<T>;
+} & Omit<ButtonProps, 'component'> &
+    Partial<Omit<InertiaLinkProps, 'component' | keyof ButtonProps>>;
 
-export default function HeaderMenuButton<T extends React.ElementType>({
+export default function HeaderMenuButton({
     className,
     tooltip,
     isActive,
@@ -21,7 +22,7 @@ export default function HeaderMenuButton<T extends React.ElementType>({
     iconOnly,
     children,
     ...props
-}: Props<T>) {
+}: Props) {
     const buttonContent = (
         // @ts-expect-error - Mantine types are incorrect
         <Button
@@ -40,7 +41,8 @@ export default function HeaderMenuButton<T extends React.ElementType>({
                 root: {
                     color: 'var(--foreground)',
                     ...(isActive && { backgroundColor: 'var(--muted)' }),
-                    ...(props.styles?.root || {}),
+                    ...((styles as Record<string, Record<string, unknown>>)
+                        ?.root || {}),
                 },
                 ...(iconOnly && {
                     // @ts-expect-error - types are incorrect

@@ -75,7 +75,12 @@ export default function SidebarMenuButton<T extends React.ElementType>({
                             ...(isActive && {
                                 backgroundColor: 'var(--muted)',
                             }),
-                            ...(props.styles?.root || {}),
+                            ...((
+                                styles as Record<
+                                    string,
+                                    Record<string, unknown>
+                                >
+                            )?.root || {}),
                         },
                         ...(iconOnly && {
                             section: {
