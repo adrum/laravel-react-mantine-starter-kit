@@ -38,6 +38,8 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
+        toastSuccess(__('Profile updated.'));
+
         return to_route('profile.edit');
     }
 
