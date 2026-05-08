@@ -39,14 +39,18 @@ type TailwindColors = keyof typeof twColors;
 type CustomColors = keyof typeof customColors;
 
 // Export type for all valid color names (Tailwind + custom only, no Mantine defaults)
-export type AppColor = TailwindColors | CustomColors;
+export type AppColor = TailwindColors | CustomColors | 'dimmed' | 'dark';
+
+// Shade-qualified color names (e.g., "blue.5", "gray.0", "orange.7")
+type MantineColorShade = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+type AppColorWithShade = `${AppColor}.${MantineColorShade}`;
 
 // Module augmentation to override Mantine's color types
 // This ensures TypeScript errors if you use invalid colors like "grape"
 // https://mantine.dev/theming/colors/#add-custom-colors-types
 declare module '@mantine/core' {
     export interface MantineThemeColorsOverride {
-        colors: Record<AppColor, MantineColorsTuple>;
+        colors: Record<AppColor | AppColorWithShade, MantineColorsTuple>;
     }
 }
 
