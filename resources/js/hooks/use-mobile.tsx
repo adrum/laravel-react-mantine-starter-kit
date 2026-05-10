@@ -4,7 +4,11 @@ import { useMediaQuery } from '@mantine/hooks';
 const MOBILE_BREAKPOINT = 768;
 
 export function useIsMobile() {
-    const isMobile = useMediaQuery(`(max-width: ${px(MOBILE_BREAKPOINT)})`);
+    const isMobile = useMediaQuery(
+        `(max-width: ${px(MOBILE_BREAKPOINT)})`,
+        undefined,
+        { getInitialValueInEffect: false },
+    );
 
     return !!isMobile;
 }
