@@ -4,7 +4,7 @@ import { Form, Head, router } from '@inertiajs/react';
 import { Button } from '@mantine/core';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { logout } from '@/routes';
-import login from '@/routes/login';
+import { send } from '@/routes/verification';
 
 export default function VerifyEmail({ status }: { status?: string }) {
     const cleanup = useMobileNavigation();
@@ -27,7 +27,7 @@ export default function VerifyEmail({ status }: { status?: string }) {
             )}
 
             <Form
-                {...login.store.form()}
+                {...send.form()}
                 className="flex flex-col items-center space-y-6 text-center"
             >
                 {({ processing }) => (
