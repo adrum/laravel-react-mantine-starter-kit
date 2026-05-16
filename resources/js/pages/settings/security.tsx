@@ -14,12 +14,14 @@ type Props = {
     canManageTwoFactor?: boolean;
     requiresConfirmation?: boolean;
     twoFactorEnabled?: boolean;
+    passwordRules: string;
 };
 
 export default function Security({
     canManageTwoFactor = false,
     requiresConfirmation = false,
     twoFactorEnabled = false,
+    passwordRules,
 }: Props) {
     const passwordInput = useRef<HTMLInputElement>(null);
     const currentPasswordInput = useRef<HTMLInputElement>(null);
@@ -106,6 +108,7 @@ export default function Security({
                                     className="mt-1 block w-full"
                                     autoComplete="new-password"
                                     placeholder="New password"
+                                    passwordrules={passwordRules}
                                 />
                             </div>
 
@@ -118,6 +121,7 @@ export default function Security({
                                     className="mt-1 block w-full"
                                     autoComplete="new-password"
                                     placeholder="Confirm password"
+                                    passwordrules={passwordRules}
                                 />
                             </div>
 

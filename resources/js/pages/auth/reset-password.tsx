@@ -3,12 +3,13 @@ import { Form, Head } from '@inertiajs/react';
 import { Button, PasswordInput, TextInput } from '@mantine/core';
 import { update } from '@/routes/password';
 
-interface ResetPasswordProps {
+interface Props {
     token: string;
     email: string;
-}
+    passwordRules: string;
+};
 
-export default function ResetPassword({ token, email }: ResetPasswordProps) {
+export default function ResetPassword({ token, email, passwordRules }: Props) {
     return (
         <>
             <Head title="Reset password" />
@@ -46,6 +47,7 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
                                 className="mt-1 block w-full"
                                 autoFocus
                                 placeholder="Password"
+                                passwordrules={passwordRules}
                             />
                         </div>
 
@@ -58,6 +60,7 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
                                 error={errors.password_confirmation}
                                 className="mt-1 block w-full"
                                 placeholder="Confirm password"
+                                passwordrules={passwordRules}
                             />
                         </div>
 

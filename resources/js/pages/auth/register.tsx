@@ -4,7 +4,11 @@ import TextLink from '@/components/text-link';
 import { login } from '@/routes';
 import { store } from '@/routes/register';
 
-export default function Register() {
+type Props = {
+    passwordRules: string;
+};
+
+export default function Register({ passwordRules }: Props) {
     return (
         <>
             <Head title="Register" />
@@ -62,6 +66,7 @@ export default function Register() {
                                     autoComplete="new-password"
                                     disabled={processing}
                                     placeholder="Password"
+                                    passwordrules={passwordRules}
                                 />
                             </div>
 
@@ -77,6 +82,7 @@ export default function Register() {
                                     autoComplete="new-password"
                                     disabled={processing}
                                     placeholder="Confirm password"
+                                    passwordrules={passwordRules}
                                 />
                             </div>
 
