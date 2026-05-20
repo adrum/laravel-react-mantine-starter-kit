@@ -95,7 +95,7 @@ export default function Security(props: Props) {
                                     className="mt-1 block w-full"
                                     autoComplete="new-password"
                                     placeholder="Confirm password"
-                                    passwordrules={passwordRules}
+                                    passwordrules={props.passwordRules}
                                 />
                             </div>
 

@@ -38,7 +38,7 @@ function TwoFactorSetupStep({
             ) : (
                 <>
                     <div className="mx-auto flex max-w-md overflow-hidden">
-                        <div className="border-border mx-auto aspect-square w-64 rounded-lg border">
+                        <div className="mx-auto aspect-square w-64 rounded-lg border border-border">
                             <div className="z-10 flex h-full w-full items-center justify-center p-5">
                                 {qrCodeSvg ? (
                                     <div
@@ -67,16 +67,16 @@ function TwoFactorSetupStep({
                     </div>
 
                     <div className="relative flex w-full items-center justify-center">
-                        <div className="bg-border absolute inset-0 top-1/2 h-px w-full" />
-                        <span className="bg-card relative px-2 py-1">
+                        <div className="absolute inset-0 top-1/2 h-px w-full bg-border" />
+                        <span className="relative bg-card px-2 py-1">
                             or, enter the code manually
                         </span>
                     </div>
 
                     <div className="flex w-full space-x-2">
-                        <div className="border-border flex w-full items-stretch overflow-hidden rounded-xl border">
+                        <div className="flex w-full items-stretch overflow-hidden rounded-xl border border-border">
                             {!manualSetupKey ? (
-                                <div className="bg-muted flex h-full w-full items-center justify-center p-3">
+                                <div className="flex h-full w-full items-center justify-center bg-muted p-3">
                                     <Loader className="size-4 animate-spin" />
                                 </div>
                             ) : (
@@ -85,13 +85,13 @@ function TwoFactorSetupStep({
                                         type="text"
                                         readOnly
                                         value={manualSetupKey}
-                                        className="bg-background text-foreground h-full w-full p-3 outline-none"
+                                        className="h-full w-full bg-background p-3 text-foreground outline-none"
                                     />
                                     <button
                                         onClick={() =>
                                             clipboard.copy(manualSetupKey)
                                         }
-                                        className="border-border hover:bg-muted border-l px-3"
+                                        className="border-l border-border px-3 hover:bg-muted"
                                     >
                                         <IconComponent className="w-4" />
                                     </button>
@@ -293,7 +293,7 @@ export default function TwoFactorSetupModal({
             <div className="flex flex-col items-center justify-center gap-2">
                 <div>
                     <div className="flex w-full flex-col items-center gap-2 text-lg font-bold">
-                        <div className="border-offset-2 border-muted bg-muted flex items-center gap-2 rounded-full border-2 p-2">
+                        <div className="border-offset-2 flex items-center gap-2 rounded-full border-2 border-muted bg-muted p-2">
                             <IconScan size="24" color="currentColor" />
                         </div>
                         <div className="text-lg font-bold">
@@ -301,7 +301,7 @@ export default function TwoFactorSetupModal({
                         </div>
                     </div>
                 </div>
-                <div className="text-muted-foreground max-w-md text-center text-sm">
+                <div className="max-w-md text-center text-sm text-muted-foreground">
                     {modalConfig.description}
                 </div>
                 <div className="mt-4 flex flex-col items-center space-y-5">

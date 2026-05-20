@@ -1,11 +1,8 @@
 import type { UrlMethodPair } from '@inertiajs/core';
 import { router } from '@inertiajs/react';
 import { usePasskeyVerify } from '@laravel/passkeys/react';
-import { KeyRound } from 'lucide-react';
-import InputError from '@/components/input-error';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { Spinner } from '@/components/ui/spinner';
+import { Button, InputError } from '@mantine/core';
+import { IconKeyFilled } from '@tabler/icons-react';
 
 type Props = {
     routes?: {
@@ -46,22 +43,23 @@ export default function PasskeyVerify({
                     type="button"
                     variant="outline"
                     className="w-full"
+                    loading={isLoading}
                     onClick={verify}
                     disabled={isLoading}
                 >
-                    {isLoading ? <Spinner /> : <KeyRound className="h-4 w-4" />}
+                    <IconKeyFilled className="h-4 w-4" />
                     {isLoading
                         ? (loadingLabel ?? 'Authenticating...')
                         : (label ?? 'Sign in with passkey')}
                 </Button>
                 {error && (
-                    <InputError message={error} className="text-center" />
+                    <InputError className="text-center">{error}</InputError>
                 )}
             </div>
 
             <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
-                    <Separator className="w-full" />
+                    <hr className="w-full border" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
                     <span className="bg-background px-2 text-muted-foreground">

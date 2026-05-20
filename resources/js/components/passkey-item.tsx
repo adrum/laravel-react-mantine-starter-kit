@@ -1,16 +1,8 @@
-import { KeyRound, Trash2 } from 'lucide-react';
+import { Button, Modal } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { IconKeyFilled, IconTrash } from '@tabler/icons-react';
 import { useState } from 'react';
 import type { Passkey } from '@/types/auth';
-import { Button } from '@/components/ui/button';
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog';
 
 type Props = {
     passkey: Passkey;
@@ -19,6 +11,7 @@ type Props = {
 
 export default function PasskeyItem({ passkey, onDelete }: Props) {
     const [isDeleting, setIsDeleting] = useState(false);
+    const [opened, { open, close }] = useDisclosure(false);
 
     const handleDelete = () => {
         setIsDeleting(true);
@@ -29,7 +22,7 @@ export default function PasskeyItem({ passkey, onDelete }: Props) {
         <div className="flex items-center justify-between border-b p-4 last:border-b-0">
             <div className="flex items-center gap-4">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-muted">
-                    <KeyRound className="h-5 w-5 text-muted-foreground" />
+                    <IconKeyFilled className="h-5 w-5 text-muted-foreground" />
                 </div>
                 <div className="space-y-1">
                     <div className="flex items-center gap-2.5">
@@ -56,38 +49,49 @@ export default function PasskeyItem({ passkey, onDelete }: Props) {
                 </div>
             </div>
 
-            <Dialog>
-                <DialogTrigger asChild>
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-                    >
-                        <Trash2 className="h-4 w-4" />
-                        <span className="sr-only">Remove</span>
-                    </Button>
-                </DialogTrigger>
-                <DialogContent>
-                    <DialogTitle>Remove passkey</DialogTitle>
-                    <DialogDescription>
+            <Button
+                variant="subtle"
+                size="sm"
+                onClick={open}
+                className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+            >
+                <IconTrash className="h-4 w-4" />
+                <span className="sr-only">Remove</span>
+            </Button>
+
+            <Modal
+                opened={opened}
+                onClose={close}
+                centered
+                title="Remove passkey"
+                classNames={{
+                    body: 'bg-background!',
+                    header: 'bg-background!',
+                    content: 'border',
+                    overlay: 'bg-black/80',
+                }}
+                radius="md"
+            >
+                <div className="flex flex-col gap-4">
+                    <p className="text-sm text-muted-foreground">
                         Are you sure you want to remove the "{passkey.name}"
                         passkey? You will no longer be able to use it to sign
                         in.
-                    </DialogDescription>
-                    <DialogFooter className="gap-2">
-                        <DialogClose asChild>
-                            <Button variant="secondary">Cancel</Button>
-                        </DialogClose>
+                    </p>
+                    <div className="flex justify-end gap-2">
+                        <Button variant="default" onClick={close}>
+                            Cancel
+                        </Button>
                         <Button
-                            variant="destructive"
+                            color="red"
                             onClick={handleDelete}
                             disabled={isDeleting}
                         >
                             {isDeleting ? 'Removing...' : 'Remove passkey'}
                         </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+                    </div>
+                </div>
+            </Modal>
         </div>
     );
 }

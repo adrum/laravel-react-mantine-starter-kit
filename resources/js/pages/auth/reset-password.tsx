@@ -7,7 +7,7 @@ interface Props {
     token: string;
     email: string;
     passwordRules: string;
-};
+}
 
 export default function ResetPassword({ token, email, passwordRules }: Props) {
     return (

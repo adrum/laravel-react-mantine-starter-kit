@@ -1,9 +1,6 @@
 import { usePasskeyRegister } from '@laravel/passkeys/react';
+import { Button, TextInput } from '@mantine/core';
 import { useState } from 'react';
-import InputError from '@/components/input-error';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 
 type Props = {
     onSuccess: () => void;
@@ -70,10 +67,11 @@ export default function PasskeyRegistration({ onSuccess }: Props) {
             className="space-y-4 rounded-lg border border-border bg-muted/50 p-4"
         >
             <div className="grid gap-2">
-                <Label htmlFor="passkey-name">Passkey name</Label>
-                <Input
+                <TextInput
                     id="passkey-name"
                     type="text"
+                    label="Passkey name"
+                    error={error}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g., MacBook Pro, iPhone"
@@ -84,8 +82,6 @@ export default function PasskeyRegistration({ onSuccess }: Props) {
                     A name helps you identify this passkey later.
                 </p>
             </div>
-
-            {error && <InputError message={error} />}
 
             <div className="flex gap-2">
                 <Button type="submit" disabled={isLoading || !name.trim()}>
