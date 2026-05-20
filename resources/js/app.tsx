@@ -4,11 +4,11 @@ import { createInertiaApp } from '@inertiajs/react';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 
-import { Notifications } from './components/notifications';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import theme from '@/theme';
+import { Notifications } from './components/notifications';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

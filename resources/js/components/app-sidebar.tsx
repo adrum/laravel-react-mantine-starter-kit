@@ -6,13 +6,13 @@ import {
     IconLayoutGrid,
     IconX,
 } from '@tabler/icons-react';
-import AppLogo from './app-logo';
-import { NavUser } from './nav-user';
-import SidebarMenuButton from './sidebar-menu-button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
+import SidebarMenuButton from './sidebar-menu-button';
+import { NavUser } from './nav-user';
+import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
     {
