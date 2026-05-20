@@ -1,5 +1,4 @@
 import type { UrlMethodPair } from '@inertiajs/core';
-import { router } from '@inertiajs/react';
 import { usePasskeyVerify } from '@laravel/passkeys/react';
 import { Button, InputError } from '@mantine/core';
 import { IconKeyFilled } from '@tabler/icons-react';
@@ -28,7 +27,7 @@ export default function PasskeyVerify({
             },
         }),
         onSuccess: (response) => {
-            router.visit(response.redirect ?? '/dashboard');
+            window.location.href = response.redirect ?? '/dashboard';
         },
     });
 
