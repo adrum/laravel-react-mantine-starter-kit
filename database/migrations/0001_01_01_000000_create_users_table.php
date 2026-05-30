@@ -16,7 +16,10 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            // Nullable so passkey-only (passwordless) accounts are
+            // representable — see the `has_password` accessor on the
+            // User model and the passkey confirmation flow.
+            $table->string('password')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

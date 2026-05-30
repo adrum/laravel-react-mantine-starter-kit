@@ -7,6 +7,7 @@ namespace App\Providers;
 use App\Actions\Fortify\CreateNewUser;
 /* @end-chisel-registration */
 use App\Actions\Fortify\ResetUserPassword;
+use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -46,6 +47,29 @@ class FortifyServiceProvider extends ServiceProvider
         /* @chisel-registration */
         Fortify::createUsersUsing(CreateNewUser::class);
         /* @end-chisel-registration */
+
+        /* @chisel-password-confirmation */
+        // Password confirmation that tolerates passwordless
+        // (passkey-only) accounts. A user with a password
+        // confirms by re-entering it; a passwordless user can't
+        // use the password form at all, so the closure rejects
+        // it and the confirm-password screen routes them to the
+        // passkey confirmation flow instead.
+        Fortify::confirmPasswordsUsing(function (User $user, ?string $password = null) {
+            if (! is_null($user->password)) {
+                return auth()->guard()->validate([
+                    Fortify::username() => $user->{Fortify::username()},
+                    'password' => $password,
+                ]);
+            }
+
+            // No password set — there's nothing to confirm against
+            // here. The passkey-only user confirms via /passkeys/confirm
+            // (the confirm-password screen surfaces that path when
+            // `hasPasskeys` is true).
+            return false;
+        });
+        /* @end-chisel-password-confirmation */
     }
 
     /**
@@ -85,7 +109,13 @@ class FortifyServiceProvider extends ServiceProvider
         /* @end-chisel-2fa */
 
         /* @chisel-password-confirmation */
-        Fortify::confirmPasswordView(fn () => Inertia::render('auth/confirm-password'));
+        Fortify::confirmPasswordView(fn (Request $request) => Inertia::render('auth/confirm-password', [
+            /* @chisel-passkeys */
+            // Lets the screen offer passkey confirmation and, for
+            // passwordless accounts, hide the password form.
+            'hasPasskeys' => $request->user()?->passkeys()->exists() ?? false,
+            /* @end-chisel-passkeys */
+        ]));
         /* @end-chisel-password-confirmation */
     }
 

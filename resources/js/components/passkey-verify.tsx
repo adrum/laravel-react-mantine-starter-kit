@@ -11,6 +11,13 @@ type Props = {
     label?: string;
     loadingLabel?: string;
     separator?: string;
+    /**
+     * Whether to render the "or" separator beneath the button.
+     * Defaults to true; pass false when there's nothing below it
+     * to separate (e.g. a passwordless account with no password
+     * form on the confirmation screen).
+     */
+    showSeparator?: boolean;
 };
 
 export default function PasskeyVerify({
@@ -18,6 +25,7 @@ export default function PasskeyVerify({
     label,
     loadingLabel,
     separator,
+    showSeparator = true,
 }: Props = {}) {
     const { verify, isLoading, error, isSupported } = usePasskeyVerify({
         ...(routes && {
@@ -56,16 +64,18 @@ export default function PasskeyVerify({
                 )}
             </div>
 
-            <div className="relative my-6">
-                <div className="absolute inset-0 flex items-center">
-                    <hr className="w-full border" />
+            {showSeparator && (
+                <div className="relative my-6">
+                    <div className="absolute inset-0 flex items-center">
+                        <hr className="w-full border" />
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-background px-2 text-muted-foreground">
+                            {separator ?? 'Or continue with email'}
+                        </span>
+                    </div>
                 </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground">
-                        {separator ?? 'Or continue with email'}
-                    </span>
-                </div>
-            </div>
+            )}
         </>
     );
 }
