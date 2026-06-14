@@ -127,6 +127,7 @@ return Chisel::script(__DIR__)
             )->removeSection('email-verification');
 
             $c->files(
+                'app/Http/Responses/VerifyEmailResponse.php',
                 $paths['verify_email'],
                 'tests/Feature/Auth/EmailVerificationTest.php',
                 'tests/Feature/Auth/VerificationNotificationTest.php',
@@ -182,6 +183,7 @@ return Chisel::script(__DIR__)
                 'config/fortify.php',
                 'app/Providers/FortifyServiceProvider.php',
                 'app/Http/Controllers/Settings/SecurityController.php',
+                'routes/settings.php',
                 'tests/Feature/Auth/AuthenticationTest.php',
                 'tests/Feature/Settings/SecurityTest.php',
                 $paths['security'],
@@ -200,6 +202,7 @@ return Chisel::script(__DIR__)
                 'config/fortify.php',
                 'app/Providers/FortifyServiceProvider.php',
                 'app/Http/Controllers/Settings/SecurityController.php',
+                'routes/settings.php',
                 'tests/Feature/Auth/AuthenticationTest.php',
                 'tests/Feature/Settings/SecurityTest.php',
                 $paths['security'],

@@ -6,7 +6,6 @@ use Illuminate\Console\Command;
 use Laravel\Chisel\Chisel;
 use Laravel\Chisel\Question;
 use Laravel\Chisel\Script;
-use RuntimeException;
 
 use function Laravel\Prompts\multiselect;
 use function Laravel\Prompts\spin;
@@ -30,7 +29,7 @@ class InstallFeaturesCommand extends Command
 
     public function handle(): int
     {
-        if (getenv('LARAVEL_INSTALLER_DEFER_HOOKS') && $this->option('answers') === null) {
+        if ($this->shouldDeferInstallerHooks()) {
             return self::SUCCESS;
         }
 
@@ -47,16 +46,13 @@ class InstallFeaturesCommand extends Command
 
         $answers = $script
             ->collectAnswers()
-            ->onQuestion(fn (Question $question) => match ($question->type) {
-                'multiselect' => multiselect(
-                    label: $question->label,
-                    options: $question->options,
-                    default: $question->default ?? [],
-                    required: $question->required,
-                    hint: $question->hint,
-                ),
-                default => throw new RuntimeException("Unsupported question type [{$question->type}]."),
-            })
+            ->onQuestion(fn (Question $question) => multiselect(
+                label: $question->label,
+                options: $question->options,
+                default: $question->default ?? [],
+                required: $question->required,
+                hint: $question->hint,
+            ))
             ->interactive($this->input->isInteractive())
             ->withAnswers($providedAnswers);
 
@@ -67,6 +63,20 @@ class InstallFeaturesCommand extends Command
         $this->buildAssets();
 
         return self::SUCCESS;
+    }
+
+    protected function shouldDeferInstallerHooks(): bool
+    {
+        if ($this->option('answers') !== null) {
+            return false;
+        }
+
+        return filter_var(
+            $_ENV['LARAVEL_INSTALLER_DEFER_HOOKS']
+                ?? $_SERVER['LARAVEL_INSTALLER_DEFER_HOOKS']
+                ?? getenv('LARAVEL_INSTALLER_DEFER_HOOKS'),
+            FILTER_VALIDATE_BOOL,
+        );
     }
 
     protected function installNodeDependencies(): void
