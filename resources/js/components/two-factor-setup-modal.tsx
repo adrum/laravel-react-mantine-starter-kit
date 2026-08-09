@@ -245,9 +245,12 @@ export default function TwoFactorSetupModal({
     }, [twoFactorEnabled, showVerificationStep]);
 
     const resetModalState = useCallback(() => {
+        if (twoFactorEnabled) {
+            clearSetupData();
+        }
+
         setShowVerificationStep(false);
-        clearSetupData();
-    }, [clearSetupData]);
+    }, [clearSetupData, twoFactorEnabled]);
 
     const handleClose = useCallback(() => {
         resetModalState();
@@ -261,8 +264,9 @@ export default function TwoFactorSetupModal({
             return;
         }
 
+        clearSetupData();
         handleClose();
-    }, [requiresConfirmation, handleClose]);
+    }, [requiresConfirmation, clearSetupData, handleClose]);
 
     const fetchSetupDataRef = useRef(fetchSetupData);
 
