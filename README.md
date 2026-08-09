@@ -22,9 +22,9 @@ Documentation for Official Laravel starter kits can be found on the [Laravel web
 
 Check out my other Laravel starter kits:
 
-- [Laravel 12+ React (Mantine) Starter Kit](https://github.com/adrum/laravel-react-mantine-starter-kit): A React starter kit based on the oficial Laravel 12 React Starter Kit which provides a robust, modern starting point for building Laravel applications with a React frontend using Inertia.
-- [Laravel Jetstream + React (Typescript) Starter Kit](https://github.com/adrum/laravel-jetstream-react-typescript): A React starter kit based on Laravel Jetstream which provides a robust, modern starting point for building Laravel applications with a React frontend using Inertia.
-- [Laravel Jetstream + React (Mantine) Starter Kit](https://github.com/adrum/laravel-jetstream-react-mantine): Same as the above, except it swaps HeadlessUI with [Mantine](https://mantine.dev).
+- [Laravel Jetstream + React (TypeScript) Starter Kit](https://github.com/adrum/laravel-jetstream-react-typescript): Jetstream and Inertia with [HeadlessUI](https://headlessui.com), the closest match to what Jetstream generates.
+- [Laravel Jetstream + React (Mantine) Starter Kit](https://github.com/adrum/laravel-jetstream-react-mantine): Jetstream and Inertia with [Mantine](https://mantine.dev).
+- [Laravel Jetstream + React (shadcn/ui) Starter Kit](https://github.com/adrum/laravel-jetstream-react-shadcn): Jetstream and Inertia with [shadcn/ui](https://ui.shadcn.com).
 
 ## License
 
