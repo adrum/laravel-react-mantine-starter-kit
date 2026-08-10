@@ -209,6 +209,11 @@ return Chisel::script(__DIR__)
                 'routes/settings.php',
                 'tests/Feature/Auth/AuthenticationTest.php',
                 'tests/Feature/Settings/SecurityTest.php',
+                // Only listed in the else branch upstream, so keeping passkeys
+                // left their markers behind in the generated project.
+                'app/Models/User.php',
+                $paths['auth_types'],
+                'tests/Feature/Auth/PasswordConfirmationTest.php',
                 $paths['security'],
                 $paths['login'],
                 $paths['confirm_password'],
@@ -228,6 +233,11 @@ return Chisel::script(__DIR__)
                 'routes/settings.php',
                 'tests/Feature/Auth/AuthenticationTest.php',
                 'tests/Feature/Settings/SecurityTest.php',
+                // Upstream leaves these two out, so their passkey sections
+                // survived as dead code and stray markers.
+                'app/Models/User.php',
+                $paths['auth_types'],
+                'tests/Feature/Auth/PasswordConfirmationTest.php',
                 $paths['security'],
                 $paths['login'],
                 $paths['confirm_password'],

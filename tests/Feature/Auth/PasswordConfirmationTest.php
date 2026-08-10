@@ -31,6 +31,7 @@ class PasswordConfirmationTest extends TestCase
         $response->assertRedirect(route('login'));
     }
 
+    /* @chisel-passkeys */
     public function test_confirm_password_screen_exposes_has_passkeys_prop()
     {
         $user = User::factory()->create();
@@ -51,6 +52,7 @@ class PasswordConfirmationTest extends TestCase
         $this->assertTrue($withPassword->toArray()['has_password']);
         $this->assertFalse($passwordless->toArray()['has_password']);
     }
+    /* @end-chisel-passkeys */
 
     public function test_password_confirmation_succeeds_with_correct_password()
     {
