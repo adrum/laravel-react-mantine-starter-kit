@@ -20,29 +20,23 @@ export default function ConfirmPassword(
     const hasPassword = usePage().props.auth.user.has_password !== false;
 
     // Baseline wording — used as-is when passkeys are disabled, and
-    // overridden below when a passkey option is available.
-    setLayoutProps({
-        title: 'Confirm your password',
-        description:
-            'This is a secure area of the application. Please confirm your password before continuing.',
-    });
+    // overridden below when a passkey option is available. These must
+    // resolve to a single setLayoutProps call: two calls with differing
+    // values re-notify each other's subscribers on every render and loop.
+    let title = 'Confirm your password';
+    let description =
+        'This is a secure area of the application. Please confirm your password before continuing.';
 
     /* @chisel-passkeys */
-    setLayoutProps({
-        title:
-            hasPassword && hasPasskeys
-                ? 'Confirm your identity'
-                : hasPasskeys
-                  ? 'Confirm with passkey'
-                  : 'Confirm your password',
-        description:
-            hasPassword && hasPasskeys
-                ? 'This is a secure area of the application. Confirm with your passkey or password to continue.'
-                : hasPasskeys
-                  ? 'This is a secure area of the application. Approve the passkey prompt to continue.'
-                  : 'This is a secure area of the application. Please confirm your password before continuing.',
-    });
+    if (hasPasskeys) {
+        title = hasPassword ? 'Confirm your identity' : 'Confirm with passkey';
+        description = hasPassword
+            ? 'This is a secure area of the application. Confirm with your passkey or password to continue.'
+            : 'This is a secure area of the application. Approve the passkey prompt to continue.';
+    }
     /* @end-chisel-passkeys */
+
+    setLayoutProps({ title, description });
 
     return (
         <>
