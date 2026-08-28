@@ -61,7 +61,7 @@ const theme = createTheme({
         }),
         Button: Button.extend({
             defaultProps: {
-                size: 'sm',
+                size: 'md',
                 classNames: {
                     root: 'rounded-full',
                 },
@@ -69,7 +69,7 @@ const theme = createTheme({
         }),
         TextInput: TextInput.extend({
             defaultProps: {
-                size: 'sm',
+                size: 'md',
                 styles: {
                     ...InputStyles,
                 },
@@ -77,7 +77,7 @@ const theme = createTheme({
         }),
         PasswordInput: PasswordInput.extend({
             defaultProps: {
-                size: 'sm',
+                size: 'md',
                 styles: {
                     ...InputStyles,
                 },
@@ -85,7 +85,7 @@ const theme = createTheme({
         }),
         Textarea: Textarea.extend({
             defaultProps: {
-                size: 'sm',
+                size: 'md',
                 styles: {
                     ...InputStyles,
                 },
@@ -93,7 +93,7 @@ const theme = createTheme({
         }),
         JsonInput: JsonInput.extend({
             defaultProps: {
-                size: 'sm',
+                size: 'md',
                 styles: {
                     ...InputStyles,
                 },
@@ -101,7 +101,7 @@ const theme = createTheme({
         }),
         DateTimePicker: DateTimePicker.extend({
             defaultProps: {
-                size: 'sm',
+                size: 'md',
                 styles: {
                     ...InputStyles,
                 },
@@ -109,7 +109,7 @@ const theme = createTheme({
         }),
         NumberInput: NumberInput.extend({
             defaultProps: {
-                size: 'sm',
+                size: 'md',
                 styles: {
                     ...InputStyles,
                 },
@@ -117,7 +117,7 @@ const theme = createTheme({
         }),
         NativeSelect: NativeSelect.extend({
             defaultProps: {
-                size: 'sm',
+                size: 'md',
                 styles: {
                     ...InputStyles,
                 },
@@ -125,7 +125,7 @@ const theme = createTheme({
         }),
         Select: Select.extend({
             defaultProps: {
-                size: 'sm',
+                size: 'md',
                 styles: {
                     ...InputStyles,
                 },
@@ -133,7 +133,7 @@ const theme = createTheme({
         }),
         MultiSelect: MultiSelect.extend({
             defaultProps: {
-                size: 'sm',
+                size: 'md',
                 classNames: {
                     input: 'border-0',
                     pill: 'border border-gray-800',
@@ -142,7 +142,7 @@ const theme = createTheme({
         }),
         Checkbox: Checkbox.extend({
             defaultProps: {
-                size: 'sm',
+                size: 'md',
                 styles: {
                     label: {
                         color: 'var(--foreground)',
