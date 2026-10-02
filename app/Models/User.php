@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 /* @chisel-passkeys */
 use Illuminate\Database\Eloquent\Attributes\Appends;
 /* @end-chisel-passkeys */
@@ -35,7 +35,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 /* @chisel-passkeys */
 #[Appends(['has_password'])]
 /* @end-chisel-passkeys */
-class User extends Authenticatable implements PasskeyUser
+class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;

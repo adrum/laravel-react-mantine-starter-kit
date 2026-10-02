@@ -67,10 +67,14 @@ export default defineConfig({
         semi: true,
         singleAttributePerLine: false,
         htmlWhitespaceSensitivity: 'css',
-        ignorePatterns: ['.github/**', 'resources/views/mail/*'],
+        ignorePatterns: [
+            '.github/**',
+            'composer.json',
+            'resources/views/mail/*',
+        ],
         sortTailwindcss: {
             functions: ['clsx', 'cn', 'cva'],
-            entryPoint: 'resources/css/app.css',
+            stylesheet: 'resources/css/app.css',
         },
     },
 });
