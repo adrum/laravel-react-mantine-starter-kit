@@ -3,102 +3,102 @@ import { Button, TextInput } from '@mantine/core';
 import { useState } from 'react';
 
 type Props = {
-    onSuccess: () => void;
+  onSuccess: () => void;
 };
 
 export default function PasskeyRegistration({ onSuccess }: Props) {
-    const [name, setName] = useState(() => {
-        const ua = navigator.userAgent;
+  const [name, setName] = useState(() => {
+    const ua = navigator.userAgent;
 
-        const browser = [
-            { pattern: /Edg|Edge/, name: 'Edge' },
-            { pattern: /OPR|Opera|OPiOS/, name: 'Opera' },
-            { pattern: /Firefox|FxiOS/, name: 'Firefox' },
-            { pattern: /Chrome|CriOS/, name: 'Chrome' },
-            { pattern: /Safari/, name: 'Safari' },
-        ].find(({ pattern }) => pattern.test(ua))?.name;
+    const browser = [
+      { pattern: /Edg|Edge/, name: 'Edge' },
+      { pattern: /OPR|Opera|OPiOS/, name: 'Opera' },
+      { pattern: /Firefox|FxiOS/, name: 'Firefox' },
+      { pattern: /Chrome|CriOS/, name: 'Chrome' },
+      { pattern: /Safari/, name: 'Safari' },
+    ].find(({ pattern }) => pattern.test(ua))?.name;
 
-        const os = [
-            { pattern: /iPhone/, name: 'iPhone' },
-            { pattern: /iPad|Macintosh(?=.*Mobile)/, name: 'iPad' },
-            { pattern: /Android/, name: 'Android' },
-            { pattern: /Mac/, name: 'Mac' },
-            { pattern: /Windows/, name: 'Windows' },
-        ].find(({ pattern }) => pattern.test(ua))?.name;
+    const os = [
+      { pattern: /iPhone/, name: 'iPhone' },
+      { pattern: /iPad|Macintosh(?=.*Mobile)/, name: 'iPad' },
+      { pattern: /Android/, name: 'Android' },
+      { pattern: /Mac/, name: 'Mac' },
+      { pattern: /Windows/, name: 'Windows' },
+    ].find(({ pattern }) => pattern.test(ua))?.name;
 
-        return [browser, os].filter(Boolean).join(' on ') || '';
-    });
+    return [browser, os].filter(Boolean).join(' on ') || '';
+  });
 
-    const [showForm, setShowForm] = useState(false);
-    const { register, isLoading, error, isSupported } = usePasskeyRegister({
-        onSuccess: () => {
-            setName('');
-            setShowForm(false);
-            onSuccess();
-        },
-    });
+  const [showForm, setShowForm] = useState(false);
+  const { register, isLoading, error, isSupported } = usePasskeyRegister({
+    onSuccess: () => {
+      setName('');
+      setShowForm(false);
+      onSuccess();
+    },
+  });
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-        if (!name.trim()) {
-            return;
-        }
-
-        await register(name);
-    };
-
-    const handleCancel = () => {
-        setShowForm(false);
-        setName('');
-    };
-
-    if (!isSupported) {
-        return (
-            <div className="text-sm text-muted-foreground">
-                Passkeys are not supported in this browser.
-            </div>
-        );
+    if (!name.trim()) {
+      return;
     }
 
-    if (!showForm) {
-        return (
-            <Button variant="outline" onClick={() => setShowForm(true)}>
-                Add passkey
-            </Button>
-        );
-    }
+    await register(name);
+  };
 
+  const handleCancel = () => {
+    setShowForm(false);
+    setName('');
+  };
+
+  if (!isSupported) {
     return (
-        <form
-            onSubmit={handleSubmit}
-            className="space-y-4 rounded-lg border border-border bg-muted/50 p-4"
-        >
-            <div className="grid gap-2">
-                <TextInput
-                    id="passkey-name"
-                    type="text"
-                    label="Passkey name"
-                    error={error}
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g., MacBook Pro, iPhone"
-                    className="mt-1 block w-full border-foreground/20"
-                    autoFocus
-                />
-                <p className="text-xs text-muted-foreground">
-                    A name helps you identify this passkey later.
-                </p>
-            </div>
-
-            <div className="flex gap-2">
-                <Button type="submit" disabled={isLoading || !name.trim()}>
-                    {isLoading ? 'Registering...' : 'Register passkey'}
-                </Button>
-                <Button type="button" variant="ghost" onClick={handleCancel}>
-                    Cancel
-                </Button>
-            </div>
-        </form>
+      <div className="text-sm text-muted-foreground">
+        Passkeys are not supported in this browser.
+      </div>
     );
+  }
+
+  if (!showForm) {
+    return (
+      <Button variant="outline" onClick={() => setShowForm(true)}>
+        Add passkey
+      </Button>
+    );
+  }
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4 rounded-lg border border-border bg-muted/50 p-4"
+    >
+      <div className="grid gap-2">
+        <TextInput
+          id="passkey-name"
+          type="text"
+          label="Passkey name"
+          error={error}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="e.g., MacBook Pro, iPhone"
+          className="mt-1 block w-full border-foreground/20"
+          autoFocus
+        />
+        <p className="text-xs text-muted-foreground">
+          A name helps you identify this passkey later.
+        </p>
+      </div>
+
+      <div className="flex gap-2">
+        <Button type="submit" disabled={isLoading || !name.trim()}>
+          {isLoading ? 'Registering...' : 'Register passkey'}
+        </Button>
+        <Button type="button" variant="ghost" onClick={handleCancel}>
+          Cancel
+        </Button>
+      </div>
+    </form>
+  );
 }

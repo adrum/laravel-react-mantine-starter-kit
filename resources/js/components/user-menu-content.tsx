@@ -9,52 +9,52 @@ import { edit } from '@/routes/profile';
 import type { User } from '@/types';
 
 interface UserMenuContentProps {
-    user: User;
+  user: User;
 }
 
 export function UserMenuContent({ user }: UserMenuContentProps) {
-    const cleanup = useMobileNavigation();
+  const cleanup = useMobileNavigation();
 
-    const handleLogout = () => {
-        cleanup();
-        router.flushAll();
-        router.post(logout());
-    };
+  const handleLogout = () => {
+    cleanup();
+    router.flushAll();
+    router.post(logout());
+  };
 
-    return (
-        <>
-            <Menu.Dropdown className="border-2 border-border">
-                <Menu.Label>
-                    <UserInfo user={user} showEmail={true} />
-                </Menu.Label>
+  return (
+    <>
+      <Menu.Dropdown className="border-2 border-border">
+        <Menu.Label>
+          <UserInfo user={user} showEmail={true} />
+        </Menu.Label>
 
-                <Menu.Divider />
+        <Menu.Divider />
 
-                <Menu.Item
-                    component={Link}
-                    href={edit()}
-                    className="block w-full cursor-pointer"
-                    leftSection={<IconSettings color="gray" size={20} />}
-                >
-                    Settings
-                </Menu.Item>
-                <Menu.Divider />
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        handleLogout();
-                    }}
-                >
-                    <Menu.Item
-                        className="block w-full cursor-pointer"
-                        leftSection={<IconLogout color="gray" />}
-                        type="submit"
-                        data-test="logout-button"
-                    >
-                        Log Out
-                    </Menu.Item>
-                </form>
-            </Menu.Dropdown>
-        </>
-    );
+        <Menu.Item
+          component={Link}
+          href={edit()}
+          className="block w-full cursor-pointer"
+          leftSection={<IconSettings color="gray" size={20} />}
+        >
+          Settings
+        </Menu.Item>
+        <Menu.Divider />
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleLogout();
+          }}
+        >
+          <Menu.Item
+            className="block w-full cursor-pointer"
+            leftSection={<IconLogout color="gray" />}
+            type="submit"
+            data-test="logout-button"
+          >
+            Log Out
+          </Menu.Item>
+        </form>
+      </Menu.Dropdown>
+    </>
+  );
 }

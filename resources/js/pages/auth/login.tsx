@@ -12,123 +12,118 @@ import PasskeyVerify from '@/components/passkey-verify';
 /* @end-chisel-passkeys */
 
 interface Props {
-    status?: string;
-    canResetPassword: boolean;
+  status?: string;
+  canResetPassword: boolean;
 }
 
 export default function Login({ status, canResetPassword }: Props) {
-    return (
-        <>
-            <Head title="Log in" />
+  return (
+    <>
+      <Head title="Log in" />
 
-            {/* @chisel-passkeys */}
-            <PasskeyVerify />
-            {/* @end-chisel-passkeys */}
+      {/* @chisel-passkeys */}
+      <PasskeyVerify />
+      {/* @end-chisel-passkeys */}
 
-            <Form
-                {...store.form()}
-                resetOnSuccess={['password']}
-                className="flex flex-col gap-6"
-            >
-                {({ processing, errors }) => (
+      <Form
+        {...store.form()}
+        resetOnSuccess={['password']}
+        className="flex flex-col gap-6"
+      >
+        {({ processing, errors }) => (
+          <>
+            <div className="grid gap-6">
+              <div className="grid gap-2">
+                <TextInput
+                  id="email"
+                  type="email"
+                  name="email"
+                  label="Email Address"
+                  error={errors.email}
+                  required
+                  withAsterisk={false}
+                  autoFocus
+                  tabIndex={1}
+                  autoComplete="email"
+                  placeholder="email@example.com"
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <PasswordInput
+                  id="password"
+                  name="password"
+                  required
+                  withAsterisk={false}
+                  label={
                     <>
-                        <div className="grid gap-6">
-                            <div className="grid gap-2">
-                                <TextInput
-                                    id="email"
-                                    type="email"
-                                    name="email"
-                                    label="Email Address"
-                                    error={errors.email}
-                                    required
-                                    withAsterisk={false}
-                                    autoFocus
-                                    tabIndex={1}
-                                    autoComplete="email"
-                                    placeholder="email@example.com"
-                                />
-                            </div>
-
-                            <div className="grid gap-2">
-                                <PasswordInput
-                                    id="password"
-                                    name="password"
-                                    required
-                                    withAsterisk={false}
-                                    label={
-                                        <>
-                                            <span>Password</span>
-                                            <span>
-                                                {canResetPassword && (
-                                                    <TextLink
-                                                        href={request()}
-                                                        className="ml-auto text-sm"
-                                                        tabIndex={5}
-                                                    >
-                                                        Forgot your password?
-                                                    </TextLink>
-                                                )}
-                                            </span>
-                                        </>
-                                    }
-                                    classNames={{
-                                        label: 'flex! flex-1 items-center justify-between mb-1!',
-                                    }}
-                                    inputWrapperOrder={[
-                                        'label',
-                                        'input',
-                                        'description',
-                                        'error',
-                                    ]}
-                                    tabIndex={2}
-                                    autoComplete="current-password"
-                                    placeholder="Password"
-                                />
-                            </div>
-
-                            <div className="flex items-center space-x-3">
-                                <Checkbox
-                                    id="remember"
-                                    name="remember"
-                                    label="Remember me"
-                                    tabIndex={3}
-                                />
-                            </div>
-
-                            <Button
-                                type="submit"
-                                className="mt-4 w-full"
-                                tabIndex={4}
-                                disabled={processing}
-                                loading={processing}
-                                data-test="login-button"
-                            >
-                                Log in
-                            </Button>
-                        </div>
-
-                        {/* @chisel-registration */}
-                        <div className="text-center text-sm text-muted-foreground">
-                            Don't have an account?{' '}
-                            <TextLink href={register()} tabIndex={5}>
-                                Sign up
-                            </TextLink>
-                        </div>
-                        {/* @end-chisel-registration */}
+                      <span>Password</span>
+                      <span>
+                        {canResetPassword && (
+                          <TextLink
+                            href={request()}
+                            className="ml-auto text-sm"
+                            tabIndex={5}
+                          >
+                            Forgot your password?
+                          </TextLink>
+                        )}
+                      </span>
                     </>
-                )}
-            </Form>
+                  }
+                  classNames={{
+                    label: 'flex! flex-1 items-center justify-between mb-1!',
+                  }}
+                  inputWrapperOrder={['label', 'input', 'description', 'error']}
+                  tabIndex={2}
+                  autoComplete="current-password"
+                  placeholder="Password"
+                />
+              </div>
 
-            {status && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
-                    {status}
-                </div>
-            )}
-        </>
-    );
+              <div className="flex items-center space-x-3">
+                <Checkbox
+                  id="remember"
+                  name="remember"
+                  label="Remember me"
+                  tabIndex={3}
+                />
+              </div>
+
+              <Button
+                type="submit"
+                className="mt-4 w-full"
+                tabIndex={4}
+                disabled={processing}
+                loading={processing}
+                data-test="login-button"
+              >
+                Log in
+              </Button>
+            </div>
+
+            {/* @chisel-registration */}
+            <div className="text-center text-sm text-muted-foreground">
+              Don't have an account?{' '}
+              <TextLink href={register()} tabIndex={5}>
+                Sign up
+              </TextLink>
+            </div>
+            {/* @end-chisel-registration */}
+          </>
+        )}
+      </Form>
+
+      {status && (
+        <div className="mb-4 text-center text-sm font-medium text-green-600">
+          {status}
+        </div>
+      )}
+    </>
+  );
 }
 
 Login.layout = {
-    title: 'Log in to your account',
-    description: 'Enter your email and password below to log in',
+  title: 'Log in to your account',
+  description: 'Enter your email and password below to log in',
 };

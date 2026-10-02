@@ -4,83 +4,83 @@ import { Button, PasswordInput, TextInput } from '@mantine/core';
 import { update } from '@/routes/password';
 
 interface Props {
-    token: string;
-    email: string;
-    passwordRules: string;
+  token: string;
+  email: string;
+  passwordRules: string;
 }
 
 export default function ResetPassword({ token, email, passwordRules }: Props) {
-    return (
-        <>
-            <Head title="Reset password" />
+  return (
+    <>
+      <Head title="Reset password" />
 
-            <Form
-                {...update.form()}
-                transform={(data) => ({ ...data, token, email })}
-                resetOnSuccess={['password', 'password_confirmation']}
+      <Form
+        {...update.form()}
+        transform={(data) => ({ ...data, token, email })}
+        resetOnSuccess={['password', 'password_confirmation']}
+      >
+        {({ processing, errors }) => (
+          <div className="grid gap-6">
+            <div className="grid gap-2">
+              <TextInput
+                id="email"
+                type="email"
+                name="email"
+                label="Email"
+                disabled={true}
+                defaultValue={email}
+                placeholder="Email"
+                error={errors.email}
+                autoComplete="email"
+                className="mt-1 block w-full"
+                readOnly
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <PasswordInput
+                id="password"
+                name="password"
+                label="Password"
+                error={errors.password}
+                autoComplete="new-password"
+                className="mt-1 block w-full"
+                autoFocus
+                placeholder="Password"
+                passwordrules={passwordRules}
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <PasswordInput
+                id="password_confirmation"
+                name="password_confirmation"
+                autoComplete="new-password"
+                label="Confirm password"
+                error={errors.password_confirmation}
+                className="mt-1 block w-full"
+                placeholder="Confirm password"
+                passwordrules={passwordRules}
+              />
+            </div>
+
+            <Button
+              type="submit"
+              className="mt-4 w-full"
+              disabled={processing}
+              loading={processing}
+              data-test="reset-password-button"
             >
-                {({ processing, errors }) => (
-                    <div className="grid gap-6">
-                        <div className="grid gap-2">
-                            <TextInput
-                                id="email"
-                                type="email"
-                                name="email"
-                                label="Email"
-                                disabled={true}
-                                defaultValue={email}
-                                placeholder="Email"
-                                error={errors.email}
-                                autoComplete="email"
-                                className="mt-1 block w-full"
-                                readOnly
-                            />
-                        </div>
-
-                        <div className="grid gap-2">
-                            <PasswordInput
-                                id="password"
-                                name="password"
-                                label="Password"
-                                error={errors.password}
-                                autoComplete="new-password"
-                                className="mt-1 block w-full"
-                                autoFocus
-                                placeholder="Password"
-                                passwordrules={passwordRules}
-                            />
-                        </div>
-
-                        <div className="grid gap-2">
-                            <PasswordInput
-                                id="password_confirmation"
-                                name="password_confirmation"
-                                autoComplete="new-password"
-                                label="Confirm password"
-                                error={errors.password_confirmation}
-                                className="mt-1 block w-full"
-                                placeholder="Confirm password"
-                                passwordrules={passwordRules}
-                            />
-                        </div>
-
-                        <Button
-                            type="submit"
-                            className="mt-4 w-full"
-                            disabled={processing}
-                            loading={processing}
-                            data-test="reset-password-button"
-                        >
-                            Reset password
-                        </Button>
-                    </div>
-                )}
-            </Form>
-        </>
-    );
+              Reset password
+            </Button>
+          </div>
+        )}
+      </Form>
+    </>
+  );
 }
 
 ResetPassword.layout = {
-    title: 'Reset password',
-    description: 'Please enter your new password below',
+  title: 'Reset password',
+  description: 'Please enter your new password below',
 };

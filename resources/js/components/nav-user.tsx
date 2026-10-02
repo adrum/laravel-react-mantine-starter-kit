@@ -9,56 +9,54 @@ import SidebarMenuButton from './sidebar-menu-button';
 import { UserMenuContent } from './user-menu-content';
 
 export function NavUser() {
-    const { auth } = usePage().props;
-    const { state: desktopOpened } = useSideBar();
-    const isMobile = useIsMobile();
+  const { auth } = usePage().props;
+  const { state: desktopOpened } = useSideBar();
+  const isMobile = useIsMobile();
 
-    const collapsed = isMobile ? false : !desktopOpened;
-    const getInitials = useInitials();
+  const collapsed = isMobile ? false : !desktopOpened;
+  const getInitials = useInitials();
 
-    if (!auth.user) {
-        return null;
-    }
+  if (!auth.user) {
+    return null;
+  }
 
-    return (
-        <Menu
-            shadow="md"
-            width={230}
-            position={collapsed ? 'right-end' : 'top-start'}
+  return (
+    <Menu
+      shadow="md"
+      width={230}
+      position={collapsed ? 'right-end' : 'top-start'}
+    >
+      <Menu.Target>
+        <SidebarMenuButton
+          component="button"
+          className={cn('group h-12! p-0.5! px-1!')}
+          classNames={{
+            inner: 'items-stretch! justify-between!',
+          }}
+          rightSection={
+            !collapsed && <IconSelector color="var(--foreground)" size={20} />
+          }
+          data-test="sidebar-menu-button"
         >
-            <Menu.Target>
-                <SidebarMenuButton
-                    component="button"
-                    className={cn('group h-12! p-0.5! px-1!')}
-                    classNames={{
-                        inner: 'items-stretch! justify-between!',
-                    }}
-                    rightSection={
-                        !collapsed && (
-                            <IconSelector color="var(--foreground)" size={20} />
-                        )
-                    }
-                    data-test="sidebar-menu-button"
-                >
-                    <Avatar
-                        src={auth.user.avatar}
-                        name={getInitials(auth.user.name)}
-                        size="md"
-                        radius="xl"
-                        imageProps={{
-                            src: auth.user.avatar,
-                            alt: auth.user.name,
-                        }}
-                    />
+          <Avatar
+            src={auth.user.avatar}
+            name={getInitials(auth.user.name)}
+            size="md"
+            radius="xl"
+            imageProps={{
+              src: auth.user.avatar,
+              alt: auth.user.name,
+            }}
+          />
 
-                    {!collapsed && (
-                        <div className="px-2 text-sm font-medium text-foreground">
-                            <span>{auth.user.name}</span>
-                        </div>
-                    )}
-                </SidebarMenuButton>
-            </Menu.Target>
-            <UserMenuContent user={auth.user} />
-        </Menu>
-    );
+          {!collapsed && (
+            <div className="px-2 text-sm font-medium text-foreground">
+              <span>{auth.user.name}</span>
+            </div>
+          )}
+        </SidebarMenuButton>
+      </Menu.Target>
+      <UserMenuContent user={auth.user} />
+    </Menu>
+  );
 }

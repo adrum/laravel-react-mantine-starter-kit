@@ -3,8 +3,8 @@ import twColors from 'tailwindcss/colors';
 
 // Custom colors defined via CSS variables in app.css
 const customColors = {
-    primary: 'primary',
-    secondary: 'secondary',
+  primary: 'primary',
+  secondary: 'secondary',
 } as const;
 
 /**
@@ -12,13 +12,13 @@ const customColors = {
  * Tailwind v4 exposes colors as --color-{name}-{shade} CSS variables.
  */
 function createTailwindColor(
-    color: Record<string, string>,
+  color: Record<string, string>,
 ): MantineColorsTuple {
-    const shades = [
-        50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950,
-    ] as const;
+  const shades = [
+    50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950,
+  ] as const;
 
-    return shades.map((shade) => color[shade]) as unknown as MantineColorsTuple;
+  return shades.map((shade) => color[shade]) as unknown as MantineColorsTuple;
 }
 
 /**
@@ -26,11 +26,11 @@ function createTailwindColor(
  * These must be defined in your CSS (e.g., app.css) for each shade 50-900.
  */
 function createCustomColor(prefix: string): MantineColorsTuple {
-    const shades = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
+  const shades = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
 
-    return shades.map(
-        (shade) => `var(--${prefix}-${shade})`,
-    ) as unknown as MantineColorsTuple;
+  return shades.map(
+    (shade) => `var(--${prefix}-${shade})`,
+  ) as unknown as MantineColorsTuple;
 }
 
 type TailwindColors = keyof typeof twColors;
@@ -49,30 +49,30 @@ type AppColorWithShade = `${AppColor}.${MantineColorShade}`;
 // This ensures TypeScript errors if you use invalid colors like "grape"
 // https://mantine.dev/theming/colors/#add-custom-colors-types
 declare module '@mantine/core' {
-    export interface MantineThemeColorsOverride {
-        colors: Record<AppColor | AppColorWithShade, MantineColorsTuple>;
-    }
+  export interface MantineThemeColorsOverride {
+    colors: Record<AppColor | AppColorWithShade, MantineColorsTuple>;
+  }
 }
 
 // Tailwind color palette converted to Mantine format
 const colors = {
-    // Tailwind colors (filter out non-object entries like black, white, transparent, etc.)
-    ...Object.fromEntries(
-        Object.entries(twColors)
-            .filter(([, value]) => typeof value === 'object' && value !== null)
-            .map(([key, value]) => [
-                key,
-                createTailwindColor(value as Record<string, string>),
-            ]),
-    ),
+  // Tailwind colors (filter out non-object entries like black, white, transparent, etc.)
+  ...Object.fromEntries(
+    Object.entries(twColors)
+      .filter(([, value]) => typeof value === 'object' && value !== null)
+      .map(([key, value]) => [
+        key,
+        createTailwindColor(value as Record<string, string>),
+      ]),
+  ),
 
-    // Custom CSS variable colors
-    ...Object.fromEntries(
-        Object.entries(customColors).map(([key, value]) => [
-            key,
-            createCustomColor(value),
-        ]),
-    ),
+  // Custom CSS variable colors
+  ...Object.fromEntries(
+    Object.entries(customColors).map(([key, value]) => [
+      key,
+      createCustomColor(value),
+    ]),
+  ),
 };
 
 export { colors };

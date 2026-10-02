@@ -4,97 +4,93 @@ import { Button, Tooltip } from '@mantine/core';
 import { cn } from '@/lib/utils';
 
 type Props<T extends React.ElementType> = {
-    component?: T;
-    icon?: React.ReactNode | null;
-    iconOnly?: boolean;
-    tooltip?: string;
-    isActive?: boolean;
+  component?: T;
+  icon?: React.ReactNode | null;
+  iconOnly?: boolean;
+  tooltip?: string;
+  isActive?: boolean;
 } & ButtonProps &
-    React.ComponentPropsWithoutRef<T>;
+  React.ComponentPropsWithoutRef<T>;
 
 const Wrapper = ({
-    tooltip,
-    isActive,
-    iconOnly,
-    children,
+  tooltip,
+  isActive,
+  iconOnly,
+  children,
 }: React.PropsWithChildren<{
-    tooltip?: string;
-    isActive?: boolean;
-    iconOnly?: boolean;
+  tooltip?: string;
+  isActive?: boolean;
+  iconOnly?: boolean;
 }>) => (
-    <>
-        <div className={cn('flex items-stretch', isActive && '')}>
-            {tooltip && iconOnly ? (
-                <Tooltip
-                    className="self-stretch"
-                    withArrow
-                    position="right"
-                    arrowSize={6}
-                    offset={10}
-                    label={<span className="text-xs">{tooltip}</span>}
-                >
-                    {children}
-                </Tooltip>
-            ) : (
-                children
-            )}
-        </div>
-    </>
+  <>
+    <div className={cn('flex items-stretch', isActive && '')}>
+      {tooltip && iconOnly ? (
+        <Tooltip
+          className="self-stretch"
+          withArrow
+          position="right"
+          arrowSize={6}
+          offset={10}
+          label={<span className="text-xs">{tooltip}</span>}
+        >
+          {children}
+        </Tooltip>
+      ) : (
+        children
+      )}
+    </div>
+  </>
 );
 export default function SidebarMenuButton<T extends React.ElementType>({
-    className,
-    isActive,
-    icon,
-    iconOnly,
-    tooltip,
-    styles,
-    children,
-    ...props
+  className,
+  isActive,
+  icon,
+  iconOnly,
+  tooltip,
+  styles,
+  children,
+  ...props
 }: Props<T>) {
-    return (
-        <>
-            <Wrapper tooltip={tooltip} isActive={isActive} iconOnly={iconOnly}>
-                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
-                {/* @ts-ignore - Mantine types are incorrect */}
-                <Button
-                    component={Link}
-                    size="md"
-                    color="gray"
-                    variant="subtle"
-                    leftSection={icon}
-                    justify={iconOnly ? 'center' : 'start'}
-                    className={cn(
-                        'h-8! w-full flex-1 text-foreground transition-none',
-                        className,
-                        iconOnly && 'p-2!',
-                    )}
-                    styles={{
-                        ...(styles || {}),
-                        root: {
-                            color: 'var(--foreground)',
-                            ...(isActive && {
-                                backgroundColor: 'var(--muted)',
-                            }),
-                            ...((
-                                styles as Record<
-                                    string,
-                                    Record<string, unknown>
-                                >
-                            )?.root || {}),
-                        },
-                        ...(iconOnly && {
-                            section: {
-                                marginRight: 0,
-                                // @ts-expect-error - types are incorrect
-                                ...(styles?.section || {}),
-                            },
-                        }),
-                    }}
-                    {...props}
-                >
-                    {!iconOnly && children}
-                </Button>
-            </Wrapper>
-        </>
-    );
+  return (
+    <>
+      <Wrapper tooltip={tooltip} isActive={isActive} iconOnly={iconOnly}>
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
+        {/* @ts-ignore - Mantine types are incorrect */}
+        <Button
+          component={Link}
+          size="md"
+          color="gray"
+          variant="subtle"
+          leftSection={icon}
+          justify={iconOnly ? 'center' : 'start'}
+          className={cn(
+            'h-8! w-full flex-1 text-foreground transition-none',
+            className,
+            iconOnly && 'p-2!',
+          )}
+          styles={{
+            ...(styles || {}),
+            root: {
+              color: 'var(--foreground)',
+              ...(isActive && {
+                backgroundColor: 'var(--muted)',
+              }),
+              ...((styles as Record<string, Record<string, unknown>>)?.root ||
+                {}),
+            },
+            ...(iconOnly && {
+              section: {
+                marginRight: 0,
+                // @ts-expect-error - types are incorrect
+                ...(styles?.section || {}),
+              },
+            }),
+          }}
+          {...props}
+        >
+          {!iconOnly && children}
+        </Button>
+      </Wrapper>
+    </>
+  );
 }

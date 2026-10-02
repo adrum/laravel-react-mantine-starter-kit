@@ -5,75 +5,74 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 
 type Props = {
-    component?: React.ElementType;
-    icon?: React.ReactNode | null;
-    iconOnly?: boolean;
-    tooltip?: string;
-    isActive?: boolean;
+  component?: React.ElementType;
+  icon?: React.ReactNode | null;
+  iconOnly?: boolean;
+  tooltip?: string;
+  isActive?: boolean;
 } & Omit<ButtonProps, 'component'> &
-    Partial<Omit<InertiaLinkProps, 'component' | keyof ButtonProps>>;
+  Partial<Omit<InertiaLinkProps, 'component' | keyof ButtonProps>>;
 
 export default function HeaderMenuButton({
-    className,
-    tooltip,
-    isActive,
-    icon,
-    styles,
-    iconOnly,
-    children,
-    ...props
+  className,
+  tooltip,
+  isActive,
+  icon,
+  styles,
+  iconOnly,
+  children,
+  ...props
 }: Props) {
-    const buttonContent = (
-        // @ts-expect-error - Mantine types are incorrect
-        <Button
-            size="sm"
-            color="gray"
-            variant="subtle"
-            leftSection={icon}
-            justify={iconOnly ? 'center' : 'start'}
-            className={cn(
-                'w-full text-foreground transition-none',
-                className,
-                iconOnly && 'p-2!',
-            )}
-            styles={{
-                ...(styles || {}),
-                root: {
-                    color: 'var(--foreground)',
-                    ...(isActive && { backgroundColor: 'var(--muted)' }),
-                    ...((styles as Record<string, Record<string, unknown>>)
-                        ?.root || {}),
-                },
-                ...(iconOnly && {
-                    // @ts-expect-error - types are incorrect
-                    section: { marginRight: 0, ...(styles?.section || {}) },
-                }),
-            }}
-            {...props}
-        >
-            {!iconOnly && children}
-        </Button>
-    );
+  const buttonContent = (
+    // @ts-expect-error - Mantine types are incorrect
+    <Button
+      size="sm"
+      color="gray"
+      variant="subtle"
+      leftSection={icon}
+      justify={iconOnly ? 'center' : 'start'}
+      className={cn(
+        'w-full text-foreground transition-none',
+        className,
+        iconOnly && 'p-2!',
+      )}
+      styles={{
+        ...(styles || {}),
+        root: {
+          color: 'var(--foreground)',
+          ...(isActive && { backgroundColor: 'var(--muted)' }),
+          ...((styles as Record<string, Record<string, unknown>>)?.root || {}),
+        },
+        ...(iconOnly && {
+          // @ts-expect-error - types are incorrect
+          section: { marginRight: 0, ...(styles?.section || {}) },
+        }),
+      }}
+      {...props}
+    >
+      {!iconOnly && children}
+    </Button>
+  );
 
-    return (
-        <div
-            className={cn(
-                'flex h-full flex-col items-center justify-center',
-                isActive && 'border-b border-b-foreground',
-            )}
+  return (
+    <div
+      className={cn(
+        'flex h-full flex-col items-center justify-center',
+        isActive && 'border-b border-b-foreground',
+      )}
+    >
+      {tooltip ? (
+        <Tooltip
+          withArrow
+          arrowSize={6}
+          offset={10}
+          label={<span className="text-xs">{tooltip}</span>}
         >
-            {tooltip ? (
-                <Tooltip
-                    withArrow
-                    arrowSize={6}
-                    offset={10}
-                    label={<span className="text-xs">{tooltip}</span>}
-                >
-                    {buttonContent}
-                </Tooltip>
-            ) : (
-                buttonContent
-            )}
-        </div>
-    );
+          {buttonContent}
+        </Tooltip>
+      ) : (
+        buttonContent
+      )}
+    </div>
+  );
 }

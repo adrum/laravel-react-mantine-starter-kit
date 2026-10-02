@@ -9,53 +9,51 @@ import { useSideBar } from '@/hooks/use-sidebar';
 import type { BreadcrumbItem } from '@/types';
 
 export default function AppSidebarLayout({
-    children,
-    breadcrumbs = [],
+  children,
+  breadcrumbs = [],
 }: PropsWithChildren<{ breadcrumbs?: BreadcrumbItem[] }>) {
-    const { state: desktopOpened, toggle: toggleDesktop } = useSideBar();
-    const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
+  const { state: desktopOpened, toggle: toggleDesktop } = useSideBar();
+  const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
 
-    const isMobile = useIsMobile();
+  const isMobile = useIsMobile();
 
-    const collapsed = isMobile ? false : !desktopOpened;
+  const collapsed = isMobile ? false : !desktopOpened;
 
-    const toggle = () => {
-        if (isMobile) {
-            toggleMobile();
-        } else {
-            toggleDesktop();
-        }
-    };
+  const toggle = () => {
+    if (isMobile) {
+      toggleMobile();
+    } else {
+      toggleDesktop();
+    }
+  };
 
-    return (
-        <AppShell
-            padding="md"
-            layout="alt"
-            className="bg-background!"
-            header={{ height: 60 }}
-            navbar={{
-                width: isMobile ? 260 : desktopOpened ? 260 : 64,
-                breakpoint: 'sm',
-                collapsed: { mobile: !mobileOpened, desktop: false },
-            }}
-        >
-            <AppShell.Header>
-                <AppSidebarHeader breadcrumbs={breadcrumbs} toggle={toggle} />
-            </AppShell.Header>
-            <AppShell.Navbar
-                style={{ ...(!isMobile && { transition: 'width 0.2s ease' }) }}
-            >
-                <AppSidebar
-                    toggle={toggle}
-                    className="group peer"
-                    collapsed={collapsed}
-                />
-            </AppShell.Navbar>
-            <AppShell.Main className="flex h-full w-full flex-col">
-                <AppContent className="overflow-x-hidden">
-                    {children}
-                </AppContent>
-            </AppShell.Main>
-        </AppShell>
-    );
+  return (
+    <AppShell
+      padding="md"
+      layout="alt"
+      className="bg-background!"
+      header={{ height: 60 }}
+      navbar={{
+        width: isMobile ? 260 : desktopOpened ? 260 : 64,
+        breakpoint: 'sm',
+        collapsed: { mobile: !mobileOpened, desktop: false },
+      }}
+    >
+      <AppShell.Header>
+        <AppSidebarHeader breadcrumbs={breadcrumbs} toggle={toggle} />
+      </AppShell.Header>
+      <AppShell.Navbar
+        style={{ ...(!isMobile && { transition: 'width 0.2s ease' }) }}
+      >
+        <AppSidebar
+          toggle={toggle}
+          className="group peer"
+          collapsed={collapsed}
+        />
+      </AppShell.Navbar>
+      <AppShell.Main className="flex h-full w-full flex-col">
+        <AppContent className="overflow-x-hidden">{children}</AppContent>
+      </AppShell.Main>
+    </AppShell>
+  );
 }
