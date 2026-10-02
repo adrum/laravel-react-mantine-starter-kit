@@ -68,23 +68,24 @@ export default function SidebarMenuButton<T extends React.ElementType>({
             className,
             iconOnly && 'p-2!',
           )}
-          styles={{
-            ...(styles || {}),
-            root: {
-              color: 'var(--foreground)',
-              ...(isActive && {
-                backgroundColor: 'var(--muted)',
-              }),
-              ...((styles as Record<string, Record<string, unknown>>)?.root ||
-                {}),
-            },
-            ...(iconOnly && {
-              section: {
-                marginRight: 0,
-                // @ts-expect-error - types are incorrect
-                ...(styles?.section || {}),
+          styles={(theme, buttonProps, ctx) => {
+            const base = ((typeof styles === 'function'
+              ? styles(theme, buttonProps, ctx)
+              : styles) ?? {}) as Record<string, React.CSSProperties>;
+
+            return {
+              ...base,
+              root: {
+                color: 'var(--foreground)',
+                ...(isActive && {
+                  backgroundColor: 'var(--muted)',
+                }),
+                ...base.root,
               },
-            }),
+              ...(iconOnly && {
+                section: { marginRight: 0, ...base.section },
+              }),
+            };
           }}
           {...props}
         >

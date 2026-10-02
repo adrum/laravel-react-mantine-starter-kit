@@ -36,17 +36,22 @@ export default function HeaderMenuButton({
         className,
         iconOnly && 'p-2!',
       )}
-      styles={{
-        ...(styles || {}),
-        root: {
-          color: 'var(--foreground)',
-          ...(isActive && { backgroundColor: 'var(--muted)' }),
-          ...((styles as Record<string, Record<string, unknown>>)?.root || {}),
-        },
-        ...(iconOnly && {
-          // @ts-expect-error - types are incorrect
-          section: { marginRight: 0, ...(styles?.section || {}) },
-        }),
+      styles={(theme, buttonProps, ctx) => {
+        const base = ((typeof styles === 'function'
+          ? styles(theme, buttonProps, ctx)
+          : styles) ?? {}) as Record<string, React.CSSProperties>;
+
+        return {
+          ...base,
+          root: {
+            color: 'var(--foreground)',
+            ...(isActive && { backgroundColor: 'var(--muted)' }),
+            ...base.root,
+          },
+          ...(iconOnly && {
+            section: { marginRight: 0, ...base.section },
+          }),
+        };
       }}
       {...props}
     >
